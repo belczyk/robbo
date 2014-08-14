@@ -1,0 +1,62 @@
+﻿body {
+	background-color: black;
+}
+
+.game-board canvas{
+
+	background-color: green;
+	display: block;
+
+}
+
+.asset {
+	display: none;
+}
+
+.counter {
+	width: 70px;
+	float: left;
+}
+
+	.counter .icon {
+		float: left;
+	}
+
+	.counter .label {
+		float: left;
+		font-size: 28px;
+		font-family: Consolas;
+		color: grey;
+		font-weight: bold;
+	}
+
+.color-selectors .color-selector,
+.color-selectors .background-color-selector {
+	width: 25px;
+	height: 25px;
+	border: solid 1px grey;
+	float: left;
+	margin: 10px;
+}
+.game-chrome {
+	padding-left: 75px;
+	background-color: black;
+	width: 562px;
+	text-align: center;
+}
+
+.clear-fix {
+	clear: both;
+}
+
+.game-scroll-pane {
+	width: 512px;
+	height: 512px;
+	overflow: hidden;
+	float: left;
+}
+
+.map-slider {
+	float: left;
+	height: 512px;
+}
