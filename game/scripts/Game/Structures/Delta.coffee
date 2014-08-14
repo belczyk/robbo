@@ -23,7 +23,7 @@ class app.Delta
 		ret = new app.Delta()
 		ret.coords = delta
 		ret
-	@fromOrientation: (orientation) ->		
+	@fromOrientation: (orientation) ->
 		if orientation == 'vertical'
 			return new app.Delta([0,-1])
 		else

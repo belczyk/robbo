@@ -74,7 +74,7 @@ class app.MapLoader
 						obj = new app.LaserBeam @envCtx,x,y,[1,0]
 						toInit.push obj
 					when 'L'
-						if char3 is ' '
+						if char3 is ' ' or char3 is '.'
 							obj = new app.Laser @envCtx,x,y,@getDirection(char2)
 						else if char3 is 'r'
 							obj = new app.RotatingLaser @envCtx,x,y
@@ -82,7 +82,7 @@ class app.MapLoader
 							obj = new app.StableBeamLaser @envCtx,x,y,@getDirection(char2)
 
 					when 'B'
-						if char3 is ' '
+						if char3 is ' ' or char3 is '.'
 							obj = new app.Bat @envCtx,x,y,@getOrientation(char2)
 						else 
 							obj = new app.FiringBat @envCtx,x,y,@getOrientation(char2),@getDirection(char3)

@@ -5,17 +5,21 @@ $ = jQuery
 
 class Editor 
 	constructor: () ->
-		@setupMenu()
 		new app.ColorManager($('#constructionyard'),()->)
 		@canvas = $('#constructionyard')
 		@cursorCanvas = $('#currentcell')
 		@toolCanvas = $('#currenttool')
 		@scrollPane = $('.scroll-panel')
-		width = 16
-		height = 32
+		@widthField = $('.width')
+		@heightField = $('.height')
+		@mapField = $(".map")
+
+		@widthField.change () => @setWidth(@widthField.val())
+		@heightField.change () => @setHeight(@heightField.val())
 		@assets = app.AssetLoader
-		@setHeight 32
-		@setWidth 16
+		@setHeight @heightField.val()
+		@setWidth @widthField.val()
+		@initMap()
 		@cursorCanvas.mousemove (e) =>@onMouseMoveInCanvas(e)
 		@cursorCtx = @cursorCanvas.get(0).getContext('2d')
 		@toolCtx = @toolCanvas.get(0).getContext('2d')
@@ -40,14 +44,33 @@ class Editor
 					@drawCurrentToolOnCanvas(@x,@y) if @isLeftDown
 					@removeTail() if @isRightDown
 
-	setupMenu: ()->
-
+	initMap: ()->
+		@map = ''
+		for x in [0..@height-1]
+			for y in [0..@width-1]
+				@map+="_.."
+			@map+="\n"
+		@mapField.val(@map)
 
 
 	drawCurrentToolOnCanvas: (x,y) ->
 		if not @selectedTool? then return
 		asset = @assets.getAsset(@selectedToolIcon)
 		@mainCtx.putImageData asset,x*32,y*32
+		@updateMap(x,y,@selectedMapSign)
+
+	updateMap: (x,y,sign) -> 
+		try
+			lines = @map.split "\n"
+			line = lines[y]
+			begin = line.substring(0,x*3)
+			end = line.substring((x+1)*3)
+			line = begin + sign+end
+			lines[y] = line
+			@map = lines.join "\n"
+			@mapField.val(@map)
+		catch e
+			console.write x+" "+y+" "+e
 
 	drawToolIcon: () ->
 		if not @selectedTool? then return
@@ -88,6 +111,7 @@ class Editor
 			$('.tool').removeClass('selected')
 			$(e.target).parent().addClass('selected')
 			@selectedTool = $(e.target)
+			@selectedMapSign = $(e.target).data('map')
 			@selectedToolIcon = @selectedTool.data('tool-icon')
 
 	setupMouseWheel: () ->
@@ -117,6 +141,7 @@ class Editor
 					if $(e).hasClass('selected')
 						editor.selectedTool=$(imgs[curr])
 						editor.selectedToolIcon =$(imgs[curr]).data('tool-icon')
+						editor.selectedMapSign = $(imgs[curr]).data('map')
 
 				@drawToolIcon(@x,@y)
 				return false
@@ -145,6 +170,7 @@ class Editor
 	removeTail: (x,y)->
 		if not @selectedTool?
 			@mainCtx.clearRect @x*32,@y*32,32,32
+			@updateMap(x,y,"_..")
 $ ->
 	new Editor()
 
