@@ -18,6 +18,17 @@
       this.widthField = $('.width');
       this.heightField = $('.height');
       this.mapField = $(".map");
+      $('.test-planet').click((function(_this) {
+        return function() {
+          return _this.testPlanet();
+        };
+      })(this));
+      $('.load').click((function(_this) {
+        return function() {
+          return _this.load();
+        };
+      })(this));
+      app.GameLoader.loadGamesConfig();
       this.widthField.change((function(_this) {
         return function() {
           return _this.setWidth(_this.widthField.val());
@@ -54,6 +65,10 @@
       })(this));
     }
 
+    Editor.prototype.testPlanet = function() {
+      return window.open('robbo.html?game=0&planet=1', "_blank");
+    };
+
     Editor.prototype.onMouseMoveInCanvas = function(e) {
       this.x = Math.floor((e.pageX - this.cursorCanvas.offset().left) / 32.0);
       this.y = Math.floor((e.pageY - this.cursorCanvas.offset().top) / 32.0);
@@ -68,6 +83,21 @@
       if (this.isRightDown) {
         return this.removeTail();
       }
+    };
+
+    Editor.prototype.load = function() {
+      var game, lines, map, planet;
+      game = app.Universe.Games[$('.games').val()];
+      planet = game.Planets[$('.planets').val()];
+      map = planet.Map.replace(new RegExp(' ', 'g'), ".");
+      lines = map.split('\n');
+      if (lines[0] === "") {
+        lines = lines.slice(1, lines.length - 1);
+      }
+      map = lines.join('\n');
+      this.mapField.val(lines.join('\n'));
+      this.mapField.attr("cols", lines[0].length);
+      return this.map = map;
     };
 
     Editor.prototype.initMap = function() {
@@ -263,3 +293,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=Editor.map

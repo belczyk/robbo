@@ -122,33 +122,27 @@
 	<script src="Scripts/Game/Tests/BombblowableMixinTest.js"></script>
 	<script src="Scripts/Game/Tests/ToolsTests.js"></script>
 	<script src="Scripts/Game/assets.js"></script>
-
+	<script src="config/Universe.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			new app.GameLoader()
+		});
+	</script>
 </head>
 
 <body>
+	<div class="game-selector">
+		<label>Game: </label> <select class="games"></select>
+		<label>Planet: </label> <select class="planets"></select>
+		<button class="play btn btn-primary">Play</button>
+	</div>
 
-
-	<script>
-	window.app = window.app == null ? { } : window.app;
-	app = window.app;
-
-	app.CurrentGameId = '';
-
-	</script>
-	<div style="color: grey">I do not hold or claim any rights to the Robbo game or any assets used in this demo.Robbo has been created by <a href="http://pl.wikipedia.org/wiki/Janusz_Pelc_(programista)">Janusz Pelc</a>, who holds all rights to the idea,the game mechanics, all assets and the plot. It's merely a case study for CoffeeScript/HTML5 capabilities.</div>
-
-	<script src="Scripts/Game/GameLoader.js"></script>
 	<div class="game-chrome">
-		<div class="color-selectors">
-			<div class="color-selector" data-for="0" data-start-val="A27240" style="background-color: rgb(162, 114, 64);"></div>
-			<div class="color-selector" data-for="1" data-start-val="1C2783" style="background-color: rgb(28, 39, 131);"></div>
-			<div class="color-selector" data-for="2" data-start-val="101010" style="background-color: rgb(16, 16, 16);"></div>
-			<div class="color-selector" data-for="3" data-start-val="989898" style="background-color: rgb(152, 152, 152);"></div>
-			<div class="background-color-selector" data-start-val="008000" style="background-color: rgb(0, 128, 0);"></div>
-		</div>
 		<div class="clear-fix"></div>
 		<div style="width: 900px"> 
-			<div class="game-scroll-pane game-board"><canvas width="1024" height="2400" style="margin-top: 0px; margin-left: -96px;"></canvas></div>
+			<div class="game-scroll-pane game-board">
+				<canvas width="1024" height="2400" style="margin-top: 0px; margin-left: -96px;"></canvas>
+			</div>
 			<canvas class="minimap" width="205" height="480" style="background-color: rgb(0, 128, 0);"></canvas>
 		</div>
 
@@ -300,9 +294,13 @@
 		<canvas width="32" height="32" class="asset assetLoad"></canvas>
 
 	</div>
-	<div style="color: gray">
-		v 0.0.2 
-		[11-08-2014 14:20]
-	</div>
+	<script>
+	window.app = window.app == null ? { } : window.app;
+	app = window.app;
+
+	app.CurrentGameId = '';
+	</script>
+	<script src="Scripts/Game/GameLoader.js"></script>
+
 </body>
 </html>

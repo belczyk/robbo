@@ -2,9 +2,9 @@
 app = window.app
 
 class app.LevelManger 
-	constructor: (@levels,@gameBoard) ->
-		@lives = app.Predef.Game.lives
-		@currentLevel = 1
+	constructor: (@gameBoard,@game,@planetsList) ->
+		@currentLevel = parseInt(@planetsList.val())+1
+		@lives = @game.StartingNumberOfLives
 
 	setupCanvas: () ->
 		@canvas = $('<canvas></canvas>')
@@ -23,7 +23,8 @@ class app.LevelManger
 		@effectManager = new app.MapEffects(@canvas,@envCtx)
 		@setupWatchers()
 		@subscribeToEvents()
-		@envCtx.eventAggregator.publish 'load-level',@levels[@currentLevel-1]
+		@envCtx.eventAggregator.publish 'starting-number-of-bolts', @game.Planets[@currentLevel-1].BoltsToBeCollected
+		@envCtx.eventAggregator.publish 'load-level',@game.Planets[@currentLevel-1]
 
 	setupWatchers: () ->
 		@scrollWatcher = new app.ScrollWatcher @envCtx,@eventAggregator,@canvas
@@ -48,8 +49,9 @@ class app.LevelManger
 		@setupLevel()
 
 	onLevelStarts: () ->
-					@envCtx.eventAggregator.publish 'level-started'
-					@envCtx.sound 'level-starts'
+		@envCtx.eventAggregator.publish 'level-started' 
+		@planetsList.val(@currentLevel-1)
+		@envCtx.sound 'level-starts'
 
 	onRobboDestroyed: ()->
 		@lives--
@@ -66,5 +68,5 @@ class app.LevelManger
 						@envCtx.unregisterRandomCalls obj
 						smoke.init()
 			setTimeout((()=>
-							@envCtx.eventAggregator.publish('restart-level',@levels[@currentLevel-1])),2000)
+							@envCtx.eventAggregator.publish('restart-level',@game.Planets[@currentLevel-1])),2000)
 		setTimeout(explosionCallback,700)

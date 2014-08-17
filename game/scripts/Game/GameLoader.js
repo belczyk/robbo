@@ -6,13 +6,74 @@
 
   app = window.app;
 
-  $(window).load(function() {
-    var game;
-    game = new app.Game($('.game-board'), ["w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  \nw  X  _  _  _  L<s_  _  _  _  _  _  #  _  _  _  X  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  #  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  Lvs_  _  _  _  w  a  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  L>s_  +  a  _  _  _  _  _  _  _  _  w  _  _  X  _  _  X  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  s  R  T11_  #  T12X  _  T13#  _  _  _  _  _  _  _  _  \nw  _  L^s_  _  _  _  _  0  _  Ee _  _  w  b  _  _  _  _  #  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  X  _  #  _  X  _  _  #  _  _  &  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  T21_  _  T22_  _  T23_  _  _  _  _  _  _  _  _  \nw  _  _  _  _  @< w  @v _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  w  _  _  _  _  _  _  w  _  _  _  _  _  _  ?  ?  a  _  ?  ?  _  _  _  _  _  _  \nw  _  _  _  _  _  w  _  _  _  _  _  _  w  _  _  _  _  _  _  ?  ?  _  _  ?  ?  _  _  _  _  _  _  \nw  _  _  _  _  _  w  +  _  _  _  _  _  w  _  _  _  b  _  _  ?  ?  _  _  ?  ?  _  _  _  _  _  _  \nw  _  _  _  _  _  w  +  _  _  _  _  _  w  _  _  _  _  _  _  ?  ?  _  _  ?  ?  _  _  _  _  _  _  \nw  _  _  _  _  _  w  a  _  _  _  _  _  w  _  _  _  _  _  _  ?  ?  _  _  ?  ?  _  _  _  _  _  _  \nw  @> _  _  _  _  w  _| _  _  _  _  @^ w  _  _  _  _  _  _  ?  ?  _  _  ?  ?  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  ?  ?  _  _  ?  ?  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  _  a  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  #o _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  X  _  _  _  _  w  k  _  _  _  _  0  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  0  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  a  _  _  _  _  _  _  _  w  _  0  0  0  0  0  0  0  w  w  w  w  w  w  w  w  w  w  \nw  _  +  _  _  a  _  _  _  _  _  _  _  w  _  _  _  _  _  _  0  k  w  _  _  _  _  _  _  _  _  w  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  0  _  _  d  a  a  a  a  a  a  a  a  w  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  w  \nw  B-v_  _  _  _  _  _  _  _  _  _  _  #  _  _  _  _  _  _  _  _  w  w  w  w  w  w  w  w  w  w  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  #  _  _  _  w  a  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  #  #  #  #  #  #  #  #  #  #  #  #  w  a  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  #  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  #  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  B-^_  _  #  B|>_  _  #  _  _  B|<w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  #  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  w  #  _  _  0  +  +  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  w  _  _  _  _  +  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  Ea _  _  _  +  _  Ec _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  B- _  _  _  _  #  B| _  _  _  _  d  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  B- _  _  _  #  _  B| _  _  _  w  k  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  B- _  _  #  _  _  B| _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  L r_  B- _  #  _  0  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  B- #  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  #  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  #  _  _  _  _  _  _  #  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  l-v_  #  #  #  #  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  #  #  #  #  #  #  #  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  #  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  l|>_  _  _  l|<#  l-^_  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  M< _  _  _  _  _  _  _  _  _  _  #  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  #  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  Lv _  _  _  M> w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  L> _  _  _  _  _  _  _  L< _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  L^ _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  w  X  _  _  _  _  _  _  _  _  _  #  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  #  _  X  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  X  k  X  _  _  _  _  _  a  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  #  X  a  X  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  Lv X  #  Ea X  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  #  _| #  B- _  X  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _-v_  _  _  _  _  _  _  _  _  _  _  #  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  ", "w  w  w  w  w  w  w  w  w  w  w  w  w  w  \nw  X  _  _  _  L<s_  _  _  _  _  _  #  _  \nw  _  _  _  _  _  _  _  #  _  _  _  _  w  \nw  _  _  _  _  _  _  _  Lvs_  _  _  _  w  \nw  L>s_  +  a  _  _  _  _  _  _  _  _  w  \nw  _  _  _  _  _  _  _  _  _  _  _  _  w  \nw  _  L^s_  _  _  _  _  0  _  Ee _  _  w  \nw  w  w  w  w  w  w  w  w  w  w  w  #  w  \nw  _  _  _  _  _  _  _  _  _  _  R  _  _  \nw  w  w  w  w  w  w  w  w  w  w  w  #  w  \nw  _  _  _  _  @< w  @v _  _  _  _  _  _  \nw  _  _  _  _  _  w  _  _  _  _  _  _  w  \nw  _  _  _  _  _  w  _  _  _  _  _  _  w  \nw  _  _  _  _  _  w  +  _  _  _  _  _  w  \nw  _  _  _  _  _  w  +  _  _  _  _  _  w  \nw  _  _  _  _  _  w  a  _  _  _  _  _  w  \nw  @> _  _  _  _  w  B| _  _  _  _  _  w  \nw  w  w  w  w  w  w  w  w  w  w  w  w  w  "]);
-    window.game = game;
-    return new app.ColorManager($('.game-board canvas'), function() {
-      return game.redraw();
-    });
-  });
+  app.GameLoader = (function() {
+    GameLoader.loadGamesConfig = function() {
+      var game, gamesList, i, planet, planetsList, _i, _j, _len, _len1, _ref1, _ref2;
+      gamesList = $('.games');
+      planetsList = $('.planets');
+      _ref1 = app.Universe.Games;
+      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+        game = _ref1[i];
+        gamesList.append($('<option></option>').attr('value', i).text(game.Name));
+        _ref2 = game.Planets;
+        for (i = _j = 0, _len1 = _ref2.length; _j < _len1; i = ++_j) {
+          planet = _ref2[i];
+          planetsList.append($('<option></option>').attr('value', i).text(planet.Name));
+        }
+        return;
+      }
+    };
+
+    function GameLoader() {
+      this.gamesList = $('.games');
+      this.planetsList = $('.planets');
+      app.GameLoader.loadGamesConfig();
+      $('button.play').click((function(_this) {
+        return function() {
+          return _this.startGame();
+        };
+      })(this));
+      this.setRequestedPlanet();
+    }
+
+    GameLoader.prototype.startGame = function() {
+      var game;
+      game = app.Universe.Games[this.gamesList.val()];
+      game = new app.Game($('.game-board'), game, this.planetsList);
+      return new app.ColorManager($('.game-board canvas'), function() {
+        return game.redraw();
+      });
+    };
+
+    GameLoader.prototype.setRequestedPlanet = function() {
+      var vars;
+      vars = this.getParams();
+      if ((vars["game"] != null)) {
+        this.gamesList.val(vars["game"]);
+      }
+      if ((vars["planet"] != null)) {
+        this.planetsList.val(vars["planet"]);
+        return this.startGame();
+      }
+    };
+
+    GameLoader.prototype.getParams = function() {
+      var key, params, query, raw_vars, v, val, _i, _len, _ref1;
+      query = window.location.search.substring(1);
+      raw_vars = query.split("&");
+      params = {};
+      for (_i = 0, _len = raw_vars.length; _i < _len; _i++) {
+        v = raw_vars[_i];
+        _ref1 = v.split("="), key = _ref1[0], val = _ref1[1];
+        params[key] = decodeURIComponent(val);
+      }
+      return params;
+    };
+
+    return GameLoader;
+
+  })();
 
 }).call(this);
+
+//# sourceMappingURL=GameLoader.map

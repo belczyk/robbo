@@ -13,7 +13,9 @@ class Editor
 		@widthField = $('.width')
 		@heightField = $('.height')
 		@mapField = $(".map")
-
+		$('.test-planet').click => @testPlanet()
+		$('.load').click => @load()
+		app.GameLoader.loadGamesConfig()
 		@widthField.change () => @setWidth(@widthField.val())
 		@heightField.change () => @setHeight(@heightField.val())
 		@assets = app.AssetLoader
@@ -32,6 +34,9 @@ class Editor
 		$('.open-select-game').click =>
 				@selectGame.show()
 
+	testPlanet: ()->
+		window.open('robbo.html?game=0&planet=1',"_blank")
+
 	onMouseMoveInCanvas:(e) ->
 					@x = Math.floor((e.pageX-@cursorCanvas.offset().left)/32.0)
 					@y = Math.floor((e.pageY-@cursorCanvas.offset().top)/32.0)
@@ -43,7 +48,18 @@ class Editor
 					@drawToolIcon()
 					@drawCurrentToolOnCanvas(@x,@y) if @isLeftDown
 					@removeTail() if @isRightDown
+	load: ()->
+		game = app.Universe.Games[$('.games').val()]
+		planet = game.Planets[$('.planets').val()]
+		map = planet.Map.replace(new RegExp(' ', 'g'),".")
+		lines = map.split('\n')
+		if (lines[0]=="")
+			lines = lines.slice(1,lines.length-1)
+		map = lines.join('\n')
 
+		@mapField.val(lines.join('\n'))
+		@mapField.attr("cols",lines[0].length)
+		@map = map
 	initMap: ()->
 		@map = ''
 		for x in [0..@height-1]

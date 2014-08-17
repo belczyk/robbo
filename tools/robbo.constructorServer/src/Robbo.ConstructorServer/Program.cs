@@ -29,10 +29,9 @@ namespace Robbo.Local.API
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+                Console.WriteLine("Press ENTER to close Robbo server.");
+                Console.ReadLine();
             }
-
-            Console.WriteLine("Press ENTER to close Robbo server.");
-            Console.ReadLine();
         }
     }
 }

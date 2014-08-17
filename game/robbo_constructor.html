@@ -48,6 +48,7 @@
 <script src="scripts/Game/EventAggregator.js"></script>
 <script src="scripts/Game/MapLoader.js"></script>
 <script src="scripts/Game/Game.js"></script>
+<script src="scripts/Game/GameLoader.js"></script>
 <script src="scripts/Game/MapEffects.js"></script>
 <script src="scripts/Game/Mixins/AssetLoader.js"></script>
 <script src="scripts/Game/Structures/Delta.js"></script>
@@ -126,6 +127,8 @@
 <script src="scripts/game/tests/BombblowableMixinTest.js"></script>
 <script src="scripts/game/tests/ToolsTests.js"></script>
 <script src="scripts/Game/assets.js"></script>
+<script src="config/constructor.js" ></script>
+<script src="config/universe.js" ></script>
 
 </head>
 <body oncontextmenu="return false">
@@ -146,6 +149,14 @@
 			<label>Widht</label> <input type="text" class="width" value="16"/>
 			<label>Height</label> <input type="text" class="height" value="32"/>
 		</div>
+
+		<div class="game-selector">
+			<label>Game: </label> <select class="games"></select>
+			<label>Planet: </label> <select class="planets"></select>
+			<button class="load btn btn-primary">Load</button>
+		</div>
+
+
 		<div class="alert alert-info color-selectors">
 
 			<div class="color-selector" data-for="0" data-start-val="A27240" style="background-color: rgb(162, 114, 64);"></div>
@@ -156,7 +167,9 @@
 
 		</div>
 		<div class="clear-fix"></div>
-
+		<div>
+			<button class="test-planet btn btn-primary">Test planet</button>
+		</div>
 		<div style="display: none;">
 			<label for="width">Width:</label><input type="text" id="width" value="16"><label for="height">Height:</label><input type="text" id="height" value="32">
 		</div>

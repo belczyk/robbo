@@ -2,10 +2,10 @@
 app = window.app
 
 class app.Game 
-	constructor: (@gameBoard,levels) ->
+	constructor: (@gameBoard,game,planetsList) ->
 		@disableScrolling()
 
-		@levelManager = new app.LevelManger levels,@gameBoard
+		@levelManager = new app.LevelManger @gameBoard,game,planetsList
 		@levelManager.startGame()
 		@timeDelayedMethodCall = new app.TimeDelayedMethodCall()
 		
@@ -14,7 +14,12 @@ class app.Game
 
 	setupMinimap: ()->
 		callback = () =>
-			minimap = $('.minimap').attr('width',@canvas().width()*0.2).attr('height',@canvas().height()*0.2).css('background-color',@canvas().css('background-color'))
+			minimap = $('.minimap')
+						.attr('width',@canvas().width()*0.2)
+						.attr('height',@canvas().height()*0.2)
+						.css('background-color',@canvas()
+						.css('background-color'))
+
 			minimap2D =minimap.get(0).getContext('2d')
 			minimap2D.scale 0.2,0.2
 			minimap2D.drawImage @canvas()[0],0,0

@@ -30,3 +30,5 @@ TestResult.xml
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+
+/game/config/backup

@@ -3,11 +3,11 @@ app = window.app
 
 class app.MapLoader
 	constructor: (@envCtx,@canvas)->
-		@envCtx.eventAggregator.subscribe 'load-level',((levelStr)=>@load(levelStr)),this
-		@envCtx.eventAggregator.subscribe 'restart-level',((mapStr)=>@restart(mapStr)),this
+		@envCtx.eventAggregator.subscribe 'load-level',((palnet)=>@load(palnet)),this
+		@envCtx.eventAggregator.subscribe 'restart-level',((palnet)=>@restart(palnet)),this
 
-	restart: (mapStr) ->
-		@load(mapStr)
+	restart: (planet) ->
+		@load(planet)
 		@envCtx.eventAggregator.publish 'level-restarted'
 
 	cleanMap: () ->
@@ -19,10 +19,11 @@ class app.MapLoader
 					@envCtx.unregisterRandomCalls obj
 					@envCtx.map[obj.y][obj.x] = null
 					`delete	obj`
-	load : (mapStr)->
+	load : (planet)->
 		@cleanMap()
-		bolts = 0
-		lines = mapStr.split '\n'
+		lines = planet.Map.split '\n'
+		if (lines[0]=="")
+			lines = lines.slice(1,lines.length-1)
 		maxWidth =0 
 		for line,y in lines
 			if (line.length-1)/3>maxWidth
@@ -31,11 +32,11 @@ class app.MapLoader
 		@envCtx.initMap maxWidth,lines.length
 		toInit = []
 
-
 		@canvas.attr('width',maxWidth*32)
 		@canvas.attr('height',lines.length*32)
-		for line,y in lines
 
+		for line,y in lines
+			if line == "" then continue
 			for i in [0..line.length/3]
 				x = i
 				char = line[i*3]
@@ -49,7 +50,6 @@ class app.MapLoader
 						obj = new app.Robbo @envCtx,x,y
 					when 'b'
 						obj = new app.Bolt @envCtx,x,y
-						bolts++
 					when '#'
 						if char2 is 'o'
 							obj = new app.ContainerWithWheels @envCtx,x,y
@@ -119,10 +119,13 @@ class app.MapLoader
 						obj = new app.IonStorm @envCtx,x,y ,@getOrientation(char2)
 						toInit.push obj
 				@envCtx.setObjAt(x,y, obj)
-		@envCtx.eventAggregator.publish 'starting-number-of-bolts', bolts
+
+
 		for o in toInit
 			o.init()
-		@envCtx.eventAggregator.publish 'level-loaded', bolts
+
+		@envCtx.eventAggregator.publish 'level-loaded'
+
 		return
 	getDirection: (char) ->
 		switch char

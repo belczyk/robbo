@@ -13,7 +13,7 @@ namespace Robbo.Local.API
                 {
                     Name = "Original game",
                     StartingNumberOfLives = 9,
-                    Plantes = new List<Planet>
+                    Planets = new List<Planet>
                     {
                         new Planet
                         {

@@ -11,19 +11,19 @@
       this.envCtx = envCtx;
       this.canvas = canvas;
       this.envCtx.eventAggregator.subscribe('load-level', ((function(_this) {
-        return function(levelStr) {
-          return _this.load(levelStr);
+        return function(palnet) {
+          return _this.load(palnet);
         };
       })(this)), this);
       this.envCtx.eventAggregator.subscribe('restart-level', ((function(_this) {
-        return function(mapStr) {
-          return _this.restart(mapStr);
+        return function(palnet) {
+          return _this.restart(palnet);
         };
       })(this)), this);
     }
 
-    MapLoader.prototype.restart = function(mapStr) {
-      this.load(mapStr);
+    MapLoader.prototype.restart = function(planet) {
+      this.load(planet);
       return this.envCtx.eventAggregator.publish('level-restarted');
     };
 
@@ -56,11 +56,13 @@
       return _results;
     };
 
-    MapLoader.prototype.load = function(mapStr) {
-      var bolts, char, char2, char3, i, line, lines, maxWidth, o, obj, toInit, x, y, _i, _j, _k, _l, _len, _len1, _len2, _ref1;
+    MapLoader.prototype.load = function(planet) {
+      var char, char2, char3, i, line, lines, maxWidth, o, obj, toInit, x, y, _i, _j, _k, _l, _len, _len1, _len2, _ref1;
       this.cleanMap();
-      bolts = 0;
-      lines = mapStr.split('\n');
+      lines = planet.Map.split('\n');
+      if (lines[0] === "") {
+        lines = lines.slice(1, lines.length - 1);
+      }
       maxWidth = 0;
       for (y = _i = 0, _len = lines.length; _i < _len; y = ++_i) {
         line = lines[y];
@@ -74,6 +76,9 @@
       this.canvas.attr('height', lines.length * 32);
       for (y = _j = 0, _len1 = lines.length; _j < _len1; y = ++_j) {
         line = lines[y];
+        if (line === "") {
+          continue;
+        }
         for (i = _k = 0, _ref1 = line.length / 3; 0 <= _ref1 ? _k <= _ref1 : _k >= _ref1; i = 0 <= _ref1 ? ++_k : --_k) {
           x = i;
           char = line[i * 3];
@@ -89,7 +94,6 @@
               break;
             case 'b':
               obj = new app.Bolt(this.envCtx, x, y);
-              bolts++;
               break;
             case '#':
               if (char2 === 'o') {
@@ -190,12 +194,11 @@
           this.envCtx.setObjAt(x, y, obj);
         }
       }
-      this.envCtx.eventAggregator.publish('starting-number-of-bolts', bolts);
       for (_l = 0, _len2 = toInit.length; _l < _len2; _l++) {
         o = toInit[_l];
         o.init();
       }
-      this.envCtx.eventAggregator.publish('level-loaded', bolts);
+      this.envCtx.eventAggregator.publish('level-loaded');
     };
 
     MapLoader.prototype.getDirection = function(char) {
@@ -225,3 +228,5 @@
   })();
 
 }).call(this);
+
+//# sourceMappingURL=MapLoader.map
