@@ -59,6 +59,14 @@
       return app.GameLoader.loadGamesConfig();
     };
 
+    GameDesigner.prototype.toggleRawMap = function() {
+      if ($('.map').is(":visible")) {
+        return $('.map').hide("blind");
+      } else {
+        return $('.map').show("blind");
+      }
+    };
+
     GameDesigner.prototype.removeGame = function() {
       if (app.GameLoader.currentGame() === "0") {
         alert("You can't remove original game");
@@ -73,13 +81,9 @@
 
     GameDesigner.prototype.toggleOptions = function(x, e) {
       if (this.optionsPanel.is(':visible')) {
-        this.optionsPanel.hide('blind');
-        $(e.target).find('i').removeClass('glyphicon-chevron-up');
-        return $(e.target).find('i').addClass('glyphicon-chevron-down');
+        return this.optionsPanel.hide('blind');
       } else {
-        this.optionsPanel.show('blind');
-        $(e.target).find('i').removeClass('glyphicon-chevron-down');
-        return $(e.target).find('i').addClass('glyphicon-chevron-up');
+        return this.optionsPanel.show('blind');
       }
     };
 

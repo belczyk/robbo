@@ -45,6 +45,12 @@ class app.GameDesigner
 		app.Universe.Games[app.GameLoader.currentGame()].Planets.splice(app.GameLoader.currentPlanet(),1)
 		app.GameLoader.loadGamesConfig()
 
+	toggleRawMap: () ->
+		if($('.map').is(":visible"))
+			$('.map').hide("blind")
+		else
+			$('.map').show("blind")
+
 	removeGame: () -> 
 		if (app.GameLoader.currentGame()=="0") 
 			alert("You can't remove original game")
@@ -58,12 +64,10 @@ class app.GameDesigner
 	toggleOptions: (x,e) ->
 		if(@optionsPanel.is(':visible'))
 			@optionsPanel.hide('blind')
-			$(e.target).find('i').removeClass('glyphicon-chevron-up')
-			$(e.target).find('i').addClass('glyphicon-chevron-down')
+
 		else
 			@optionsPanel.show('blind')
-			$(e.target).find('i').removeClass('glyphicon-chevron-down')
-			$(e.target).find('i').addClass('glyphicon-chevron-up')
+
 
 	createPlanet: () -> 
 		planet = 
