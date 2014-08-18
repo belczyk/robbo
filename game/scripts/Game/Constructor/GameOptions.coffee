@@ -12,6 +12,7 @@ class app.GameDesigner
 		@optionsPanel = $('.options-panel')
 		ko.applyBindings this,$('.game-designer')[0]
 		$('.has-tooltip').tooltip()
+
 	saveGame: () -> 
 		$('.save-game').text('Saving...')
 		$.ajax
@@ -37,8 +38,22 @@ class app.GameDesigner
 		return
 
 	removePlanet: () ->
+		if (!app.GameLoader.currentPlanet()?) then return 
+
+		if !confirm("Are you sure you want remove current planet?") then return
+
+		app.Universe.Games[app.GameLoader.currentGame()].Planets.splice(app.GameLoader.currentPlanet(),1)
+		app.GameLoader.loadGamesConfig()
 
 	removeGame: () -> 
+		if (app.GameLoader.currentGame()=="0") 
+			alert("You can't remove original game")
+			return
+
+		if !confirm("Are you sure you want remove current game?") then return
+
+		app.Universe.Games.splice(app.GameLoader.currentGame(),1)
+		app.GameLoader.loadGamesConfig()
 
 	toggleOptions: (x,e) ->
 		if(@optionsPanel.is(':visible'))

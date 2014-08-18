@@ -48,9 +48,28 @@
       this.load();
     };
 
-    GameDesigner.prototype.removePlanet = function() {};
+    GameDesigner.prototype.removePlanet = function() {
+      if (app.GameLoader.currentPlanet() == null) {
+        return;
+      }
+      if (!confirm("Are you sure you want remove current planet?")) {
+        return;
+      }
+      app.Universe.Games[app.GameLoader.currentGame()].Planets.splice(app.GameLoader.currentPlanet(), 1);
+      return app.GameLoader.loadGamesConfig();
+    };
 
-    GameDesigner.prototype.removeGame = function() {};
+    GameDesigner.prototype.removeGame = function() {
+      if (app.GameLoader.currentGame() === "0") {
+        alert("You can't remove original game");
+        return;
+      }
+      if (!confirm("Are you sure you want remove current game?")) {
+        return;
+      }
+      app.Universe.Games.splice(app.GameLoader.currentGame(), 1);
+      return app.GameLoader.loadGamesConfig();
+    };
 
     GameDesigner.prototype.toggleOptions = function(x, e) {
       if (this.optionsPanel.is(':visible')) {

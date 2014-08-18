@@ -25,9 +25,6 @@
 					<button data-bind="click: newPlanet" class="btn btn-primary btn-sm">New planet</button>
 					<button data-bind="click: testPlanet" class="btn btn-primary btn-sm">Test planet</button>
 
-
-
-
 					<button data-bind="click: toggleOptions" class="btn btn-default btn-sm btn-right" data-toggle="button"><i class="glyphicon glyphicon-chevron-up"></i></button>
 				</div>
 			</div>
@@ -44,7 +41,7 @@
 						<div>
 							<label class="long">Game name:</label><input type="text" class="game-name" value="Original game" data-bind="value:  gameName"/>
 							<label>Lives:</label><input type="text" class="number lives" value="9"  data-bind="value:  lives"/>
-							<button data-bind="click: removeGame" class="btn btn-default btn-sm have-tooltip" data-toggle="tooltip" data-placement="top" title="Remove game"><i class="glyphicon glyphicon-remove"></i></button>
+							<button data-bind="click: removeGame" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top" title="Remove game"><i class="glyphicon glyphicon-remove"></i></button>
 						</div>
 						<div>
 							<label class="long">Planet name:</label><input type="text" class="planet-name" value="Planet 1" data-bind="value:  planetName"/>
@@ -52,7 +49,7 @@
 							
 							<label>Width:</label><input type="text" class="number width" value="16" data-bind="value:  width"/>
 							<label>Height:</label><input type="text" class="number height" value="32" data-bind="value:  height"/>
-							<button data-bind="click: removePlanet" class="btn btn-default btn-sm have-tooltip" data-toggle="tooltip" data-placement="top"  title="Remove game"><i class="glyphicon glyphicon-remove"></i></button>
+							<button data-bind="click: removePlanet" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top"  title="Remove planet"><i class="glyphicon glyphicon-remove"></i></button>
 
 						</div>
 						<div>
