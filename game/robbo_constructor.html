@@ -12,426 +12,312 @@
 	<link href="content/bootstrap/bootstrap-responsive.css" rel="stylesheet">
 	<link href="content/game.css" rel="stylesheet">
 	<link href="content/constructor.css" rel="stylesheet">
-
+	<link href="Content/QUnit/QUnit.1.10.0.css" rel="stylesheet">
 </head>
 <body oncontextmenu="return false">
-
-	<div class="editor">
-		<div class="game-designer">
-			<div class="panel panel-default designer-menu" >
-				<div class="panel-body">
-					<button data-bind="click: saveGame" class="save-game btn btn-primary btn-sm">Save game</button>
-					<button data-bind="click: newGame" class="btn btn-primary btn-sm">New game</button>
-					<button data-bind="click: newPlanet" class="btn btn-primary btn-sm">New planet</button>
-					<button data-bind="click: testPlanet" class="btn btn-primary btn-sm">Test planet</button>
-
-					
-					<button data-bind="click: toggleOptions" class="btn btn-default btn-sm btn-right " data-toggle="button" ><i class="glyphicon glyphicon-chevron-down"></i></button>
-					<button data-bind="click: toggleRawMap" class="btn btn-default btn-sm btn-right" data-toggle="button"><i class="glyphicon glyphicon-qrcode"></i></button>
-				</div>
-			</div>
-			<div class="options-panel">
-				<div class="panel panel-default" >
-					<div class="panel-body">
-						<label>Game: </label> <select class="games"></select>
-						<label>Planet: </label> <select class="planets"></select>
-					</div>
-				</div>
-
-				<div class="panel panel-default game-options" >
-					<div class="panel-body">
-						<div>
-							<label class="long">Game name:</label><input type="text" class="game-name" value="Original game" data-bind="value:  gameName"/>
-							<label>Lives:</label><input type="text" class="number lives" value="9"  data-bind="value:  lives"/>
-							<button data-bind="click: removeGame" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top" title="Remove game"><i class="glyphicon glyphicon-remove"></i></button>
-						</div>
-						<div>
-							<label class="long">Planet name:</label><input type="text" class="planet-name" value="Planet 1" data-bind="value:  planetName"/>
-							<label>Bolts:</label><input type="text" class="number bolts" value="5" data-bind="value:  bolts"/>
-							
-							<label>Width:</label><input type="text" class="number width" value="16" data-bind="value:  width"/>
-							<label>Height:</label><input type="text" class="number height" value="32" data-bind="value:  height"/>
-							<button data-bind="click: removePlanet" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top"  title="Remove planet"><i class="glyphicon glyphicon-remove"></i></button>
-
-						</div>
-						<div>
-
-						</div>
-					</div>
-				</div>
-			</div>
+	<div class="unit-tests">
+		<h1 id="qunit-header"><a href="/Home/gametests">Unit Tests</a> </h1>
+		<h2 id="qunit-banner" class="qunit-pass"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<p id="qunit-testresult" class="result">
+			<span class="passed"></span> tests of <span class="total"></span> passed, <span class="failed"></span> failed.</p>
+			<ol id="qunit-tests"></ol>
+			<div id="qunit-fixture"></div>
 		</div>
-		<div>
-			
+		<div class="editor">
+			<div class="game-designer">
+				<div class="panel panel-default designer-menu" >
+					<div class="panel-body">
+						<button data-bind="click: saveGame" class="save-game btn btn-primary btn-sm">Save game</button>
+						<button data-bind="click: newGame" class="btn btn-primary btn-sm">New game</button>
+						<button data-bind="click: newPlanet" class="btn btn-primary btn-sm">New planet</button>
+						<button data-bind="click: testPlanet" class="btn btn-primary btn-sm">Test planet</button>
+
+						<button data-bind="click: toggleOptions" class="btn btn-default btn-sm btn-right " data-toggle="button" ><i class="glyphicon glyphicon-chevron-down"></i></button>
+						<button data-bind="click: toggleRawMap" class="btn btn-default btn-sm btn-right" data-toggle="button"><i class="glyphicon glyphicon-qrcode"></i></button>
+					</div>
+				</div>
+				<div class="options-panel">
+					<div class="panel panel-default" >
+						<div class="panel-body">
+							<label>Game: </label> <select data-bind="options: games, optionsText: 'name',optionsValue : 'index', value: 'gameId'"></select>
+							<label>Planet: </label> <select data-bind="options: planets,optionsText: 'name',optionsValue : 'index', value: 'planetId'" ></select>
+						</div>
+					</div>
+
+					<div class="panel panel-default game-options" >
+						<div class="panel-body">
+							<div>
+								<label class="long">Game name:</label><input type="text" class="game-name" data-bind="value:  game().name"/>
+								<label>Lives:</label><input type="text" class="number lives"  data-bind="value:  game().startingNumberOfLives"/>
+								<button data-bind="click: removeGame" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top" title="Remove game"><i class="glyphicon glyphicon-remove"></i></button>
+							</div>
+							<div>
+								<label class="long">Planet name:</label><input type="text" class="planet-name" data-bind="value:  planet().name"/>
+								<label>Bolts:</label><input type="text" class="number bolts"  data-bind="value:  planet().boltsToBeCollected"/>
+
+								<label>Width:</label><input type="text" class="number width"  data-bind="value:  planet().width"/>
+								<label>Height:</label><input type="text" class="number height"  data-bind="value:  planet().height"/>
+								<button data-bind="click: removePlanet" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top"  title="Remove planet"><i class="glyphicon glyphicon-remove"></i></button>
+							</div>
+						</div>
+					</div> 
+				</div>
+			</div>
 			<div>
 
+				<div>
 
-				<div class="panel panel-default toolbox">
-					<div class="panel-body">
-						<div class="tool">
-							<img src="content/game-assets/constructor/ant.png" class="curr" data-tool-icon="ant" data-map="Ea.">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/coala.png" class="curr" data-tool-icon="coala" data-map="Ec.">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/bat-h.png" class="curr" data-tool-icon="bat-h" data-map="B_.">
-							<img src="content/game-assets/constructor/bat-v.png" data-tool-icon="bat-v" data-map="B|.">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/firing-bat-v-u.png" class="curr" data-tool-icon="firing-bat-v-u" data-map="B|^">
-							<img src="content/game-assets/constructor/firing-bat-v-r.png" data-tool-icon="firing-bat-v-r" data-map="B|>">
-							<img src="content/game-assets/constructor/firing-bat-v-d.png" data-tool-icon="firing-bat-v-d" data-map="B|v">
-							<img src="content/game-assets/constructor/firing-bat-v-l.png" data-tool-icon="firing-bat-v-l" data-map="B|<">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/firing-bat-h-u.png" class="curr" data-tool-icon="firing-bat-h-u" data-map="B_^">
-							<img src="content/game-assets/constructor/firing-bat-h-r.png" data-tool-icon="firing-bat-h-r"data-map="B_>">
-							<img src="content/game-assets/constructor/firing-bat-h-d.png" data-tool-icon="firing-bat-h-d" data-map="B_v">
-							<img src="content/game-assets/constructor/firing-bat-h-l.png" data-tool-icon="firing-bat-h-l" data-map="B_<">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/eyes.png" class="curr" data-tool-icon="eyes" data-map="Ee.">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/rotating-laser.png" class="curr" data-tool-icon="rotating-laser" data-map="L.r">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/laser-u.png" class="curr" data-tool-icon="laser-u" data-map="L^.">
-							<img src="content/game-assets/constructor/laser-r.png" data-tool-icon="laser-r" data-map="L>.">
-							<img src="content/game-assets/constructor/laser-d.png" data-tool-icon="laser-d" data-map="Lv.">
-							<img src="content/game-assets/constructor/laser-l.png" data-tool-icon="laser-l" data-map="L<.">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/laser-s-u.png" class="curr" data-tool-icon="laser-s-u" data-map="L^s">
-							<img src="content/game-assets/constructor/laser-s-r.png" data-tool-icon="laser-s-r" data-map="L>s">
-							<img src="content/game-assets/constructor/laser-s-d.png" data-tool-icon="laser-s-d" data-map="Lvs">
-							<img src="content/game-assets/constructor/laser-s-l.png" data-tool-icon="laser-s-l" data-map="L<s">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/laser-b-u.png" class="curr" data-tool-icon="laser-b-u"data-map="L^b">
-							<img src="content/game-assets/constructor/laser-b-r.png" data-tool-icon="laser-b-r" data-map="L>b">
-							<img src="content/game-assets/constructor/laser-b-d.png" data-tool-icon="laser-b-d" data-map="Lvb">
-							<img src="content/game-assets/constructor/laser-b-l.png" data-tool-icon="laser-b-l" data-map="L<b">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/laser-m-h-u.png" class="curr" data-tool-icon="laser-m-h-u" data-map="l_^">
-							<img src="content/game-assets/constructor/laser-m-h-r.png" data-tool-icon="laser-m-h-r" data-map="l_>">
-							<img src="content/game-assets/constructor/laser-m-h-d.png" data-tool-icon="laser-m-h-d" data-map="l_v">
-							<img src="content/game-assets/constructor/laser-m-h-l.png" data-tool-icon="laser-m-h-l" data-map="l_<">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/laser-m-v-u.png" class="curr" data-tool-icon="laser-m-v-u"  data-map="l|^">
-							<img src="content/game-assets/constructor/laser-m-v-r.png" data-tool-icon="laser-m-v-r" data-map="l|>">
-							<img src="content/game-assets/constructor/laser-m-v-d.png" data-tool-icon="laser-m-v-d" data-map="l|v">
-							<img src="content/game-assets/constructor/laser-m-v-l.png" data-tool-icon="laser-m-v-l" data-map="l|<">
-						</div>
-						<div class="tool">
 
-							<img src="content/game-assets/constructor/magnet-r.png" class="curr" data-tool-icon="magnet-r" data-map="M>.">
-							<img src="content/game-assets/constructor/magnet-l.png" class="magnet-l" data-tool-icon="magnet-l" data-map="M<.">
-						</div>
+					<div class="panel panel-default toolbox">
+						<div class="panel-body">
+							<div class="tool">
+								<img src="content/game-assets/constructor/ant.png" class="curr" data-tool-icon="ant" data-map="Ea.">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/coala.png" class="curr" data-tool-icon="coala" data-map="Ec.">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/bat-h.png" class="curr" data-tool-icon="bat-h" data-map="B_.">
+								<img src="content/game-assets/constructor/bat-v.png" data-tool-icon="bat-v" data-map="B|.">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/firing-bat-v-u.png" class="curr" data-tool-icon="firing-bat-v-u" data-map="B|^">
+								<img src="content/game-assets/constructor/firing-bat-v-r.png" data-tool-icon="firing-bat-v-r" data-map="B|>">
+								<img src="content/game-assets/constructor/firing-bat-v-d.png" data-tool-icon="firing-bat-v-d" data-map="B|v">
+								<img src="content/game-assets/constructor/firing-bat-v-l.png" data-tool-icon="firing-bat-v-l" data-map="B|<">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/firing-bat-h-u.png" class="curr" data-tool-icon="firing-bat-h-u" data-map="B_^">
+								<img src="content/game-assets/constructor/firing-bat-h-r.png" data-tool-icon="firing-bat-h-r"data-map="B_>">
+								<img src="content/game-assets/constructor/firing-bat-h-d.png" data-tool-icon="firing-bat-h-d" data-map="B_v">
+								<img src="content/game-assets/constructor/firing-bat-h-l.png" data-tool-icon="firing-bat-h-l" data-map="B_<">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/eyes.png" class="curr" data-tool-icon="eyes" data-map="Ee.">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/rotating-laser.png" class="curr" data-tool-icon="rotating-laser" data-map="L.r">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/laser-u.png" class="curr" data-tool-icon="laser-u" data-map="L^.">
+								<img src="content/game-assets/constructor/laser-r.png" data-tool-icon="laser-r" data-map="L>.">
+								<img src="content/game-assets/constructor/laser-d.png" data-tool-icon="laser-d" data-map="Lv.">
+								<img src="content/game-assets/constructor/laser-l.png" data-tool-icon="laser-l" data-map="L<.">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/laser-s-u.png" class="curr" data-tool-icon="laser-s-u" data-map="L^s">
+								<img src="content/game-assets/constructor/laser-s-r.png" data-tool-icon="laser-s-r" data-map="L>s">
+								<img src="content/game-assets/constructor/laser-s-d.png" data-tool-icon="laser-s-d" data-map="Lvs">
+								<img src="content/game-assets/constructor/laser-s-l.png" data-tool-icon="laser-s-l" data-map="L<s">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/laser-b-u.png" class="curr" data-tool-icon="laser-b-u"data-map="L^b">
+								<img src="content/game-assets/constructor/laser-b-r.png" data-tool-icon="laser-b-r" data-map="L>b">
+								<img src="content/game-assets/constructor/laser-b-d.png" data-tool-icon="laser-b-d" data-map="Lvb">
+								<img src="content/game-assets/constructor/laser-b-l.png" data-tool-icon="laser-b-l" data-map="L<b">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/laser-m-h-u.png" class="curr" data-tool-icon="laser-m-h-u" data-map="l_^">
+								<img src="content/game-assets/constructor/laser-m-h-r.png" data-tool-icon="laser-m-h-r" data-map="l_>">
+								<img src="content/game-assets/constructor/laser-m-h-d.png" data-tool-icon="laser-m-h-d" data-map="l_v">
+								<img src="content/game-assets/constructor/laser-m-h-l.png" data-tool-icon="laser-m-h-l" data-map="l_<">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/laser-m-v-u.png" class="curr" data-tool-icon="laser-m-v-u"  data-map="l|^">
+								<img src="content/game-assets/constructor/laser-m-v-r.png" data-tool-icon="laser-m-v-r" data-map="l|>">
+								<img src="content/game-assets/constructor/laser-m-v-d.png" data-tdool-icon="laser-m-v-d" data-map="l|v">
+								<img src="content/game-assets/constructor/laser-m-v-l.png" data-tool-icon="laser-m-v-l" data-map="l|<">
+							</div>
+							<div class="tool">
 
-						<div class="clear-fix"></div>
+								<img src="content/game-assets/constructor/magnet-r.png" class="curr" data-tool-icon="magnet-r" data-map="M>.">
+								<img src="content/game-assets/constructor/magnet-l.png" class="magnet-l" data-tool-icon="magnet-l" data-map="M<.">
+							</div>
 
-						<div class="tool">
-							<img src="content/game-assets/constructor/bolt.png" class="curr" data-tool-icon="bolt" data-map="b..">
+							<div class="clear-fix"></div>
+
+							<div class="tool">
+								<img src="content/game-assets/constructor/bolt.png" class="curr" data-tool-icon="bolt" data-map="b..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/ammo.png" class="curr" data-tool-icon="ammo" data-map="a..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/key.png" class="curr" data-tool-icon="key" data-map="k..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/bomb.png" class="curr" data-tool-icon="bomb" data-map="X..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/question.png" class="curr" data-tool-icon="question" data-map="?..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/live.png" class="curr" data-tool-icon="live" data-map="&..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/robbo.png" class="curr" data-tool-icon="robbo" data-map="R..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/ship-inactive.png" class="curr" data-tool-icon="ship-inactive" data-map="s..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/teleport-a-0.png" class="curr" data-tool-icon="teleport-a-0" data-map="s01">
+								<img src="content/game-assets/constructor/teleport-a-1.png" data-tool-icon="teleport-a-1" data-map="s11">
+								<img src="content/game-assets/constructor/teleport-a-2.png" data-tool-icon="teleport-a-2" data-map="s21">
+								<img src="content/game-assets/constructor/teleport-a-3.png" data-tool-icon="teleport-a-3" data-map="s31">
+								<img src="content/game-assets/constructor/teleport-a-4.png" data-tool-icon="teleport-a-4" data-map="s41">
+								<img src="content/game-assets/constructor/teleport-a-5.png" data-tool-icon="teleport-a-5" data-map="s51">
+								<img src="content/game-assets/constructor/teleport-a-6.png" data-tool-icon="teleport-a-6" data-map="s61">
+								<img src="content/game-assets/constructor/teleport-a-7.png" data-tool-icon="teleport-a-7" data-map="s71">
+								<img src="content/game-assets/constructor/teleport-a-8.png" data-tool-icon="teleport-a-8" data-map="s81">
+								<img src="content/game-assets/constructor/teleport-a-9.png" data-tool-icon="teleport-a-9" data-map="s91">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/door.png" class="curr" data-tool-icon="door" data-map="d..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/brick-0.png" class="curr" data-tool-icon="brick-0" data-map="w..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/container-with-wheels.png" class="curr" data-tool-icon="container-with-wheels" data-map="#o.">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/container.png" class="curr" data-tool-icon="container" data-map="#..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/nothing.png" class="curr" data-tool-icon="nothing" data-map="0..">
+							</div>
+							<div class="tool">
+								<img src="content/game-assets/constructor/rubble.png" class="curr" data-tool-icon="rubble" data-map="+..">
+							</div>
+							<canvas width="32" height="32" class="asset assetLoad"></canvas>
 						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/ammo.png" class="curr" data-tool-icon="ammo" data-map="a..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/key.png" class="curr" data-tool-icon="key" data-map="k..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/bomb.png" class="curr" data-tool-icon="bomb" data-map="X..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/question.png" class="curr" data-tool-icon="question" data-map="?..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/live.png" class="curr" data-tool-icon="live" data-map="&..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/robbo.png" class="curr" data-tool-icon="robbo" data-map="R..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/ship-inactive.png" class="curr" data-tool-icon="ship-inactive" data-map="s..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/teleport-a-0.png" class="curr" data-tool-icon="teleport-a-0" data-map="s01">
-							<img src="content/game-assets/constructor/teleport-a-1.png" data-tool-icon="teleport-a-1" data-map="s11">
-							<img src="content/game-assets/constructor/teleport-a-2.png" data-tool-icon="teleport-a-2" data-map="s21">
-							<img src="content/game-assets/constructor/teleport-a-3.png" data-tool-icon="teleport-a-3" data-map="s31">
-							<img src="content/game-assets/constructor/teleport-a-4.png" data-tool-icon="teleport-a-4" data-map="s41">
-							<img src="content/game-assets/constructor/teleport-a-5.png" data-tool-icon="teleport-a-5" data-map="s51">
-							<img src="content/game-assets/constructor/teleport-a-6.png" data-tool-icon="teleport-a-6" data-map="s61">
-							<img src="content/game-assets/constructor/teleport-a-7.png" data-tool-icon="teleport-a-7" data-map="s71">
-							<img src="content/game-assets/constructor/teleport-a-8.png" data-tool-icon="teleport-a-8" data-map="s81">
-							<img src="content/game-assets/constructor/teleport-a-9.png" data-tool-icon="teleport-a-9" data-map="s91">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/door.png" class="curr" data-tool-icon="door" data-map="d..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/brick-0.png" class="curr" data-tool-icon="brick-0" data-map="w..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/container-with-wheels.png" class="curr" data-tool-icon="container-with-wheels" data-map="#o.">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/container.png" class="curr" data-tool-icon="container" data-map="#..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/nothing.png" class="curr" data-tool-icon="nothing" data-map="0..">
-						</div>
-						<div class="tool">
-							<img src="content/game-assets/constructor/rubble.png" class="curr" data-tool-icon="rubble" data-map="+..">
-						</div>
-						<canvas width="32" height="32" class="asset assetLoad"></canvas>
+					</div>
+					<div class="label label-primary messages">Missing ship. Missing robbo.</div>
+					<div class="scroll-panel" style="width: 532px;">
+						<canvas id="constructionyard" style="background-color: green" height="1024" width="512"></canvas>
+						<canvas id="currenttool" style="" height="1024" width="512"></canvas>
+						<canvas id="currentcell" style="" height="1024" width="512"></canvas>
+					</div>
+					<div class="map-panel">
+						<textarea class="map"></textarea>
 					</div>
 				</div>
-				<div class="label label-primary messages">Missing ship. Missing robbo.</div>
-				<div class="scroll-panel" style="width: 532px;">
-					<canvas id="constructionyard" style="background-color: green" height="1024" width="512"></canvas>
-					<canvas id="currenttool" style="" height="1024" width="512"></canvas>
-					<canvas id="currentcell" style="" height="1024" width="512"></canvas>
-				</div>
-				<div class="map-panel">
-					<textarea class="map"></textarea>
-				</div>
 
-				<div id="assets">
+				<script src="scripts/external/jquery-1.8.3.min.js"></script>
+				<script src="scripts/external/jquery-ui-1.9.2.min.js"></script>
+				<script src="scripts/external/json2.min.js"></script>
+				<script src="scripts/external/Math.uuid.js"></script>
+				<script src="scripts/external/jquery.mousewheel.min.js"></script>
+				<script src="scripts/external/bootstrap.js"></script>
+				<script src="scripts/external/knockout-3.1.js"></script>
+				<script src="scripts/external/knockout-mapping-2.4.1.js"></script>
 
-					<img src="content/game-assets/ammo.png" class="asset ammo">
-					<img src="content/game-assets/ant-d.png" class="asset ant-d">
-					<img src="content/game-assets/ant-u.png" class="asset ant-u">
-					<img src="content/game-assets/bat-d.png" class="asset bat-d">
-					<img src="content/game-assets/bat-u.png" class="asset bat-u">
-					<img src="content/game-assets/blink-1.png" class="asset blink-1">
-					<img src="content/game-assets/blink-2.png" class="asset blink-2">
-					<img src="content/game-assets/blink-3.png" class="asset blink-3">
-					<img src="content/game-assets/blink-4.png" class="asset blink-4">
-					<img src="content/game-assets/bolt.png" class="asset bolt">
-					<img src="content/game-assets/bomb.png" class="asset bomb">
-					<img src="content/game-assets/brick-2.png" class="asset brick-2">
-					<img src="content/game-assets/brick-3.png" class="asset brick-3">
-					<img src="content/game-assets/brick.png" class="asset brick">
-					<img src="content/game-assets/coala-d.png" class="asset coala-d">
-					<img src="content/game-assets/coala-u.png" class="asset coala-u">
-					<img src="content/game-assets/container-with-wheels.png" class="asset container-with-wheels">
-					<img src="content/game-assets/container.png" class="asset container">
-					<img src="content/game-assets/door.png" class="asset door">
-					<img src="content/game-assets/eyes-d.png" class="asset eyes-d">
-					<img src="content/game-assets/eyes-u.png" class="asset eyes-u">
-					<img src="content/game-assets/ion-storm.png" class="asset ion-storm">
-					<img src="content/game-assets/key.png" class="asset key">
-					<img src="content/game-assets/laser-beam-he.png" class="asset laser-beam-he">
-					<img src="content/game-assets/laser-beam-ho.png" class="asset laser-beam-ho">
-					<img src="content/game-assets/laser-beam-ve.png" class="asset laser-beam-ve">
-					<img src="content/game-assets/laser-beam-vo.png" class="asset laser-beam-vo">
-					<img src="content/game-assets/laser-d.png" class="asset laser-d">
-					<img src="content/game-assets/laser-l.png" class="asset laser-l">
-					<img src="content/game-assets/laser-r.png" class="asset laser-r">
-					<img src="content/game-assets/laser-u.png" class="asset laser-u">
-					<img src="content/game-assets/live.png" class="asset live">
-					<img src="content/game-assets/magnet-l.png" class="asset magnet-l">
-					<img src="content/game-assets/magnet-r.png" class="asset magnet-r">
-					<img src="content/game-assets/nothing.png" class="asset nothing">
-					<img src="content/game-assets/question.png" class="asset question">
-					<img src="content/game-assets/robbo-fd.png" class="asset robbo-fd">
-					<img src="content/game-assets/robbo-fu.png" class="asset robbo-fu">
-					<img src="content/game-assets/robbo-ld.png" class="asset robbo-ld">
-					<img src="content/game-assets/robbo-lu.png" class="asset robbo-lu">
-					<img src="content/game-assets/robbo-rd.png" class="asset robbo-rd">
-					<img src="content/game-assets/robbo-ru.png" class="asset robbo-ru">
-					<img src="content/game-assets/robbo-ud.png" class="asset robbo-ud">
-					<img src="content/game-assets/robbo-uu.png" class="asset robbo-uu">
-					<img src="content/game-assets/rotating-laser-d.png" class="asset rotating-laser-d">
-					<img src="content/game-assets/rotating-laser-l.png" class="asset rotating-laser-l">
-					<img src="content/game-assets/rotating-laser-r.png" class="asset rotating-laser-r">
-					<img src="content/game-assets/rotating-laser-u.png" class="asset rotating-laser-u">
-					<img src="content/game-assets/rubble.png" class="asset rubble">
-					<img src="content/game-assets/ship-active.png" class="asset ship-active">
-					<img src="content/game-assets/ship-inactive.png" class="asset ship-inactive">
-					<img src="content/game-assets/smoke-1.png" class="asset smoke-1">
-					<img src="content/game-assets/smoke-2.png" class="asset smoke-2">
-					<img src="content/game-assets/smoke-3.png" class="asset smoke-3">
-					<img src="content/game-assets/smoke-4.png" class="asset smoke-4">
-					<img src="content/game-assets/teleport-a.png" class="asset teleport-a">
-					<img src="content/game-assets/teleport-d.png" class="asset teleport-d">
-					<img src="content/game-assets/wall.png" class="asset wall">
-					<img src="content/game-assets/constructor/ammo.png" class="asset ammo">
-					<img src="content/game-assets/constructor/ant.png" class="asset ant">
-					<img src="content/game-assets/constructor/bat-h.png" class="asset bat-h">
-					<img src="content/game-assets/constructor/bat-v.png" class="asset bat-v">
-					<img src="content/game-assets/constructor/bolt.png" class="asset bolt">
-					<img src="content/game-assets/constructor/bomb.png" class="asset bomb">
-					<img src="content/game-assets/constructor/brick-0.png" class="asset brick-0">
-					<img src="content/game-assets/constructor/brick-1.png" class="asset brick-1">
-					<img src="content/game-assets/constructor/brick-2.png" class="asset brick-2">
-					<img src="content/game-assets/constructor/brick-3.png" class="asset brick-3">
-					<img src="content/game-assets/constructor/coala.png" class="asset coala">
-					<img src="content/game-assets/constructor/container-with-wheels.png" class="asset container-with-wheels">
-					<img src="content/game-assets/constructor/container.png" class="asset container">
-					<img src="content/game-assets/constructor/door.png" class="asset door">
-					<img src="content/game-assets/constructor/eyes.png" class="asset eyes">
-					<img src="content/game-assets/constructor/firing-bat-h-d.png" class="asset firing-bat-h-d">
-					<img src="content/game-assets/constructor/firing-bat-h-l.png" class="asset firing-bat-h-l">
-					<img src="content/game-assets/constructor/firing-bat-h-r.png" class="asset firing-bat-h-r">
-					<img src="content/game-assets/constructor/firing-bat-h-u.png" class="asset firing-bat-h-u">
-					<img src="content/game-assets/constructor/firing-bat-v-d.png" class="asset firing-bat-v-d">
-					<img src="content/game-assets/constructor/firing-bat-v-l.png" class="asset firing-bat-v-l">
-					<img src="content/game-assets/constructor/firing-bat-v-r.png" class="asset firing-bat-v-r">
-					<img src="content/game-assets/constructor/firing-bat-v-u.png" class="asset firing-bat-v-u">
-					<img src="content/game-assets/constructor/ion-storm.png" class="asset ion-storm">
-					<img src="content/game-assets/constructor/key.png" class="asset key">
-					<img src="content/game-assets/constructor/laser-b-d.png" class="asset laser-b-d">
-					<img src="content/game-assets/constructor/laser-b-l.png" class="asset laser-b-l">
-					<img src="content/game-assets/constructor/laser-b-r.png" class="asset laser-b-r">
-					<img src="content/game-assets/constructor/laser-b-u.png" class="asset laser-b-u">
-					<img src="content/game-assets/constructor/laser-d.png" class="asset laser-d">
-					<img src="content/game-assets/constructor/laser-l.png" class="asset laser-l">
-					<img src="content/game-assets/constructor/laser-m-h-d.png" class="asset laser-m-h-d">
-					<img src="content/game-assets/constructor/laser-m-h-l.png" class="asset laser-m-h-l">
-					<img src="content/game-assets/constructor/laser-m-h-r.png" class="asset laser-m-h-r">
-					<img src="content/game-assets/constructor/laser-m-h-u.png" class="asset laser-m-h-u">
-					<img src="content/game-assets/constructor/laser-m-v-d.png" class="asset laser-m-v-d">
-					<img src="content/game-assets/constructor/laser-m-v-l.png" class="asset laser-m-v-l">
-					<img src="content/game-assets/constructor/laser-m-v-r.png" class="asset laser-m-v-r">
-					<img src="content/game-assets/constructor/laser-m-v-u.png" class="asset laser-m-v-u">
-					<img src="content/game-assets/constructor/laser-r.png" class="asset laser-r">
-					<img src="content/game-assets/constructor/laser-s-d.png" class="asset laser-s-d">
-					<img src="content/game-assets/constructor/laser-s-l.png" class="asset laser-s-l">
-					<img src="content/game-assets/constructor/laser-s-r.png" class="asset laser-s-r">
-					<img src="content/game-assets/constructor/laser-s-u.png" class="asset laser-s-u">
-					<img src="content/game-assets/constructor/laser-u.png" class="asset laser-u">
-					<img src="content/game-assets/constructor/live.png" class="asset live">
-					<img src="content/game-assets/constructor/magnet-l.png" class="asset magnet-l">
-					<img src="content/game-assets/constructor/magnet-r.png" class="asset magnet-r">
-					<img src="content/game-assets/constructor/nothing.png" class="asset nothing">
-					<img src="content/game-assets/constructor/question.png" class="asset question">
-					<img src="content/game-assets/constructor/robbo.png" class="asset robbo">
-					<img src="content/game-assets/constructor/rotating-laser-u.png" class="asset rotating-laser-u">
-					<img src="content/game-assets/constructor/rotating-laser.png" class="asset rotating-laser">
-					<img src="content/game-assets/constructor/rubble.png" class="asset rubble">
-					<img src="content/game-assets/constructor/ship-inactive.png" class="asset ship-inactive">
-					<img src="content/game-assets/constructor/teleport-a-0.png" class="asset teleport-a-0">
-					<img src="content/game-assets/constructor/teleport-a-1.png" class="asset teleport-a-1">
-					<img src="content/game-assets/constructor/teleport-a-2.png" class="asset teleport-a-2">
-					<img src="content/game-assets/constructor/teleport-a-3.png" class="asset teleport-a-3">
-					<img src="content/game-assets/constructor/teleport-a-4.png" class="asset teleport-a-4">
-					<img src="content/game-assets/constructor/teleport-a-5.png" class="asset teleport-a-5">
-					<img src="content/game-assets/constructor/teleport-a-6.png" class="asset teleport-a-6">
-					<img src="content/game-assets/constructor/teleport-a-7.png" class="asset teleport-a-7">
-					<img src="content/game-assets/constructor/teleport-a-8.png" class="asset teleport-a-8">
-					<img src="content/game-assets/constructor/teleport-a-9.png" class="asset teleport-a-9">
-				</div>
+				<script src="scripts/game/common/Tools.js"></script>
+				<script src="scripts/game/common/Predef.js"></script>
+
+				<script src="colorpicker/js/colorpicker.js"></script>
+				<script src="colorpicker/js/eye.js"></script>
+				<script src="colorpicker/js/utils.js"></script>
+				<script src="colorpicker/js/layout.js"></script>
+
+				<script src="scripts/game/Module.js"></script>
+				<script src="scripts/game/assets.js"></script>
+				<script src="scripts/game/TimeDelayedMethodCall.js"></script>
+				<script src="scripts/game/ColorManager.js"></script>
+				<script src="scripts/game/EventAggregator.js"></script>
+				<script src="scripts/game/MapLoader.js"></script>
+				<script src="scripts/game/Game.js"></script>
+				<script src="scripts/game/GameLoader.js"></script>
+				<script src="scripts/game/MapEffects.js"></script>
+				<script src="scripts/game/Mixins/AssetLoader.js"></script>
+				<script src="scripts/game/Structures/Delta.js"></script>
+				<script src="scripts/game/Structures/MNeighbour.js"></script>
+				<script src="scripts/game/Structures/NNeighbour.js"></script>
+				<script src="scripts/game/Structures/RingArray.js"></script>
+				<script src="scripts/game/Mixins/Animatable.js"></script>
+				<script src="scripts/game/Mixins/ArmedWithBlaster.js"></script>
+				<script src="scripts/game/Mixins/ArmedWithLaser.js"></script>
+				<script src="scripts/game/Mixins/ArmedWithStableBeamLaser.js"></script>
+				<script src="scripts/game/Mixins/Blowable.js"></script>
+				<script src="scripts/game/Mixins/Bombblowable.js"></script>
+				<script src="scripts/game/Mixins/Circlewalker.js"></script>
+				<script src="scripts/game/Mixins/Collectable.js"></script>
+				<script src="scripts/game/Mixins/Enemy.js"></script>
+				<script src="scripts/game/Mixins/Moveable.js"></script>
+				<script src="scripts/game/Mixins/Multistate.js"></script>
+				<script src="scripts/game/Mixins/Walking.js"></script>
+				<script src="scripts/game/DrawingContext.js"></script>
+				<script src="scripts/game/EnvironmentContext.js"></script>
+				<script src="scripts/game/watchers/AmmoWatcher.js"></script>
+				<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
+				<script src="scripts/game/watchers/BoltWatcher.js"></script>
+				<script src="scripts/game/watchers/KeysWatcher.js"></script>
+				<script src="scripts/game/watchers/ScrollWatcher.js"></script>
+				<script src="scripts/game/LevelManager.js"></script>
+				<script src="scripts/game/objects/Object.js"></script>
+				<script src="scripts/game/objects/DisappearingAnimation.js"></script>
+				<script src="scripts/game/watchers/AmmoWatcher.js"></script>
+				<script src="scripts/game/watchers/BoltWatcher.js"></script>
+				<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
+				<script src="scripts/game/watchers/KeysWatcher.js"></script>
+				<script src="scripts/game/watchers/KeyWatcher.js"></script>
+				<script src="scripts/game/watchers/LiveWatcher.js"></script>
+				<script src="scripts/game/watchers/ScrollWatcher.js"></script>
+				<script src="scripts/game/objects/Ammo.js"></script>
+				<script src="scripts/game/objects/Ant.js"></script>
+				<script src="scripts/game/objects/Bat.js"></script>
+				<script src="scripts/game/objects/Blast.js"></script>
+				<script src="scripts/game/objects/Blaster.js"></script>
+				<script src="scripts/game/objects/Blink.js"></script>
+				<script src="scripts/game/objects/Bolt.js"></script>
+				<script src="scripts/game/objects/Bomb.js"></script>
+				<script src="scripts/game/objects/Coala.js"></script>
+				<script src="scripts/game/objects/Container.js"></script>
+				<script src="scripts/game/objects/ContainerWithWheels.js"></script>
+				<script src="scripts/game/objects/Door.js"></script>
+				<script src="scripts/game/objects/Eyes.js"></script>
+				<script src="scripts/game/objects/FiringBat.js"></script>
+				<script src="scripts/game/objects/IonStorm.js"></script>
+				<script src="scripts/game/objects/Key.js"></script>
+				<script src="scripts/game/objects/Laser.js"></script>
+				<script src="scripts/game/objects/LaserBeam.js"></script>
+				<script src="scripts/game/objects/Live.js"></script>
+				<script src="scripts/game/objects/Magnet.js"></script>
+				<script src="scripts/game/objects/MightyLive.js"></script>
+				<script src="scripts/game/objects/MovingLaser.js"></script>
+				<script src="scripts/game/objects/Nothing.js"></script>
+				<script src="scripts/game/objects/QuestionMark.js"></script>
+				<script src="scripts/game/objects/Robbo.js"></script>
+				<script src="scripts/game/objects/RotatingLaser.js"></script>
+				<script src="scripts/game/objects/Rubble.js"></script>
+				<script src="scripts/game/objects/Ship.js"></script>
+				<script src="scripts/game/objects/Smoke.js"></script>
+				<script src="scripts/game/objects/StableBeam.js"></script>
+				<script src="scripts/game/objects/StableBeamLaser.js"></script>
+				<script src="scripts/game/objects/Teleport.js"></script>
+				<script src="scripts/game/objects/Wall.js"></script>
+				<script src="scripts/game/tests/TestHelpers.js"></script>
+				<script src="scripts/game/tests/MoveableMixinTests.js"></script>
+				<script src="scripts/game/tests/MultistateMixinTests.js"></script>
+				<script src="scripts/game/tests/CollectableMixinTest.js"></script>
+				<script src="scripts/game/tests/BombblowableMixinTest.js"></script>
+				<script src="scripts/game/tests/ToolsTests.js"></script>
+				<script src="config/constructor.js" ></script>
+				<script src="config/universe.js" ></script>
+				<script src="scripts/game/constructor/RobboConstructor.js"></script>
+				<script type="text/javascript">
+				$(function(){
+					new app.RobboConstructor(app.Universe,$('.game-designer'));
+				})
+				</script>
+
+				<!-- Tests -->
+				<script src="scripts/game/tests/universe.js" ></script>
+				<script src="scripts/external/QUnit.1.10.1.js"></script>
+				<script src="scripts/game/tests/constructor/RobboConstructorTests.js"></script>
 			</div>
-			
-
-			<script src="scripts/external/jquery-1.8.3.min.js"></script>
-			<script src="scripts/external/jquery-ui-1.9.2.min.js"></script>
-			<script src="scripts/external/json2.min.js"></script>
-			<script src="scripts/external/Math.uuid.js"></script>
-			<script src="scripts/external/jquery.mousewheel.min.js"></script>
-			<script src="scripts/external/bootstrap.js"></script>
-			<script src="scripts/external/knockout-3.1.js"></script>
-
-			<script src="scripts/game/common/Tools.js"></script>
-			<script src="scripts/game/common/Predef.js"></script>
-
-			<script src="colorpicker/js/colorpicker.js"></script>
-			<script src="colorpicker/js/eye.js"></script>
-			<script src="colorpicker/js/utils.js"></script>
-			<script src="colorpicker/js/layout.js"></script>
-
-			<script src="scripts/game/Module.js"></script>
-			<script src="scripts/game/assets.js"></script>
-			<script src="scripts/game/TimeDelayedMethodCall.js"></script>
-			<script src="scripts/game/ColorManager.js"></script>
-			<script src="scripts/game/EventAggregator.js"></script>
-			<script src="scripts/game/MapLoader.js"></script>
-			<script src="scripts/game/Game.js"></script>
-			<script src="scripts/game/GameLoader.js"></script>
-			<script src="scripts/game/MapEffects.js"></script>
-			<script src="scripts/game/Mixins/AssetLoader.js"></script>
-			<script src="scripts/game/Structures/Delta.js"></script>
-			<script src="scripts/game/Structures/MNeighbour.js"></script>
-			<script src="scripts/game/Structures/NNeighbour.js"></script>
-			<script src="scripts/game/Structures/RingArray.js"></script>
-			<script src="scripts/game/Mixins/Animatable.js"></script>
-			<script src="scripts/game/Mixins/ArmedWithBlaster.js"></script>
-			<script src="scripts/game/Mixins/ArmedWithLaser.js"></script>
-			<script src="scripts/game/Mixins/ArmedWithStableBeamLaser.js"></script>
-			<script src="scripts/game/Mixins/Blowable.js"></script>
-			<script src="scripts/game/Mixins/Bombblowable.js"></script>
-			<script src="scripts/game/Mixins/Circlewalker.js"></script>
-			<script src="scripts/game/Mixins/Collectable.js"></script>
-			<script src="scripts/game/Mixins/Enemy.js"></script>
-			<script src="scripts/game/Mixins/Moveable.js"></script>
-			<script src="scripts/game/Mixins/Multistate.js"></script>
-			<script src="scripts/game/Mixins/Walking.js"></script>
-			<script src="scripts/game/DrawingContext.js"></script>
-			<script src="scripts/game/EnvironmentContext.js"></script>
-			<script src="scripts/game/watchers/AmmoWatcher.js"></script>
-			<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
-			<script src="scripts/game/watchers/BoltWatcher.js"></script>
-			<script src="scripts/game/watchers/KeysWatcher.js"></script>
-			<script src="scripts/game/watchers/ScrollWatcher.js"></script>
-			<script src="scripts/game/LevelManager.js"></script>
-			<script src="scripts/game/objects/Object.js"></script>
-			<script src="scripts/game/objects/DisappearingAnimation.js"></script>
-			<script src="scripts/game/watchers/AmmoWatcher.js"></script>
-			<script src="scripts/game/watchers/BoltWatcher.js"></script>
-			<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
-			<script src="scripts/game/watchers/KeysWatcher.js"></script>
-			<script src="scripts/game/watchers/KeyWatcher.js"></script>
-			<script src="scripts/game/watchers/LiveWatcher.js"></script>
-			<script src="scripts/game/watchers/ScrollWatcher.js"></script>
-			<script src="scripts/game/objects/Ammo.js"></script>
-			<script src="scripts/game/objects/Ant.js"></script>
-			<script src="scripts/game/objects/Bat.js"></script>
-			<script src="scripts/game/objects/Blast.js"></script>
-			<script src="scripts/game/objects/Blaster.js"></script>
-			<script src="scripts/game/objects/Blink.js"></script>
-			<script src="scripts/game/objects/Bolt.js"></script>
-			<script src="scripts/game/objects/Bomb.js"></script>
-			<script src="scripts/game/objects/Coala.js"></script>
-			<script src="scripts/game/objects/Container.js"></script>
-			<script src="scripts/game/objects/ContainerWithWheels.js"></script>
-			<script src="scripts/game/objects/Door.js"></script>
-			<script src="scripts/game/objects/Eyes.js"></script>
-			<script src="scripts/game/objects/FiringBat.js"></script>
-			<script src="scripts/game/objects/IonStorm.js"></script>
-			<script src="scripts/game/objects/Key.js"></script>
-			<script src="scripts/game/objects/Laser.js"></script>
-			<script src="scripts/game/objects/LaserBeam.js"></script>
-			<script src="scripts/game/objects/Live.js"></script>
-			<script src="scripts/game/objects/Magnet.js"></script>
-			<script src="scripts/game/objects/MightyLive.js"></script>
-			<script src="scripts/game/objects/MovingLaser.js"></script>
-			<script src="scripts/game/objects/Nothing.js"></script>
-			<script src="scripts/game/objects/QuestionMark.js"></script>
-			<script src="scripts/game/objects/Robbo.js"></script>
-			<script src="scripts/game/objects/RotatingLaser.js"></script>
-			<script src="scripts/game/objects/Rubble.js"></script>
-			<script src="scripts/game/objects/Ship.js"></script>
-			<script src="scripts/game/objects/Smoke.js"></script>
-			<script src="scripts/game/objects/StableBeam.js"></script>
-			<script src="scripts/game/objects/StableBeamLaser.js"></script>
-			<script src="scripts/game/objects/Teleport.js"></script>
-			<script src="scripts/game/objects/Wall.js"></script>
-			<script src="scripts/game/tests/TestHelpers.js"></script>
-			<script src="scripts/game/tests/MoveableMixinTests.js"></script>
-			<script src="scripts/game/tests/MultistateMixinTests.js"></script>
-			<script src="scripts/game/tests/CollectableMixinTest.js"></script>
-			<script src="scripts/game/tests/BombblowableMixinTest.js"></script>
-			<script src="scripts/game/tests/ToolsTests.js"></script>
-			<script src="config/constructor.js" ></script>
-			<script src="config/universe.js" ></script>
-
-			<script src="scripts/game/constructor/GameOptions.js"></script>
-			<script src="scripts/game/constructor/Editor.js"></script>
-
-		</body></html>
+		</div>
+	</body>
+	</html>

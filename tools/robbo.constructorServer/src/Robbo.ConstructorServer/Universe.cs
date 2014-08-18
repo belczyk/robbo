@@ -6,8 +6,8 @@ namespace Robbo.Local.API
     {
         public Universe()
         {
-            Games = new List<Game>();
+            games = new List<Game>();
         }
-        public IList<Game> Games { get; set; }
+        public IList<Game> games { get; set; }
     }
 }

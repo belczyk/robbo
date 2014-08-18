@@ -10,9 +10,43 @@ class app.GameDesigner
 		@width = ko.observable()
 		@height = ko.observable()
 		@optionsPanel = $('.options-panel')
+		@games = ko.observableArray()
+		@planets = ko.observableArray()
+		@selectedGame = ko.observable()
+		@selectedPlanet = ko.observable()
+		@selectedGameId = ko.observable(0)
+		@selectedPlanetId = ko.observable(0)
+		@selectedGameId.subscribe => 
+			@selectedGame = @games()[@selectedGameId()]
+			@selectedPlanetId(0)
+			return 
+		@selectedPlanetId.subscribe => 
+			@selectedPlanet = @planets[@selectedPlanetId()]
+			@load()
+			return
+		@loadGames()
+		@loadPlanets()
+
 		ko.applyBindings this,$('.game-designer')[0]
 		$('.has-tooltip').tooltip()
 
+	loadGames: ()->
+		for game,i in app.Universe.Games
+			game.index = i
+			@games.push game
+		@selectedGameId 0
+		@selectedGame @games[0]
+
+		return
+
+	loadPlanets: () -> 
+		for planet,i in app.Universe.Games[@selectedGameId()].Planets
+			planet.index = i
+			@planets.push planet
+		@selectedPlanetId 0
+		@selectedPlanet @planets[0]
+
+		return
 	saveGame: () -> 
 		$('.save-game').text('Saving...')
 		$.ajax
@@ -24,26 +58,24 @@ class app.GameDesigner
 		return
 
 	newGame: () ->
-		name = "Game "+(app.Universe.Games.length+1)
+		name = "Game "+@games.length+1
 		planet = @createPlanet()
 		planet.Name += " 1"
 		app.Universe.Games.push 
 			Name: name
 			StartingNumberOfLives: 9
 			Planets : [planet]
-
-		app.GameLoader.loadGamesConfig()
-		app.GameLoader.selectGame(app.Universe.Games.length-1)
+		@loadGames()
 		@load()
 		return
 
 	removePlanet: () ->
-		if (!app.GameLoader.currentPlanet()?) then return 
+		if (!@currentPlanetId()?) then return 
 
 		if !confirm("Are you sure you want remove current planet?") then return
 
-		app.Universe.Games[app.GameLoader.currentGame()].Planets.splice(app.GameLoader.currentPlanet(),1)
-		app.GameLoader.loadGamesConfig()
+		@currentGame().Planets.splice(@currentPlanetId(),1)
+
 
 	toggleRawMap: () ->
 		if($('.map').is(":visible"))
@@ -52,14 +84,14 @@ class app.GameDesigner
 			$('.map').show("blind")
 
 	removeGame: () -> 
-		if (app.GameLoader.currentGame()=="0") 
+		if (@currentGameId()=="0") 
 			alert("You can't remove original game")
 			return
 
 		if !confirm("Are you sure you want remove current game?") then return
 
-		app.Universe.Games.splice(app.GameLoader.currentGame(),1)
-		app.GameLoader.loadGamesConfig()
+		app.Universe.Games.splice(@currentGameId(),1)
+
 
 	toggleOptions: (x,e) ->
 		if(@optionsPanel.is(':visible'))
@@ -86,26 +118,23 @@ class app.GameDesigner
 		planet 
 
 	newPlanet: ()-> 
-		gameN = app.GameLoader.currentGame()
-
 		planet = @createPlanet()
-		game = app.Universe.Games[app.GameLoader.currentGame()]
-		planet.Name += " "+(game.Planets.length+1)
+		planet.Name += " "+(@currentGame().Planets.length+1)
 		game.Planets.push planet
-		app.GameLoader.loadGamesConfig()
-		app.GameLoader.selectGame(gameN)
-		app.GameLoader.selectPlanet(game.Planets.length-1)
+		app.Universe.Games[@currentGameId()].Planets push planet
+		@selectedPlanetId(game.Planets.length-1)
 		@load()
 
 	testPlanet: () ->
-		window.open("robbo.html?game=#{app.GameLoader.currentGame()}&planet=#{app.GameLoader.currentPlanet()}","_blank")
+		window.open("robbo.html?game=#{@currentGameId()}&planet=#{@currentPlanetId()}","_blank")
 
 	load: () ->
-		game = app.Universe.Games[$('.games').val()]
-		planet = game.Planets[$('.planets').val()]
-		@width(app.MapLoader.getWidth(planet.Map))
-		@height(app.MapLoader.getHeight(planet.Map))
-		@planetName(planet.Name)
-		@gameName(game.Name)
-		@bolts(planet.BoltsToBeCollected)
-		@lives(game.StartingNumberOfLives)
+		@width(app.MapLoader.getWidth(@currentPlanet().Map))
+		@height(app.MapLoader.getHeight(@currentPlanet().Map))
+		@planetName(@currentPlanet().Name)
+		@gameName(@currentGame().Name)
+		@bolts(@currentPlanet().BoltsToBeCollected)
+		@lives(@currentGame().StartingNumberOfLives)
+
+$ ->
+	new app.GameDesigner()

@@ -7,19 +7,19 @@ namespace Robbo.Local.API
     {
         public static Universe OriginalUniverse = new Universe
         {
-            Games = new List<Game>
+            games = new List<Game>
             {
                 new Game
                 {
-                    Name = "Original game",
-                    StartingNumberOfLives = 9,
-                    Planets = new List<Planet>
+                    name = "Original game",
+                    startingNumberOfLives = 9,
+                    planets = new List<Planet>
                     {
                         new Planet
                         {
-                            BoltsToBeCollected = 5,
-                            Name = "Planet 1",
-                            Map = @"w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  
+                            boltsToBeCollected = 5,
+                            name = "Planet 1",
+                            map = @"w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  
 w  X  _  _  _  L<s_  _  _  _  _  _  #  _  _  _  X  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  
 w  _  _  _  _  _  _  _  #  _  _  _  _  w  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  
 w  _  _  _  _  _  _  _  Lvs_  _  _  _  w  a  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  
@@ -98,9 +98,9 @@ w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w  w 
                         },
                         new Planet
                         {
-                            Name = "Planet 2",
-                            BoltsToBeCollected = 1,
-                            Map = @"w  w  w  w  w  w  w  w  w  w  w  w  w  w  
+                            name = "Planet 2",
+                            boltsToBeCollected = 1,
+                            map = @"w  w  w  w  w  w  w  w  w  w  w  w  w  w  
 w  X  _  _  _  L<s_  _  _  _  _  _  #  _  
 w  _  _  _  _  _  _  _  #  _  _  _  _  w  
 w  _  _  _  _  _  _  _  Lvs_  _  _  _  w  

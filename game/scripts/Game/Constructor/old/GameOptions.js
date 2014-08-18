@@ -15,9 +15,53 @@
       this.width = ko.observable();
       this.height = ko.observable();
       this.optionsPanel = $('.options-panel');
+      this.games = ko.observableArray();
+      this.planets = ko.observableArray();
+      this.selectedGame = ko.observable();
+      this.selectedPlanet = ko.observable();
+      this.selectedGameId = ko.observable(0);
+      this.selectedPlanetId = ko.observable(0);
+      this.selectedGameId.subscribe((function(_this) {
+        return function() {
+          _this.selectedGame = _this.games()[_this.selectedGameId()];
+          _this.selectedPlanetId(0);
+        };
+      })(this));
+      this.selectedPlanetId.subscribe((function(_this) {
+        return function() {
+          _this.selectedPlanet = _this.planets[_this.selectedPlanetId()];
+          _this.load();
+        };
+      })(this));
+      this.loadGames();
+      this.loadPlanets();
       ko.applyBindings(this, $('.game-designer')[0]);
       $('.has-tooltip').tooltip();
     }
+
+    GameDesigner.prototype.loadGames = function() {
+      var game, i, _i, _len, _ref1;
+      _ref1 = app.Universe.Games;
+      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+        game = _ref1[i];
+        game.index = i;
+        this.games.push(game);
+      }
+      this.selectedGameId(0);
+      this.selectedGame(this.games[0]);
+    };
+
+    GameDesigner.prototype.loadPlanets = function() {
+      var i, planet, _i, _len, _ref1;
+      _ref1 = app.Universe.Games[this.selectedGameId()].Planets;
+      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+        planet = _ref1[i];
+        planet.index = i;
+        this.planets.push(planet);
+      }
+      this.selectedPlanetId(0);
+      this.selectedPlanet(this.planets[0]);
+    };
 
     GameDesigner.prototype.saveGame = function() {
       $('.save-game').text('Saving...');
@@ -35,7 +79,7 @@
 
     GameDesigner.prototype.newGame = function() {
       var name, planet;
-      name = "Game " + (app.Universe.Games.length + 1);
+      name = "Game " + this.games.length + 1;
       planet = this.createPlanet();
       planet.Name += " 1";
       app.Universe.Games.push({
@@ -43,20 +87,18 @@
         StartingNumberOfLives: 9,
         Planets: [planet]
       });
-      app.GameLoader.loadGamesConfig();
-      app.GameLoader.selectGame(app.Universe.Games.length - 1);
+      this.loadGames();
       this.load();
     };
 
     GameDesigner.prototype.removePlanet = function() {
-      if (app.GameLoader.currentPlanet() == null) {
+      if (this.currentPlanetId() == null) {
         return;
       }
       if (!confirm("Are you sure you want remove current planet?")) {
         return;
       }
-      app.Universe.Games[app.GameLoader.currentGame()].Planets.splice(app.GameLoader.currentPlanet(), 1);
-      return app.GameLoader.loadGamesConfig();
+      return this.currentGame().Planets.splice(this.currentPlanetId(), 1);
     };
 
     GameDesigner.prototype.toggleRawMap = function() {
@@ -68,15 +110,14 @@
     };
 
     GameDesigner.prototype.removeGame = function() {
-      if (app.GameLoader.currentGame() === "0") {
+      if (this.currentGameId() === "0") {
         alert("You can't remove original game");
         return;
       }
       if (!confirm("Are you sure you want remove current game?")) {
         return;
       }
-      app.Universe.Games.splice(app.GameLoader.currentGame(), 1);
-      return app.GameLoader.loadGamesConfig();
+      return app.Universe.Games.splice(this.currentGameId(), 1);
     };
 
     GameDesigner.prototype.toggleOptions = function(x, e) {
@@ -107,36 +148,34 @@
     };
 
     GameDesigner.prototype.newPlanet = function() {
-      var game, gameN, planet;
-      gameN = app.GameLoader.currentGame();
+      var planet;
       planet = this.createPlanet();
-      game = app.Universe.Games[app.GameLoader.currentGame()];
-      planet.Name += " " + (game.Planets.length + 1);
+      planet.Name += " " + (this.currentGame().Planets.length + 1);
       game.Planets.push(planet);
-      app.GameLoader.loadGamesConfig();
-      app.GameLoader.selectGame(gameN);
-      app.GameLoader.selectPlanet(game.Planets.length - 1);
+      app.Universe.Games[this.currentGameId()].Planets(push(planet));
+      this.selectedPlanetId(game.Planets.length - 1);
       return this.load();
     };
 
     GameDesigner.prototype.testPlanet = function() {
-      return window.open("robbo.html?game=" + (app.GameLoader.currentGame()) + "&planet=" + (app.GameLoader.currentPlanet()), "_blank");
+      return window.open("robbo.html?game=" + (this.currentGameId()) + "&planet=" + (this.currentPlanetId()), "_blank");
     };
 
     GameDesigner.prototype.load = function() {
-      var game, planet;
-      game = app.Universe.Games[$('.games').val()];
-      planet = game.Planets[$('.planets').val()];
-      this.width(app.MapLoader.getWidth(planet.Map));
-      this.height(app.MapLoader.getHeight(planet.Map));
-      this.planetName(planet.Name);
-      this.gameName(game.Name);
-      this.bolts(planet.BoltsToBeCollected);
-      return this.lives(game.StartingNumberOfLives);
+      this.width(app.MapLoader.getWidth(this.currentPlanet().Map));
+      this.height(app.MapLoader.getHeight(this.currentPlanet().Map));
+      this.planetName(this.currentPlanet().Name);
+      this.gameName(this.currentGame().Name);
+      this.bolts(this.currentPlanet().BoltsToBeCollected);
+      return this.lives(this.currentGame().StartingNumberOfLives);
     };
 
     return GameDesigner;
 
   })();
+
+  $(function() {
+    return new app.GameDesigner();
+  });
 
 }).call(this);

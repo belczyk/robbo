@@ -7,10 +7,11 @@ namespace Robbo.Local.API
     {
         public Game()
         {
-            Planets = new List<Planet>();
+            planets = new List<Planet>();
         }
-        public int StartingNumberOfLives { get; set; }
-        public string Name { get; set; }
-        public IList<Planet> Planets { get; set; } 
+        public int startingNumberOfLives { get; set; }
+        public string name { get; set; }
+        public int index { get; set; }
+        public IList<Planet> planets { get; set; } 
     }
 }

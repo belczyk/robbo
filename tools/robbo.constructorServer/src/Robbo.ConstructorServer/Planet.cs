@@ -2,8 +2,11 @@
 {
     public class Planet
     {
-        public string Name { get; set; }
-        public string Map { get; set; }
-        public int BoltsToBeCollected { get; set; }
+        public string name { get; set; }
+        public int index { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
+        public int boltsToBeCollected { get; set; }
+        public string map { get; set; }
     }
 }

@@ -85,7 +85,8 @@
       map = lines.join('\n');
       this.mapField.val(lines.join('\n'));
       this.mapField.attr("cols", lines[0].length);
-      return this.map = map;
+      this.map = map;
+      return this.validateMap();
     };
 
     Editor.prototype.initMap = function() {
@@ -288,9 +289,5 @@
     return Editor;
 
   })();
-
-  $(function() {
-    return new Editor();
-  });
 
 }).call(this);

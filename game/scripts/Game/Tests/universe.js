@@ -1,4 +1,4 @@
-app.Universe = {
+app.TestUniverse = {
   "games": [
     {
       "startingNumberOfLives": 9,

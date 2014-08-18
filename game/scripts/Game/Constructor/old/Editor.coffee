@@ -196,8 +196,7 @@ class Editor
 		if not @selectedTool?
 			@mainCtx.clearRect @x*32,@y*32,32,32
 			@updateMap(x,y,"_..")
-$ ->
-	new Editor()
+
 
 
 
