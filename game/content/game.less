@@ -1,6 +1,4 @@
-﻿body {
-    background-color: #002240;
-}
+﻿
 
 .game-board {
     canvas {
@@ -64,20 +62,36 @@
 }
 
 .game-selector {
-
-    line-height: 32px;
-    label {
-        display: inline;
-        color: #3AD900;
-        margin-top: 5px;
-    }
-
+    width: 800px;
     select {
+        background-color: #222222;
+        border: none;
         display: inline;
-        margin-top: 9px;
-        color: #3AD900;
-        border: solid 1px #0088FF;
-        background-color: #002240;
         width: 180px;
+        height: 40px;
+        color: white;
+        margin: 2px;
+
     }
+    label {
+        width: 70px;
+        margin: 2px;
+    }
+    label.long {
+        width: 100px;
+    }
+    input {
+        color: white;
+        font-weight: bold;
+        background-color: #222222;
+        border: none;
+        height: 32px;
+        margin: 2px;
+        padding-left: 4px;
+    }
+    button{
+        margin: 4px 2px 2px 2px;
+
+    }
+
 }

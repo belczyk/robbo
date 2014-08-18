@@ -19,6 +19,12 @@ class app.GameLoader
 
 			return
 
+	@currentGame: ->
+		$('.games').val()
+
+	@currentPlanet: ->
+		$('.planets').val()
+
 	constructor: () ->
 		@gamesList = $('.games')
 		@planetsList = $('.planets')

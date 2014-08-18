@@ -55,18 +55,11 @@
       this.setupMouseWheel();
       this.setupToolbar();
       this.setupClick();
-      this.selectGame = new app.SelectGameDialog($('.select-game-dialog'), function(i) {
-        return alert(i.Name);
-      });
-      $('.open-select-game').click((function(_this) {
-        return function() {
-          return _this.selectGame.show();
-        };
-      })(this));
+      this.load();
     }
 
     Editor.prototype.testPlanet = function() {
-      return window.open('robbo.html?game=0&planet=1', "_blank");
+      return window.open("robbo.html?game=" + (app.GameLoader.currentGame()) + "&planet=" + (app.GameLoader.currentPlanet()), "_blank");
     };
 
     Editor.prototype.onMouseMoveInCanvas = function(e) {

@@ -24,6 +24,14 @@
       }
     };
 
+    GameLoader.currentGame = function() {
+      return $('.games').val();
+    };
+
+    GameLoader.currentPlanet = function() {
+      return $('.planets').val();
+    };
+
     function GameLoader() {
       this.gamesList = $('.games');
       this.planetsList = $('.planets');

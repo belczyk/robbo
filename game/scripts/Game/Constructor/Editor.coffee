@@ -30,12 +30,10 @@ class Editor
 		@setupMouseWheel()
 		@setupToolbar()
 		@setupClick()
-		@selectGame = new app.SelectGameDialog($('.select-game-dialog'),(i)->alert(i.Name))
-		$('.open-select-game').click =>
-				@selectGame.show()
+		@load()
 
 	testPlanet: ()->
-		window.open('robbo.html?game=0&planet=1',"_blank")
+		window.open("robbo.html?game=#{app.GameLoader.currentGame()}&planet=#{app.GameLoader.currentPlanet()}","_blank")
 
 	onMouseMoveInCanvas:(e) ->
 					@x = Math.floor((e.pageX-@cursorCanvas.offset().left)/32.0)
@@ -60,6 +58,7 @@ class Editor
 		@mapField.val(lines.join('\n'))
 		@mapField.attr("cols",lines[0].length)
 		@map = map
+
 	initMap: ()->
 		@map = ''
 		for x in [0..@height-1]
