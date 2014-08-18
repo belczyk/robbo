@@ -9,8 +9,8 @@ namespace Robbo.Local.API
         {
             Planets = new List<Planet>();
         }
+        public int StartingNumberOfLives { get; set; }
         public string Name { get; set; }
         public IList<Planet> Planets { get; set; } 
-        public int StartingNumberOfLives { get; set; }
     }
 }

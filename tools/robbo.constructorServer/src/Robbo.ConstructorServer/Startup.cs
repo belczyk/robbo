@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Owin;
 
 namespace Robbo.Local.API
@@ -16,6 +17,10 @@ namespace Robbo.Local.API
         {
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
+
+            // Cors
+            var cors = new EnableCorsAttribute("*", "*", "GET"); 
+            config.EnableCors(cors);
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

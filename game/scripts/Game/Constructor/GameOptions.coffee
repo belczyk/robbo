@@ -11,9 +11,16 @@ class app.GameDesigner
 		@height = ko.observable()
 		@optionsPanel = $('.options-panel')
 		ko.applyBindings this,$('.game-designer')[0]
-
+		$('.has-tooltip').tooltip()
 	saveGame: () -> 
-		alert(app.ConstructorConfig.serverAddress+"/api/robbo")
+		$('.save-game').text('Saving...')
+		$.ajax
+			url: app.ConstructorConfig.serverAddress+"/api/robbo"
+			data: app.Universe
+			type: "POST"
+			success: ()-> setTimeout((()->$('.save-game').text('Save game')),200)
+
+		return
 
 	newGame: () ->
 		name = "Game "+(app.Universe.Games.length+1)
@@ -29,8 +36,11 @@ class app.GameDesigner
 		@load()
 		return
 
+	removePlanet: () ->
 
-	toggleOptions: (x,e) -> 
+	removeGame: () -> 
+
+	toggleOptions: (x,e) ->
 		if(@optionsPanel.is(':visible'))
 			@optionsPanel.hide('blind')
 			$(e.target).find('i').removeClass('glyphicon-chevron-up')
@@ -39,8 +49,6 @@ class app.GameDesigner
 			@optionsPanel.show('blind')
 			$(e.target).find('i').removeClass('glyphicon-chevron-down')
 			$(e.target).find('i').addClass('glyphicon-chevron-up')
-
-
 
 	createPlanet: () -> 
 		planet = 

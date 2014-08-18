@@ -16,10 +16,21 @@
       this.height = ko.observable();
       this.optionsPanel = $('.options-panel');
       ko.applyBindings(this, $('.game-designer')[0]);
+      $('.has-tooltip').tooltip();
     }
 
     GameDesigner.prototype.saveGame = function() {
-      return alert(app.ConstructorConfig.serverAddress);
+      $('.save-game').text('Saving...');
+      $.ajax({
+        url: app.ConstructorConfig.serverAddress + "/api/robbo",
+        data: app.Universe,
+        type: "POST",
+        success: function() {
+          return setTimeout((function() {
+            return $('.save-game').text('Save game');
+          }), 200);
+        }
+      });
     };
 
     GameDesigner.prototype.newGame = function() {
@@ -36,6 +47,10 @@
       app.GameLoader.selectGame(app.Universe.Games.length - 1);
       this.load();
     };
+
+    GameDesigner.prototype.removePlanet = function() {};
+
+    GameDesigner.prototype.removeGame = function() {};
 
     GameDesigner.prototype.toggleOptions = function(x, e) {
       if (this.optionsPanel.is(':visible')) {
