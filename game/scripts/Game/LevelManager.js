@@ -33,7 +33,7 @@
       this.effectManager = new app.MapEffects(this.canvas, this.envCtx);
       this.setupWatchers();
       this.subscribeToEvents();
-      this.envCtx.eventAggregator.publish('starting-number-of-bolts', this.game.Planets[this.currentLevel - 1].BoltsToBeCollected);
+      this.envCtx.eventAggregator.publish('starting-number-of-bolts', this.game.Planets[this.currentLevel - 1].boltsToBeCollected);
       return this.envCtx.eventAggregator.publish('load-level', this.game.Planets[this.currentLevel - 1]);
     };
 

@@ -24,7 +24,7 @@
       this.widthField = $('.width');
       this.heightField = $('.height');
       this.mapField = $(".map");
-      app.GameLoader.loadGamesConfig();
+      this.gameLoader = new app.GameLoader();
       this.widthField.change((function(_this) {
         return function() {
           return _this.setWidth(_this.widthField.val());
@@ -120,11 +120,24 @@
         line = begin + sign + end;
         lines[y] = line;
         this.map = lines.join("\n");
-        return this.mapField.val(this.map);
+        this.mapField.val(this.map);
+        return this.validateMap();
       } catch (_error) {
         e = _error;
         return console.write(x + " " + y + " " + e);
       }
+    };
+
+    Editor.prototype.validateMap = function() {
+      var msg;
+      msg = "";
+      if (this.map.indexOf("R..") === -1) {
+        msg += "Missing robbo.";
+      }
+      if (this.map.indexOf("s..") === -1) {
+        msg += "Missing ship.";
+      }
+      return $(".messages").text(msg);
     };
 
     Editor.prototype.drawToolIcon = function() {
@@ -281,5 +294,3 @@
   });
 
 }).call(this);
-
-//# sourceMappingURL=Editor.map

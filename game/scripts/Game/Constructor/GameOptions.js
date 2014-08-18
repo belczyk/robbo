@@ -8,25 +8,77 @@
 
   app.GameDesigner = (function() {
     function GameDesigner() {
-      this.gameName = ko.observable("game");
-      this.planetName = ko.observable("planet");
-      this.lives = ko.observable(9);
-      this.bolts = ko.observable(5);
-      this.width = ko.observable(16);
-      this.height = ko.observable(32);
+      this.gameName = ko.observable();
+      this.planetName = ko.observable();
+      this.lives = ko.observable();
+      this.bolts = ko.observable();
+      this.width = ko.observable();
+      this.height = ko.observable();
+      this.optionsPanel = $('.options-panel');
       ko.applyBindings(this, $('.game-designer')[0]);
     }
 
     GameDesigner.prototype.saveGame = function() {
-      return alert('save');
+      return alert(app.ConstructorConfig.serverAddress);
     };
 
     GameDesigner.prototype.newGame = function() {
-      return alert('new');
+      var name, planet;
+      name = "Game " + (app.Universe.Games.length + 1);
+      planet = this.createPlanet();
+      planet.Name += " 1";
+      app.Universe.Games.push({
+        Name: name,
+        StartingNumberOfLives: 9,
+        Planets: [planet]
+      });
+      app.GameLoader.loadGamesConfig();
+      app.GameLoader.selectGame(app.Universe.Games.length - 1);
+      this.load();
+    };
+
+    GameDesigner.prototype.toggleOptions = function(x, e) {
+      if (this.optionsPanel.is(':visible')) {
+        this.optionsPanel.hide('blind');
+        $(e.target).find('i').removeClass('glyphicon-chevron-up');
+        return $(e.target).find('i').addClass('glyphicon-chevron-down');
+      } else {
+        this.optionsPanel.show('blind');
+        $(e.target).find('i').removeClass('glyphicon-chevron-down');
+        return $(e.target).find('i').addClass('glyphicon-chevron-up');
+      }
+    };
+
+    GameDesigner.prototype.createPlanet = function() {
+      var line, lines, planet, x, y, _i, _j;
+      planet = {
+        BoltsToBeCollected: 5,
+        Name: "Planet",
+        Map: ""
+      };
+      lines = [];
+      for (x = _i = 0; _i <= 31; x = ++_i) {
+        line = "";
+        for (y = _j = 0; _j <= 16; y = ++_j) {
+          line += "_..";
+        }
+        lines.push(line);
+      }
+      planet.Map = lines.join("\n");
+      return planet;
     };
 
     GameDesigner.prototype.newPlanet = function() {
-      return alert('newp');
+      var game, gameN, planet;
+      gameN = app.GameLoader.currentGame();
+      planet = this.createPlanet();
+      game = app.Universe.Games[app.GameLoader.currentGame()];
+      planet.Name += " " + (game.Planets.length + 1);
+      game.Planets.push(planet);
+      app.GameLoader.loadGamesConfig();
+      app.GameLoader.selectGame(gameN);
+      app.GameLoader.selectPlanet(game.Planets.length - 1);
+      return this.load();
     };
 
     GameDesigner.prototype.testPlanet = function() {
@@ -38,7 +90,7 @@
       game = app.Universe.Games[$('.games').val()];
       planet = game.Planets[$('.planets').val()];
       this.width(app.MapLoader.getWidth(planet.Map));
-      this.width(app.MapLoader.getHeight(planet.Map));
+      this.height(app.MapLoader.getHeight(planet.Map));
       this.planetName(planet.Name);
       this.gameName(game.Name);
       this.bolts(planet.BoltsToBeCollected);
@@ -50,5 +102,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=GameOptions.map

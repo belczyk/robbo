@@ -8,20 +8,27 @@
 
   app.GameLoader = (function() {
     GameLoader.loadGamesConfig = function() {
-      var game, gamesList, i, planet, planetsList, _i, _j, _len, _len1, _ref1, _ref2;
+      var game, gamesList, i, _i, _len, _ref1;
       gamesList = $('.games');
-      planetsList = $('.planets');
+      gamesList.find('option').remove();
       _ref1 = app.Universe.Games;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         game = _ref1[i];
         gamesList.append($('<option></option>').attr('value', i).text(game.Name));
-        _ref2 = game.Planets;
-        for (i = _j = 0, _len1 = _ref2.length; _j < _len1; i = ++_j) {
-          planet = _ref2[i];
-          planetsList.append($('<option></option>').attr('value', i).text(planet.Name));
-        }
-        return;
       }
+      app.GameLoader.reloadPlanets();
+    };
+
+    GameLoader.reloadPlanets = function() {
+      var i, planet, planetsList, _i, _len, _ref1;
+      planetsList = $('.planets');
+      planetsList.find('option').remove();
+      _ref1 = app.Universe.Games[app.GameLoader.currentGame()].Planets;
+      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+        planet = _ref1[i];
+        planetsList.append($('<option></option>').attr('value', i).text(planet.Name));
+      }
+      return planetsList.change();
     };
 
     GameLoader.currentGame = function() {
@@ -32,9 +39,24 @@
       return $('.planets').val();
     };
 
+    GameLoader.selectGame = function(n) {
+      $('.games').val(n);
+      return $('.games').change();
+    };
+
+    GameLoader.selectPlanet = function(n) {
+      $('.planets').val(n);
+      return $('.planets').change();
+    };
+
     function GameLoader() {
       this.gamesList = $('.games');
       this.planetsList = $('.planets');
+      this.gamesList.change((function(_this) {
+        return function() {
+          return app.GameLoader.reloadPlanets();
+        };
+      })(this));
       app.GameLoader.loadGamesConfig();
       $('button.play').click((function(_this) {
         return function() {
@@ -83,5 +105,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=GameLoader.map

@@ -23,7 +23,7 @@ class app.LevelManger
 		@effectManager = new app.MapEffects(@canvas,@envCtx)
 		@setupWatchers()
 		@subscribeToEvents()
-		@envCtx.eventAggregator.publish 'starting-number-of-bolts', @game.Planets[@currentLevel-1].BoltsToBeCollected
+		@envCtx.eventAggregator.publish 'starting-number-of-bolts', @game.Planets[@currentLevel-1].boltsToBeCollected
 		@envCtx.eventAggregator.publish 'load-level',@game.Planets[@currentLevel-1]
 
 	setupWatchers: () ->

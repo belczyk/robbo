@@ -5,19 +5,27 @@ app = window.app
 class app.GameLoader
 	@loadGamesConfig: ->
 		gamesList = $('.games')
-		planetsList = $('.planets')
+		gamesList.find('option').remove()
+		
 		for game,i in app.Universe.Games
 			gamesList
 				.append($('<option></option>')
 					.attr('value',i)
 					.text(game.Name))
-			for planet,i in game.Planets
-				planetsList
-					.append($('<option></option>')
-						.attr('value',i)
-						.text(planet.Name))
 
-			return
+		app.GameLoader.reloadPlanets()
+		return
+
+	@reloadPlanets: () -> 
+		planetsList = $('.planets')
+		planetsList.find('option').remove()
+		for planet,i in app.Universe.Games[app.GameLoader.currentGame()].Planets
+			planetsList
+				.append($('<option></option>')
+					.attr('value',i)
+					.text(planet.Name))
+
+		planetsList.change()
 
 	@currentGame: ->
 		$('.games').val()
@@ -25,9 +33,18 @@ class app.GameLoader
 	@currentPlanet: ->
 		$('.planets').val()
 
+	@selectGame: (n) -> 
+		$('.games').val(n)
+		$('.games').change()
+
+	@selectPlanet: (n) -> 
+		$('.planets').val(n)
+		$('.planets').change()
+
 	constructor: () ->
 		@gamesList = $('.games')
 		@planetsList = $('.planets')
+		@gamesList.change =>  app.GameLoader.reloadPlanets()
 		app.GameLoader.loadGamesConfig()
 		$('button.play').click => @startGame()
 		@setRequestedPlanet()
@@ -45,7 +62,6 @@ class app.GameLoader
 		if(vars["planet"]?)
 			@planetsList.val(vars["planet"])
 			@startGame()
-
 
 	getParams: () ->
 		query = window.location.search.substring(1)

@@ -16,7 +16,7 @@ class Editor
 		@heightField = $('.height')
 		@mapField = $(".map")
 
-		app.GameLoader.loadGamesConfig()
+		@gameLoader = new app.GameLoader()
 		@widthField.change () => @setWidth(@widthField.val())
 		@heightField.change () => @setHeight(@heightField.val())
 		@assets = app.AssetLoader
@@ -59,6 +59,7 @@ class Editor
 		@mapField.val(lines.join('\n'))
 		@mapField.attr("cols",lines[0].length)
 		@map = map
+		@validateMap()
 
 	initMap: ()->
 		@map = ''
@@ -85,8 +86,16 @@ class Editor
 			lines[y] = line
 			@map = lines.join "\n"
 			@mapField.val(@map)
+			@validateMap()
 		catch e
 			console.write x+" "+y+" "+e
+
+	validateMap: ()->
+		msg = ""
+		if @map.indexOf("R..")== -1 then msg+="Missing robbo."
+		if @map.indexOf("s..")== -1 then msg+="Missing ship."
+
+		$(".messages").text(msg)
 
 	drawToolIcon: () ->
 		if not @selectedTool? then return
