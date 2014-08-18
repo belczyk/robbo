@@ -10,6 +10,12 @@
 
   Editor = (function() {
     function Editor() {
+      this.designer = new app.GameDesigner();
+      $('.planets').change((function(_this) {
+        return function() {
+          return _this.load();
+        };
+      })(this));
       new app.ColorManager($('#constructionyard'), function() {});
       this.canvas = $('#constructionyard');
       this.cursorCanvas = $('#currentcell');
@@ -18,16 +24,6 @@
       this.widthField = $('.width');
       this.heightField = $('.height');
       this.mapField = $(".map");
-      $('.test-planet').click((function(_this) {
-        return function() {
-          return _this.testPlanet();
-        };
-      })(this));
-      $('.load').click((function(_this) {
-        return function() {
-          return _this.load();
-        };
-      })(this));
       app.GameLoader.loadGamesConfig();
       this.widthField.change((function(_this) {
         return function() {
@@ -58,9 +54,7 @@
       this.load();
     }
 
-    Editor.prototype.testPlanet = function() {
-      return window.open("robbo.html?game=" + (app.GameLoader.currentGame()) + "&planet=" + (app.GameLoader.currentPlanet()), "_blank");
-    };
+    Editor.prototype.testPlanet = function() {};
 
     Editor.prototype.onMouseMoveInCanvas = function(e) {
       this.x = Math.floor((e.pageX - this.cursorCanvas.offset().left) / 32.0);
@@ -80,6 +74,7 @@
 
     Editor.prototype.load = function() {
       var game, lines, map, planet;
+      this.designer.load();
       game = app.Universe.Games[$('.games').val()];
       planet = game.Planets[$('.planets').val()];
       map = planet.Map.replace(new RegExp(' ', 'g'), ".");

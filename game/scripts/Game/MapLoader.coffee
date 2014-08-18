@@ -24,16 +24,16 @@ class app.MapLoader
 		lines = planet.Map.split '\n'
 		if (lines[0]=="")
 			lines = lines.slice(1,lines.length-1)
-		maxWidth =0 
-		for line,y in lines
-			if (line.length-1)/3>maxWidth
-				maxWidth=line.length/3
-		
-		@envCtx.initMap maxWidth,lines.length
+
+
+		width = app.MapLoader.getWidth(planet.Map)
+		height = app.MapLoader.getHeight(planet.Map)
+
+		@envCtx.initMap width,height
 		toInit = []
 
-		@canvas.attr('width',maxWidth*32)
-		@canvas.attr('height',lines.length*32)
+		@canvas.attr('width',width*32)
+		@canvas.attr('height',height*32)
 
 		for line,y in lines
 			if line == "" then continue
@@ -145,3 +145,16 @@ class app.MapLoader
 			when '-'
 				return 'horizontal'
 
+	@getHeight: (map) -> 
+		lines = map.split '\n'
+		if (lines[0]=="")
+			return lines.length-1
+		lines.length
+
+	@getWidth: (map) -> 
+		lines = map.split '\n'
+		maxWidth =0 
+		for line,y in lines
+			if (line.length-1)/3>maxWidth
+				maxWidth=line.length/3
+		maxWidth

@@ -57,29 +57,24 @@
     };
 
     MapLoader.prototype.load = function(planet) {
-      var char, char2, char3, i, line, lines, maxWidth, o, obj, toInit, x, y, _i, _j, _k, _l, _len, _len1, _len2, _ref1;
+      var char, char2, char3, height, i, line, lines, o, obj, toInit, width, x, y, _i, _j, _k, _len, _len1, _ref1;
       this.cleanMap();
       lines = planet.Map.split('\n');
       if (lines[0] === "") {
         lines = lines.slice(1, lines.length - 1);
       }
-      maxWidth = 0;
-      for (y = _i = 0, _len = lines.length; _i < _len; y = ++_i) {
-        line = lines[y];
-        if ((line.length - 1) / 3 > maxWidth) {
-          maxWidth = line.length / 3;
-        }
-      }
-      this.envCtx.initMap(maxWidth, lines.length);
+      width = app.MapLoader.getWidth(planet.Map);
+      height = app.MapLoader.getHeight(planet.Map);
+      this.envCtx.initMap(width, height);
       toInit = [];
-      this.canvas.attr('width', maxWidth * 32);
-      this.canvas.attr('height', lines.length * 32);
-      for (y = _j = 0, _len1 = lines.length; _j < _len1; y = ++_j) {
+      this.canvas.attr('width', width * 32);
+      this.canvas.attr('height', height * 32);
+      for (y = _i = 0, _len = lines.length; _i < _len; y = ++_i) {
         line = lines[y];
         if (line === "") {
           continue;
         }
-        for (i = _k = 0, _ref1 = line.length / 3; 0 <= _ref1 ? _k <= _ref1 : _k >= _ref1; i = 0 <= _ref1 ? ++_k : --_k) {
+        for (i = _j = 0, _ref1 = line.length / 3; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
           x = i;
           char = line[i * 3];
           char2 = line[i * 3 + 1];
@@ -194,8 +189,8 @@
           this.envCtx.setObjAt(x, y, obj);
         }
       }
-      for (_l = 0, _len2 = toInit.length; _l < _len2; _l++) {
-        o = toInit[_l];
+      for (_k = 0, _len1 = toInit.length; _k < _len1; _k++) {
+        o = toInit[_k];
         o.init();
       }
       this.envCtx.eventAggregator.publish('level-loaded');
@@ -221,6 +216,28 @@
         case '-':
           return 'horizontal';
       }
+    };
+
+    MapLoader.getHeight = function(map) {
+      var lines;
+      lines = map.split('\n');
+      if (lines[0] === "") {
+        return lines.length - 1;
+      }
+      return lines.length;
+    };
+
+    MapLoader.getWidth = function(map) {
+      var line, lines, maxWidth, y, _i, _len;
+      lines = map.split('\n');
+      maxWidth = 0;
+      for (y = _i = 0, _len = lines.length; _i < _len; y = ++_i) {
+        line = lines[y];
+        if ((line.length - 1) / 3 > maxWidth) {
+          maxWidth = line.length / 3;
+        }
+      }
+      return maxWidth;
     };
 
     return MapLoader;

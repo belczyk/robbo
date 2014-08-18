@@ -18,47 +18,41 @@
 <body oncontextmenu="return false">
 
 	<div class="editor">
-		<div class="panel panel-default game-selector" >
-		  <div class="panel-body">
+		<div class="game-designer">
+			<div class="panel panel-default designer-menu" >
+				<div class="panel-body">
+					<button data-bind="click: saveGame" class="save-game btn btn-default">Save game</button>
+					<button data-bind="click: newGame" class="new-game btn btn-default">New game</button>
+					<button data-bind="click: newPlanet" class="new-planet btn btn-default">New planet</button>
+					<button data-bind="click: testPlanet" class="test-planet btn btn-default">Test planet</button>
+				</div>
+			</div>
+			<div class="panel panel-default game-selector" >
+				<div class="panel-body">
 					<label>Game: </label> <select class="games"></select>
 					<label>Planet: </label> <select class="planets"></select>
-				<button class="save btn btn-default">Save game</button>
-				<button class="new-game btn btn-default">New game</button>
-
-		  </div>
-		</div>
-
-		<div class="panel panel-default game-selector" >
-			<div class="panel-body">
-				<div>
-					<label class="long">Game name:</label><input type="text" class="game-name" value="Original game"/>
-					<label>Lives:</label><input type="text" class="number lives" value="9"/>
 				</div>
-				<div>
-					<label class="long">Planet name:</label><input type="text" class="planet-name" value="Planet 1"/>
-					<label>Bolts:</label><input type="text" class="number bolts" value="5"/>
-					
-					<label>Width:</label><input type="text" class="number width" value="16"/>
-					<label>Height:</label><input type="text" class="number height" value="32"/>
-				</div>
-				<div>
-					<button class="test-planet btn btn-default">Test planet</button>
-					<button class="new-planet btn btn-default">New planet</button>
+			</div>
+
+			<div class="panel panel-default game-options" >
+				<div class="panel-body">
+					<div>
+						<label class="long">Game name:</label><input type="text" class="game-name" value="Original game" data-bind="value:  gameName"/>
+						<label>Lives:</label><input type="text" class="number lives" value="9"  data-bind="value:  lives"/>
+					</div>
+					<div>
+						<label class="long">Planet name:</label><input type="text" class="planet-name" value="Planet 1" data-bind="value:  planetName"/>
+						<label>Bolts:</label><input type="text" class="number bolts" value="5" data-bind="value:  bolts"/>
+						
+						<label>Width:</label><input type="text" class="number width" value="16" data-bind="value:  width"/>
+						<label>Height:</label><input type="text" class="number height" value="32" data-bind="value:  height"/>
+					</div>
+					<div>
+
+					</div>
 				</div>
 			</div>
 		</div>
-
-
-<!-- 		<div class="alert alert-info color-selectors">
-
-			<div class="color-selector" data-for="0" data-start-val="A27240" style="background-color: rgb(162, 114, 64);"></div>
-			<div class="color-selector" data-for="1" data-start-val="1C2783" style="background-color: rgb(28, 39, 131);"></div>
-			<div class="color-selector" data-for="2" data-start-val="101010" style="background-color: rgb(16, 16, 16);"></div>
-			<div class="color-selector" data-for="3" data-start-val="989898" style="background-color: rgb(152, 152, 152);"></div>
-			<div class="color-selector background-color-selector" data-start-val="008000" style="background-color: rgb(0, 128, 0);"></div>
-
-		</div> -->
-
 		<div class="toolbox">
 			<div class="tool">
 				<img src="content/game-assets/constructor/ant.png" class="curr" data-tool-icon="ant" data-map="Ea.">
@@ -324,62 +318,64 @@
 		</div>
 	</div>
 
-	<script src="scripts/jquery-1.8.3.min.js"></script>
-	<script src="scripts/json2.min.js"></script>
-	<script src="scripts/knockout-2.2.0.js"></script>
-	<script src="scripts/knockout.mapping-latest.js"></script>
-	<script src="scripts/Tools.js"></script>
-	<script src="scripts/Game/boostrap/bootstrap.js"></script>
-	<script src="scripts/jquery.mousewheel.min.js"></script>
-	<script src="scripts/QUnit/QUnit.1.10.1.js"></script>
+	<script src="scripts/external/jquery-1.8.3.min.js"></script>
+	<script src="scripts/external/json2.min.js"></script>
+	<script src="scripts/external/Math.uuid.js"></script>
+	<script src="scripts/external/jquery.mousewheel.min.js"></script>
+	<script src="scripts/external/bootstrap.js"></script>
+	<script src="scripts/external/knockout-3.1.js"></script>
+
+	<script src="scripts/game/common/Tools.js"></script>
+	<script src="scripts/game/common/Predef.js"></script>
+
 	<script src="colorpicker/js/colorpicker.js"></script>
 	<script src="colorpicker/js/eye.js"></script>
 	<script src="colorpicker/js/utils.js"></script>
 	<script src="colorpicker/js/layout.js"></script>
-	<script src="scripts/Math.uuid.js"></script>
-	<script src="scripts/Game/Predef.js"></script>
-	<script src="scripts/Game/Module.js"></script>
-	<script src="scripts/Game/TimeDelayedMethodCall.js"></script>
-	<script src="scripts/Game/ColorManager.js"></script>
-	<script src="scripts/Game/EventAggregator.js"></script>
-	<script src="scripts/Game/MapLoader.js"></script>
-	<script src="scripts/Game/Game.js"></script>
-	<script src="scripts/Game/GameLoader.js"></script>
-	<script src="scripts/Game/MapEffects.js"></script>
-	<script src="scripts/Game/Mixins/AssetLoader.js"></script>
-	<script src="scripts/Game/Structures/Delta.js"></script>
-	<script src="scripts/Game/Structures/MNeighbour.js"></script>
-	<script src="scripts/Game/Structures/NNeighbour.js"></script>
-	<script src="scripts/Game/Structures/RingArray.js"></script>
-	<script src="scripts/Game/Mixins/Animatable.js"></script>
-	<script src="scripts/Game/Mixins/ArmedWithBlaster.js"></script>
-	<script src="scripts/Game/Mixins/ArmedWithLaser.js"></script>
-	<script src="scripts/Game/Mixins/ArmedWithStableBeamLaser.js"></script>
-	<script src="scripts/Game/Mixins/Blowable.js"></script>
-	<script src="scripts/Game/Mixins/Bombblowable.js"></script>
-	<script src="scripts/Game/Mixins/Circlewalker.js"></script>
-	<script src="scripts/Game/Mixins/Collectable.js"></script>
-	<script src="scripts/Game/Mixins/Enemy.js"></script>
-	<script src="scripts/Game/Mixins/Moveable.js"></script>
-	<script src="scripts/Game/Mixins/Multistate.js"></script>
-	<script src="scripts/Game/Mixins/Walking.js"></script>
-	<script src="scripts/Game/DrawingContext.js"></script>
-	<script src="scripts/Game/EnvironmentContext.js"></script>
-	<script src="scripts/Game/Watchers/AmmoWatcher.js"></script>
-	<script src="scripts/Game/Watchers/KeyboardWatcher.js"></script>
-	<script src="scripts/Game/Watchers/BoltWatcher.js"></script>
-	<script src="scripts/Game/Watchers/KeysWatcher.js"></script>
-	<script src="scripts/Game/Watchers/ScrollWatcher.js"></script>
-	<script src="scripts/Game/LevelManager.js"></script>
+
+	<script src="scripts/game/Module.js"></script>
+	<script src="scripts/game/assets.js"></script>
+	<script src="scripts/game/TimeDelayedMethodCall.js"></script>
+	<script src="scripts/game/ColorManager.js"></script>
+	<script src="scripts/game/EventAggregator.js"></script>
+	<script src="scripts/game/MapLoader.js"></script>
+	<script src="scripts/game/Game.js"></script>
+	<script src="scripts/game/GameLoader.js"></script>
+	<script src="scripts/game/MapEffects.js"></script>
+	<script src="scripts/game/Mixins/AssetLoader.js"></script>
+	<script src="scripts/game/Structures/Delta.js"></script>
+	<script src="scripts/game/Structures/MNeighbour.js"></script>
+	<script src="scripts/game/Structures/NNeighbour.js"></script>
+	<script src="scripts/game/Structures/RingArray.js"></script>
+	<script src="scripts/game/Mixins/Animatable.js"></script>
+	<script src="scripts/game/Mixins/ArmedWithBlaster.js"></script>
+	<script src="scripts/game/Mixins/ArmedWithLaser.js"></script>
+	<script src="scripts/game/Mixins/ArmedWithStableBeamLaser.js"></script>
+	<script src="scripts/game/Mixins/Blowable.js"></script>
+	<script src="scripts/game/Mixins/Bombblowable.js"></script>
+	<script src="scripts/game/Mixins/Circlewalker.js"></script>
+	<script src="scripts/game/Mixins/Collectable.js"></script>
+	<script src="scripts/game/Mixins/Enemy.js"></script>
+	<script src="scripts/game/Mixins/Moveable.js"></script>
+	<script src="scripts/game/Mixins/Multistate.js"></script>
+	<script src="scripts/game/Mixins/Walking.js"></script>
+	<script src="scripts/game/DrawingContext.js"></script>
+	<script src="scripts/game/EnvironmentContext.js"></script>
+	<script src="scripts/game/watchers/AmmoWatcher.js"></script>
+	<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
+	<script src="scripts/game/watchers/BoltWatcher.js"></script>
+	<script src="scripts/game/watchers/KeysWatcher.js"></script>
+	<script src="scripts/game/watchers/ScrollWatcher.js"></script>
+	<script src="scripts/game/LevelManager.js"></script>
 	<script src="scripts/game/objects/Object.js"></script>
 	<script src="scripts/game/objects/DisappearingAnimation.js"></script>
-	<script src="scripts/Game/Watchers/AmmoWatcher.js"></script>
-	<script src="scripts/Game/Watchers/BoltWatcher.js"></script>
-	<script src="scripts/Game/Watchers/KeyboardWatcher.js"></script>
-	<script src="scripts/Game/Watchers/KeysWatcher.js"></script>
-	<script src="scripts/Game/Watchers/KeyWatcher.js"></script>
-	<script src="scripts/Game/Watchers/LiveWatcher.js"></script>
-	<script src="scripts/Game/Watchers/ScrollWatcher.js"></script>
+	<script src="scripts/game/watchers/AmmoWatcher.js"></script>
+	<script src="scripts/game/watchers/BoltWatcher.js"></script>
+	<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
+	<script src="scripts/game/watchers/KeysWatcher.js"></script>
+	<script src="scripts/game/watchers/KeyWatcher.js"></script>
+	<script src="scripts/game/watchers/LiveWatcher.js"></script>
+	<script src="scripts/game/watchers/ScrollWatcher.js"></script>
 	<script src="scripts/game/objects/Ammo.js"></script>
 	<script src="scripts/game/objects/Ant.js"></script>
 	<script src="scripts/game/objects/Bat.js"></script>
@@ -419,8 +415,10 @@
 	<script src="scripts/game/tests/CollectableMixinTest.js"></script>
 	<script src="scripts/game/tests/BombblowableMixinTest.js"></script>
 	<script src="scripts/game/tests/ToolsTests.js"></script>
-	<script src="scripts/Game/assets.js"></script>
 	<script src="config/constructor.js" ></script>
 	<script src="config/universe.js" ></script>
-	<script src="scripts/Game/Constructor/Editor.js"></script>
+
+	<script src="scripts/game/constructor/GameOptions.js"></script>
+	<script src="scripts/game/constructor/Editor.js"></script>
+
 </body></html>

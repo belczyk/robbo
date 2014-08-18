@@ -5,6 +5,8 @@ $ = jQuery
 
 class Editor 
 	constructor: () ->
+		@designer = new app.GameDesigner()
+		$('.planets').change => @load()
 		new app.ColorManager($('#constructionyard'),()->)
 		@canvas = $('#constructionyard')
 		@cursorCanvas = $('#currentcell')
@@ -13,8 +15,7 @@ class Editor
 		@widthField = $('.width')
 		@heightField = $('.height')
 		@mapField = $(".map")
-		$('.test-planet').click => @testPlanet()
-		$('.load').click => @load()
+
 		app.GameLoader.loadGamesConfig()
 		@widthField.change () => @setWidth(@widthField.val())
 		@heightField.change () => @setHeight(@heightField.val())
@@ -33,7 +34,6 @@ class Editor
 		@load()
 
 	testPlanet: ()->
-		window.open("robbo.html?game=#{app.GameLoader.currentGame()}&planet=#{app.GameLoader.currentPlanet()}","_blank")
 
 	onMouseMoveInCanvas:(e) ->
 					@x = Math.floor((e.pageX-@cursorCanvas.offset().left)/32.0)
@@ -47,6 +47,7 @@ class Editor
 					@drawCurrentToolOnCanvas(@x,@y) if @isLeftDown
 					@removeTail() if @isRightDown
 	load: ()->
+		@designer.load()
 		game = app.Universe.Games[$('.games').val()]
 		planet = game.Planets[$('.planets').val()]
 		map = planet.Map.replace(new RegExp(' ', 'g'),".")
