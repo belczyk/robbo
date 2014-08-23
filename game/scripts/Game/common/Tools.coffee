@@ -16,6 +16,12 @@ Array.prototype.single = (predicat) ->
 
 Array.prototype.top = (n)-> this.slice(0,n)
 
+Array.prototype.firstIndexOf = (predicat)->
+	for e,i in this
+		if predicat(e)
+			return i
+	-1
+
 Array.prototype.any = (predicat) ->
 	if predicat?
 		items = []
@@ -41,6 +47,12 @@ Array.prototype.select = (selector) ->
 	
 Array.prototype.last = () ->
 	this[this.length-1]
+
+Array.prototype.max = (predicat) ->
+	val = predicat(this[0])
+	for i in [1..this.length-1]
+		val = predicat(this[i]) if predicat(this[i])>val
+
 
 
 app.Tools ={}

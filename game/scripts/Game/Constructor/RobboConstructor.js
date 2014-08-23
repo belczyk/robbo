@@ -6,47 +6,327 @@
 
   app = window.app;
 
-  app.RobboConstructor = (function() {
-    function RobboConstructor(universe, gameDesinger) {
-      this.gameDesinger = gameDesinger;
-      this.games = ko.mapping.fromJS(universe.games);
-      this.gameId = ko.observable(0);
-      this.planets = this.games()[0].planets;
-      this.planetId = ko.observable(0);
-      this.gameId.subscribe((function(_this) {
+  app.RobboConstructorViewModel = (function() {
+    function RobboConstructorViewModel(gameDesigner, games, eventCtx) {
+      this.gameDesigner = gameDesigner;
+      this.games = games;
+      this.eventCtx = eventCtx;
+      this.setupGameOptions();
+      this.setupPlanetOptions();
+      this.setupActions();
+      this.$games = this.gameDesigner.find('.games');
+      this.$planets = this.gameDesigner.find('.planets');
+      this.$games.change((function(_this) {
         return function() {
-          return _this.planetId(0);
+          return _this.onGameChanged();
         };
       })(this));
-      this.game = ko.computed((function(_this) {
+      this.$planets.change((function(_this) {
         return function() {
-          return ko.mapping.fromJS(_this.games()[_this.gameId()]);
+          return _this.onPlanetChanged();
         };
       })(this));
-      this.planet = ko.computed((function(_this) {
+      this.onGamesChanged();
+      this.gameDesigner.find('.toggle-rawmap').click((function(_this) {
         return function() {
-          return ko.mapping.fromJS(_this.planets()[_this.planetId()]);
+          return $('.map').toggle({
+            easing: 'blind'
+          });
         };
       })(this));
-      ko.applyBindings(this, this.gameDesinger[0]);
-      return;
+      this.gameDesigner.find('.toggle-options').click((function(_this) {
+        return function() {
+          return $('.options-panel').toggle({
+            easing: 'blind'
+          });
+        };
+      })(this));
     }
 
-    RobboConstructor.prototype.saveGame = function() {};
+    RobboConstructorViewModel.prototype.setupActions = function() {
+      $('.save-game').click((function(_this) {
+        return function() {
+          return _this.saveGame();
+        };
+      })(this));
+      $('.new-game').click((function(_this) {
+        return function() {
+          return _this.newGame();
+        };
+      })(this));
+      $('.new-planet').click((function(_this) {
+        return function() {
+          return _this.newPlanet();
+        };
+      })(this));
+      $('.test-planet').click((function(_this) {
+        return function() {
+          return _this.testPlanet();
+        };
+      })(this));
+      $('.remove-planet').click((function(_this) {
+        return function() {
+          return _this.removePlanet();
+        };
+      })(this));
+      return $('.remove-game').click((function(_this) {
+        return function() {
+          return _this.removeGame();
+        };
+      })(this));
+    };
 
-    RobboConstructor.prototype.newGame = function() {};
+    RobboConstructorViewModel.prototype.saveGame = function() {
+      $('.save-game').text('Saving...');
+      $.ajax({
+        url: app.ConstructorConfig.serverAddress + "/api/robbo",
+        data: {
+          games: this.games
+        },
+        type: "POST",
+        success: function() {
+          return setTimeout((function() {
+            return $('.save-game').text('Save game');
+          }), 200);
+        },
+        error: function() {
+          alert("Error. Coudn't save game.");
+          return $('.save-game').text('Save game');
+        }
+      });
+    };
 
-    RobboConstructor.prototype.removeGame = function() {};
+    RobboConstructorViewModel.prototype.removeGame = function() {
+      var i;
+      if (this.games.length === 1) {
+        alert("Don't remove all games.");
+        return;
+      }
+      i = this.games.firstIndexOf((function(_this) {
+        return function(g) {
+          return g.index.toString() === _this.$games.val();
+        };
+      })(this));
+      this.games.splice(i, 1);
+      return this.onGamesChanged();
+    };
 
-    RobboConstructor.prototype.newPlanet = function() {};
+    RobboConstructorViewModel.prototype.newGame = function() {
+      this.games.push({
+        name: "Game " + (this.games.length + 1),
+        startingNumberOfLives: 9,
+        planets: [this.createPlanet(1)],
+        index: parseInt(this.games.max((function(_this) {
+          return function(g) {
+            return g.index;
+          };
+        })(this))) + 1
+      });
+      this.onGamesChanged();
+      this.$games.find('option:last').attr("selected", "selected");
+      return this.onGameChanged();
+    };
 
-    RobboConstructor.prototype.removePlanet = function() {};
+    RobboConstructorViewModel.prototype.newPlanet = function() {
+      this.updateGame((function(_this) {
+        return function(game) {
+          return game.planets.push(_this.createPlanet(game.planets.length + 1));
+        };
+      })(this));
+      this.onPlanetsChanged();
+      return this.$planets.find('option:last').attr("selected", "selected");
+    };
 
-    RobboConstructor.prototype.testPlanet = function() {};
+    RobboConstructorViewModel.prototype.removePlanet = function() {
+      if (this.selectedGame().planets.length === 1) {
+        alert("Don't remove all planets.");
+        return;
+      }
+      this.updateGame((function(_this) {
+        return function(game) {
+          var i;
+          i = game.planets.firstIndexOf(function(p) {
+            return p.index.toString() === _this.$planets.val();
+          });
+          game.planets.splice(i, 1);
+          _this.onPlanetsChanged();
+        };
+      })(this));
+    };
 
-    RobboConstructor.prototype.toggleOptions = function() {};
+    RobboConstructorViewModel.prototype.testPlanet = function() {};
 
-    RobboConstructor.prototype.toggleRawMap = function() {};
+    RobboConstructorViewModel.prototype.setupGameOptions = function() {
+      this.$gameName = $('.game-name');
+      this.$lives = $('.lives');
+      this.$gameName.change((function(_this) {
+        return function() {
+          return _this.updateGame(function(game) {
+            return game.name = _this.$gameName.val();
+          });
+        };
+      })(this));
+      return this.$lives.change((function(_this) {
+        return function() {
+          return _this.updateGame(function(game) {
+            return game.startingNumberOfLives = _this.$lives.val();
+          });
+        };
+      })(this));
+    };
+
+    RobboConstructorViewModel.prototype.setupPlanetOptions = function() {
+      this.$width = $('.width');
+      this.$height = $('.height');
+      this.$bolts = $('.bolts');
+      this.$planetName = $('.planet-name');
+      this.$width.change((function(_this) {
+        return function() {
+          return _this.updatePlanet(function(planet) {
+            return planet.width = _this.$width.val();
+          });
+        };
+      })(this));
+      this.$height.change((function(_this) {
+        return function() {
+          return _this.updatePlanet(function(planet) {
+            return planet.height = _this.$height.val();
+          });
+        };
+      })(this));
+      this.$bolts.change((function(_this) {
+        return function() {
+          return _this.updatePlanet(function(planet) {
+            return planet.boltsToBeCollected = _this.$bolts.val();
+          });
+        };
+      })(this));
+      return this.$planetName.change((function(_this) {
+        return function() {
+          return _this.updatePlanet(function(planet) {
+            return planet.name = _this.$planetName.val();
+          });
+        };
+      })(this));
+    };
+
+    RobboConstructorViewModel.prototype.updatePlanet = function(func) {
+      var game, planet, _i, _j, _len, _len1, _ref1, _ref2;
+      _ref1 = this.games;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        game = _ref1[_i];
+        if (game.index.toString() === this.$games.val()) {
+          _ref2 = game.planets;
+          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+            planet = _ref2[_j];
+            if (planet.index.toString() === this.$planets.val()) {
+              func(planet);
+            }
+          }
+        }
+      }
+    };
+
+    RobboConstructorViewModel.prototype.updateGame = function(func) {
+      var game, _i, _len, _ref1;
+      _ref1 = this.games;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        game = _ref1[_i];
+        if (game.index.toString() === this.$games.val()) {
+          func(game);
+        }
+      }
+    };
+
+    RobboConstructorViewModel.prototype.onGamesChanged = function() {
+      var game, _i, _len, _ref1;
+      this.$games.find('option').remove();
+      _ref1 = this.games;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        game = _ref1[_i];
+        this.$games.append($('<option />').attr('value', game.index).text(game.name));
+      }
+      this.onGameChanged();
+    };
+
+    RobboConstructorViewModel.prototype.onPlanetsChanged = function() {
+      var planet, _i, _len, _ref1;
+      this.$planets.find('option').remove();
+      _ref1 = this.selectedGame().planets;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        planet = _ref1[_i];
+        this.$planets.append($('<option />').attr('value', planet.index).text(planet.name));
+      }
+      return this.onPlanetChanged();
+    };
+
+    RobboConstructorViewModel.prototype.onGameChanged = function() {
+      var game;
+      game = this.selectedGame();
+      this.$gameName.val(game.name);
+      this.$lives.val(game.startingNumberOfLives);
+      return this.onPlanetsChanged();
+    };
+
+    RobboConstructorViewModel.prototype.onPlanetChanged = function() {
+      var planet;
+      planet = this.selectedPlanet();
+      this.$width.val(planet.width);
+      this.$height.val(planet.height);
+      this.$bolts.val(planet.boltsToBeCollected);
+      return this.$planetName.val(planet.name);
+    };
+
+    RobboConstructorViewModel.prototype.selectedGame = function() {
+      return this.games.single((function(_this) {
+        return function(g) {
+          return g.index.toString() === _this.$games.val();
+        };
+      })(this));
+    };
+
+    RobboConstructorViewModel.prototype.selectedPlanet = function() {
+      return this.selectedGame().planets.single((function(_this) {
+        return function(p) {
+          return p.index.toString() === _this.$planets.val();
+        };
+      })(this));
+    };
+
+    RobboConstructorViewModel.prototype.createPlanet = function(index) {
+      return {
+        boltsToBeCollected: 5,
+        name: "Planet " + index,
+        index: index,
+        width: 16,
+        height: 32,
+        map: this.generateEmptyMap(32, 16)
+      };
+    };
+
+    RobboConstructorViewModel.prototype.generateEmptyMap = function(h, w) {
+      var map, x, y, _i, _j, _ref1, _ref2;
+      map = "";
+      for (y = _i = 0, _ref1 = h - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; y = 0 <= _ref1 ? ++_i : --_i) {
+        for (x = _j = 0, _ref2 = w - 1; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; x = 0 <= _ref2 ? ++_j : --_j) {
+          map += "_..";
+        }
+        map += "\n";
+      }
+      return map;
+    };
+
+    return RobboConstructorViewModel;
+
+  })();
+
+  app.RobboConstructor = (function() {
+    function RobboConstructor(universe, gameDesigner) {
+      this.gameDesigner = gameDesigner;
+      this.eventCtx = new app.EventAggregator();
+      this.games = app.Universe.games;
+      this.designerVM = new app.RobboConstructorViewModel(this.gameDesigner, this.games, this.eventCtx);
+    }
 
     return RobboConstructor;
 

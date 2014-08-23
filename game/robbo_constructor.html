@@ -15,60 +15,47 @@
 	<link href="Content/QUnit/QUnit.1.10.0.css" rel="stylesheet">
 </head>
 <body oncontextmenu="return false">
-	<div class="unit-tests">
-		<h1 id="qunit-header"><a href="/Home/gametests">Unit Tests</a> </h1>
-		<h2 id="qunit-banner" class="qunit-pass"></h2>
-		<h2 id="qunit-userAgent"></h2>
-		<p id="qunit-testresult" class="result">
-			<span class="passed"></span> tests of <span class="total"></span> passed, <span class="failed"></span> failed.</p>
-			<ol id="qunit-tests"></ol>
-			<div id="qunit-fixture"></div>
-		</div>
 		<div class="editor">
 			<div class="game-designer">
 				<div class="panel panel-default designer-menu" >
 					<div class="panel-body">
-						<button data-bind="click: saveGame" class="save-game btn btn-primary btn-sm">Save game</button>
-						<button data-bind="click: newGame" class="btn btn-primary btn-sm">New game</button>
-						<button data-bind="click: newPlanet" class="btn btn-primary btn-sm">New planet</button>
-						<button data-bind="click: testPlanet" class="btn btn-primary btn-sm">Test planet</button>
-
-						<button data-bind="click: toggleOptions" class="btn btn-default btn-sm btn-right " data-toggle="button" ><i class="glyphicon glyphicon-chevron-down"></i></button>
-						<button data-bind="click: toggleRawMap" class="btn btn-default btn-sm btn-right" data-toggle="button"><i class="glyphicon glyphicon-qrcode"></i></button>
+						<button class="save-game btn btn-primary btn-sm">Save game</button>
+						<button class="new-game btn btn-primary btn-sm">New game</button>
+						<button class="new-planet btn btn-primary btn-sm">New planet</button>
+						<button class="test-planet btn btn-primary btn-sm">Test planet</button>
+						<button class="btn btn-default btn-sm btn-right toggle-options" data-toggle="button" ><i class="glyphicon glyphicon-chevron-down"></i></button>
+						<button class="btn btn-default btn-sm btn-right toggle-rawmap" data-toggle="button"><i class="glyphicon glyphicon-qrcode"></i></button>
 					</div>
 				</div>
 				<div class="options-panel">
 					<div class="panel panel-default" >
 						<div class="panel-body">
-							<label>Game: </label> <select data-bind="options: games, optionsText: 'name',optionsValue : 'index', value: 'gameId'"></select>
-							<label>Planet: </label> <select data-bind="options: planets,optionsText: 'name',optionsValue : 'index', value: 'planetId'" ></select>
+							<label>Game: </label> <select class="games"></select>
+							<label>Planet: </label> <select class="planets"></select>
 						</div>
 					</div>
-
 					<div class="panel panel-default game-options" >
 						<div class="panel-body">
 							<div>
-								<label class="long">Game name:</label><input type="text" class="game-name" data-bind="value:  game().name"/>
-								<label>Lives:</label><input type="text" class="number lives"  data-bind="value:  game().startingNumberOfLives"/>
-								<button data-bind="click: removeGame" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top" title="Remove game"><i class="glyphicon glyphicon-remove"></i></button>
+								<label class="long">Game name:</label><input type="text" class="game-name" />
+								<label>Lives:</label><input type="text" class="number lives" />
+								<button class="remove-game btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top" title="Remove game"><i class="glyphicon glyphicon-remove"></i></button>
 							</div>
 							<div>
-								<label class="long">Planet name:</label><input type="text" class="planet-name" data-bind="value:  planet().name"/>
-								<label>Bolts:</label><input type="text" class="number bolts"  data-bind="value:  planet().boltsToBeCollected"/>
+								<label class="long">Planet name:</label><input type="text" class="planet-name" />
+								<label>Bolts:</label><input type="text" class="number bolts"  />
 
-								<label>Width:</label><input type="text" class="number width"  data-bind="value:  planet().width"/>
-								<label>Height:</label><input type="text" class="number height"  data-bind="value:  planet().height"/>
-								<button data-bind="click: removePlanet" class="btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top"  title="Remove planet"><i class="glyphicon glyphicon-remove"></i></button>
+								<label>Width:</label><input type="text" class="number width"  />
+								<label>Height:</label><input type="text" class="number height"  />
+								<button  class="remove-planet btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top"  title="Remove planet"><i class="glyphicon glyphicon-remove"></i></button>
 							</div>
 						</div>
 					</div> 
-				</div>
+ 				</div>
 			</div>
+
 			<div>
-
 				<div>
-
-
 					<div class="panel panel-default toolbox">
 						<div class="panel-body">
 							<div class="tool">
@@ -194,6 +181,16 @@
 							<canvas width="32" height="32" class="asset assetLoad"></canvas>
 						</div>
 					</div>
+			<!-- 						<div class="unit-tests" style="float: right">
+		<h1 id="qunit-header"><a href="/Home/gametests">Unit Tests</a> </h1>
+		<h2 id="qunit-banner" class="qunit-pass"></h2>
+		<h2 id="qunit-userAgent"></h2>
+		<p id="qunit-testresult" class="result">
+			<span class="passed"></span> tests of <span class="total"></span> passed, <span class="failed"></span> failed.</p>
+			<ol id="qunit-tests"></ol>
+			<div id="qunit-fixture"></div>
+		</div> -->
+
 					<div class="label label-primary messages">Missing ship. Missing robbo.</div>
 					<div class="scroll-panel" style="width: 532px;">
 						<canvas id="constructionyard" style="background-color: green" height="1024" width="512"></canvas>
@@ -298,12 +295,7 @@
 				<script src="scripts/game/objects/StableBeamLaser.js"></script>
 				<script src="scripts/game/objects/Teleport.js"></script>
 				<script src="scripts/game/objects/Wall.js"></script>
-				<script src="scripts/game/tests/TestHelpers.js"></script>
-				<script src="scripts/game/tests/MoveableMixinTests.js"></script>
-				<script src="scripts/game/tests/MultistateMixinTests.js"></script>
-				<script src="scripts/game/tests/CollectableMixinTest.js"></script>
-				<script src="scripts/game/tests/BombblowableMixinTest.js"></script>
-				<script src="scripts/game/tests/ToolsTests.js"></script>
+				
 				<script src="config/constructor.js" ></script>
 				<script src="config/universe.js" ></script>
 				<script src="scripts/game/constructor/RobboConstructor.js"></script>
@@ -314,9 +306,10 @@
 				</script>
 
 				<!-- Tests -->
+				<!--<script src="scripts/game/tests/TestHelpers.js"></script>
 				<script src="scripts/game/tests/universe.js" ></script>
 				<script src="scripts/external/QUnit.1.10.1.js"></script>
-				<script src="scripts/game/tests/constructor/RobboConstructorTests.js"></script>
+				<script src="scripts/game/tests/constructor/RobboConstructorTests.js"></script>-->
 			</div>
 		</div>
 	</body>
