@@ -6,13 +6,88 @@
 
   app = window.app;
 
+  app.ConstructorToolbar = (function() {
+    function ConstructorToolbar() {
+      this.setupToolbar();
+      $(window).keydown((function(_this) {
+        return function(event) {
+          if (event.keyCode === 9) {
+            return _this.rotateTools(event);
+          }
+        };
+      })(this));
+    }
+
+    ConstructorToolbar.prototype.rotateTools = function(event) {
+      var editor;
+      editor = this;
+      $('.tool').each(function(i, e) {
+        var curr, imgs;
+        imgs = $(this).find('img');
+        if (imgs.size() === 1) {
+          return;
+        }
+        curr = -1;
+        imgs.each(function(j, img) {
+          if ($(img).hasClass('curr')) {
+            return curr = j;
+          }
+        });
+        curr++;
+        if (curr < 0) {
+          curr = imgs.size() - 1;
+        }
+        if (curr === imgs.size()) {
+          curr = 0;
+        }
+        imgs.removeClass('curr');
+        $(imgs[curr]).addClass('curr');
+        if ($(e).hasClass('selected')) {
+          editor.selectedTool = $(imgs[curr]);
+          editor.selectedToolIcon = $(imgs[curr]).data('tool-icon');
+          return editor.selectedMapSign = $(imgs[curr]).data('map');
+        }
+      });
+      event.preventDefault();
+      return false;
+    };
+
+    ConstructorToolbar.prototype.setupToolbar = function() {
+      return $('.tool').click((function(_this) {
+        return function(e, item) {
+          $('.tool').removeClass('selected');
+          $(e.target).parent().addClass('selected');
+          _this.selectedTool = $(e.target);
+          _this.selectedMapSign = $(e.target).data('map');
+          return _this.selectedToolIcon = _this.selectedTool.data('tool-icon');
+        };
+      })(this));
+    };
+
+    return ConstructorToolbar;
+
+  })();
+
   app.RobboConstructor = (function() {
     function RobboConstructor(universe, gameDesigner) {
       this.gameDesigner = gameDesigner;
       this.eventCtx = new app.EventAggregator();
+      this.$map = $('.map');
       this.games = app.Universe.games;
-      this.designerVM = new app.GamesOptions(this.gameDesigner, this.games, this.eventCtx);
+      this.eventCtx.subscribe('selected-planet-changed', (function(_this) {
+        return function(p) {
+          return _this.changeMap(p);
+        };
+      })(this));
+      this.gamesOptions = new app.GamesOptions(this.gameDesigner, this.games, this.eventCtx);
+      this.toolbar = new app.ConstructorToolbar(this.eventCtx);
     }
+
+    RobboConstructor.prototype.changeMap = function(planet) {
+      this.$map.val(planet.map);
+      this.$map.attr("cols", planet.width * 3);
+      return this.$map.attr("rows", planet.height);
+    };
 
     return RobboConstructor;
 

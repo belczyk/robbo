@@ -23,7 +23,8 @@
       })(this));
       this.$planets.change((function(_this) {
         return function() {
-          return _this.onPlanetChanged();
+          _this.onPlanetChanged();
+          return _this.publishSelectedPlanetChanged();
         };
       })(this));
       this.onGamesChanged();
@@ -41,7 +42,12 @@
           });
         };
       })(this));
+      this.publishSelectedPlanetChanged();
     }
+
+    GamesOptions.prototype.publishSelectedPlanetChanged = function() {
+      return this.eventCtx.publish('selected-planet-changed', this.selectedPlanet());
+    };
 
     GamesOptions.prototype.setupActions = function() {
       $('.save-game').click((function(_this) {
@@ -78,6 +84,7 @@
 
     GamesOptions.prototype.saveGame = function() {
       $('.save-game').text('Saving...');
+      this.upateSizes();
       $.ajax({
         url: app.ConstructorConfig.serverAddress + "/api/robbo",
         data: {
@@ -94,6 +101,20 @@
           return $('.save-game').text('Save game');
         }
       });
+    };
+
+    GamesOptions.prototype.upateSizes = function() {
+      var game, planet, _i, _j, _len, _len1, _ref1, _ref2;
+      _ref1 = this.games;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        game = _ref1[_i];
+        _ref2 = game.planets;
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          planet = _ref2[_j];
+          planet.width = app.MapLoader.getWidth(planet.map);
+          planet.height = app.MapLoader.getHeight(planet.map);
+        }
+      }
     };
 
     GamesOptions.prototype.removeGame = function() {

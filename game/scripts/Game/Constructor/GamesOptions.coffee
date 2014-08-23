@@ -9,10 +9,16 @@ class app.GamesOptions
 		@$games = @gameDesigner.find('.games')
 		@$planets = @gameDesigner.find('.planets')
 		@$games.change () => @onGameChanged()
-		@$planets.change () => @onPlanetChanged()
+		@$planets.change () => 
+			@onPlanetChanged()
+			@publishSelectedPlanetChanged()
 		@onGamesChanged()
 		@gameDesigner.find('.toggle-rawmap').click ()=>$('.map').toggle({easing : 'blind'}) 
-		@gameDesigner.find('.toggle-options').click ()=>$('.options-panel').toggle({easing : 'blind'}) 
+		@gameDesigner.find('.toggle-options').click ()=>$('.options-panel').toggle({easing : 'blind'})
+		@publishSelectedPlanetChanged()
+		
+	publishSelectedPlanetChanged: ()-> 
+		@eventCtx.publish 'selected-planet-changed', @selectedPlanet()
 
 	setupActions: () ->
 		$('.save-game').click => @saveGame()
@@ -24,6 +30,7 @@ class app.GamesOptions
 
 	saveGame: () ->
 		$('.save-game').text('Saving...')
+		@upateSizes()
 		$.ajax
 			url: app.ConstructorConfig.serverAddress+"/api/robbo"
 			data: {games: @games}
@@ -32,8 +39,16 @@ class app.GamesOptions
 			error: ()-> 
 				alert("Error. Coudn't save game.")
 				$('.save-game').text('Save game')
+
+
 		return
 
+	upateSizes: () ->
+		for game in @games
+			for planet in game.planets
+				planet.width = app.MapLoader.getWidth(planet.map)
+				planet.height = app.MapLoader.getHeight(planet.map)
+		return
 
 	removeGame: () ->
 		if @games.length ==1

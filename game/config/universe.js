@@ -8,11 +8,10 @@ app.Universe = {
         {
           "name": "OG Planet 1",
           "index": 1,
-          "width": 0,
-          "height": 0,
+          "width": 14,
+          "height": 18,
           "boltsToBeCollected": 1,
-          "map": "\n\
-w  w  w  w  w  w  w  w  w  w  w  w  w  w  \n\
+          "map": "w  w  w  w  w  w  w  w  w  w  w  w  w  w  \n\
 w  X  _  _  _  L<s_  _  _  _  _  _  #  _  \n\
 w  _  _  _  _  _  _  _  #  _  _  _  _  w  \n\
 w  _  _  _  _  _  _  _  Lvs_  _  _  _  w  \n\
@@ -34,11 +33,10 @@ w  w  w  w  w  w  w  w  w  w  w  w  w  w  "
         {
           "name": "OG Planet 2",
           "index": 2,
-          "width": 0,
-          "height": 0,
+          "width": 14,
+          "height": 18,
           "boltsToBeCollected": 2,
-          "map": "\n\
-w  w  w  w  w  w  w  w  w  w  w  w  w  w  \n\
+          "map": "w  w  w  w  w  w  w  w  w  w  w  w  w  w  \n\
 w  X  _  _  _  L<s_  _  _  _  _  _  #  _  \n\
 w  _  _  _  _  _  _  _  #  _  _  _  _  w  \n\
 w  _  _  _  _  _  _  _  Lvs_  _  _  _  w  \n\
