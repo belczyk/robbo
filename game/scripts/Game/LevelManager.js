@@ -118,5 +118,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=LevelManager.map

@@ -245,5 +245,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=MapLoader.map

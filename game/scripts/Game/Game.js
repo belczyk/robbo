@@ -87,5 +87,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=Game.map
