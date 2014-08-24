@@ -19,7 +19,7 @@ class Editor
 		@gameLoader = new app.GameLoader()
 		@widthField.change () => @setWidth(@widthField.val())
 		@heightField.change () => @setHeight(@heightField.val())
-		
+		@assets = app.AssetLoader
 		@setHeight @heightField.val()
 		@setWidth @widthField.val()
 		@initMap()
@@ -72,7 +72,7 @@ class Editor
 
 	drawCurrentToolOnCanvas: (x,y) ->
 		if not @selectedTool? then return
-		asset = app.AssetLoader.getAsset(@selectedToolIcon)
+		asset = @assets.getAsset(@selectedToolIcon)
 		@mainCtx.putImageData asset,x*32,y*32
 		@updateMap(x,y,@selectedMapSign)
 
@@ -101,7 +101,7 @@ class Editor
 		if not @selectedTool? then return
 		
 		@toolCtx.clearRect 0,0,@toolCanvas.width(),@toolCanvas.height()
-		@asset = app.AssetLoader.getAsset(@selectedToolIcon)
+		asset = @assets.getAsset(@selectedToolIcon)
 		@toolCtx.putImageData asset,@x*32,@y*32
 
 	setHeight: (val) -> 

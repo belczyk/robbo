@@ -11,7 +11,7 @@
       var game, gamesList, i, _i, _len, _ref1;
       gamesList = $('.games');
       gamesList.find('option').remove();
-      _ref1 = app.Universe.games;
+      _ref1 = app.Universe.Games;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         game = _ref1[i];
         gamesList.append($('<option></option>').attr('value', i).text(game.Name));
@@ -23,7 +23,7 @@
       var i, planet, planetsList, _i, _len, _ref1;
       planetsList = $('.planets');
       planetsList.find('option').remove();
-      _ref1 = app.Universe.games[app.GameLoader.currentGame()].planets;
+      _ref1 = app.Universe.Games[app.GameLoader.currentGame()].Planets;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         planet = _ref1[i];
         planetsList.append($('<option></option>').attr('value', i).text(planet.Name));
@@ -68,7 +68,7 @@
 
     GameLoader.prototype.startGame = function() {
       var game;
-      game = app.Universe.games[this.gamesList.val()];
+      game = app.Universe.Games[this.gamesList.val()];
       game = new app.Game($('.game-board'), game, this.planetsList);
       return new app.ColorManager($('.game-board canvas'), function() {
         return game.redraw();

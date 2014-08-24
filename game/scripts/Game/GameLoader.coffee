@@ -7,7 +7,7 @@ class app.GameLoader
 		gamesList = $('.games')
 		gamesList.find('option').remove()
 		
-		for game,i in app.Universe.games
+		for game,i in app.Universe.Games
 			gamesList
 				.append($('<option></option>')
 					.attr('value',i)
@@ -19,7 +19,7 @@ class app.GameLoader
 	@reloadPlanets: () -> 
 		planetsList = $('.planets')
 		planetsList.find('option').remove()
-		for planet,i in app.Universe.games[app.GameLoader.currentGame()].planets
+		for planet,i in app.Universe.Games[app.GameLoader.currentGame()].Planets
 			planetsList
 				.append($('<option></option>')
 					.attr('value',i)
@@ -50,7 +50,7 @@ class app.GameLoader
 		@setRequestedPlanet()
 
 	startGame: () ->
-		game = app.Universe.games[@gamesList.val()]
+		game = app.Universe.Games[@gamesList.val()]
 		game = new app.Game($('.game-board'),game,@planetsList)
 		new app.ColorManager($('.game-board canvas'),()->game.redraw())
 

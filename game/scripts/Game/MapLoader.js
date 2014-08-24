@@ -59,12 +59,12 @@
     MapLoader.prototype.load = function(planet) {
       var char, char2, char3, height, i, line, lines, o, obj, toInit, width, x, y, _i, _j, _k, _len, _len1, _ref1;
       this.cleanMap();
-      lines = planet.map.split('\n');
+      lines = planet.Map.split('\n');
       if (lines[0] === "") {
         lines = lines.slice(1, lines.length - 1);
       }
-      width = app.MapLoader.getWidth(planet.map);
-      height = app.MapLoader.getHeight(planet.map);
+      width = app.MapLoader.getWidth(planet.Map);
+      height = app.MapLoader.getHeight(planet.Map);
       this.envCtx.initMap(width, height);
       toInit = [];
       this.canvas.attr('width', width * 32);

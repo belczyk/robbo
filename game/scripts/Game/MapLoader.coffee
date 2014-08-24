@@ -21,13 +21,13 @@ class app.MapLoader
 					`delete	obj`
 	load : (planet)->
 		@cleanMap()
-		lines = planet.map.split '\n'
+		lines = planet.Map.split '\n'
 		if (lines[0]=="")
 			lines = lines.slice(1,lines.length-1)
 
 
-		width = app.MapLoader.getWidth(planet.map)
-		height = app.MapLoader.getHeight(planet.map)
+		width = app.MapLoader.getWidth(planet.Map)
+		height = app.MapLoader.getHeight(planet.Map)
 
 		@envCtx.initMap width,height
 		toInit = []
