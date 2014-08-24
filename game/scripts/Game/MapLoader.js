@@ -130,6 +130,8 @@
                 obj = new app.RotatingLaser(this.envCtx, x, y);
               } else if (char3 === 's') {
                 obj = new app.StableBeamLaser(this.envCtx, x, y, this.getDirection(char2));
+              } else if (char3 === 'b') {
+                obj = new app.Blaster(this.envCtx, x, y, this.getDirection(char2));
               }
               break;
             case 'B':
@@ -157,9 +159,6 @@
               break;
             case 'l':
               obj = new app.MovingLaser(this.envCtx, x, y, this.getOrientation(char2), this.getDirection(char3));
-              break;
-            case '@':
-              obj = new app.Blaster(this.envCtx, x, y, this.getDirection(char2));
               break;
             case '0':
               obj = new app.Nothing(this.envCtx, x, y);

@@ -81,7 +81,8 @@ class app.MapLoader
 							obj = new app.RotatingLaser @envCtx,x,y
 						else if char3 is 's'
 							obj = new app.StableBeamLaser @envCtx,x,y,@getDirection(char2)
-
+						else if char3 is 'b'
+							obj = new app.Blaster @envCtx,x,y, @getDirection(char2)
 					when 'B'
 						if char3 is ' ' or char3 is '.'
 							obj = new app.Bat @envCtx,x,y,@getOrientation(char2)
@@ -99,8 +100,6 @@ class app.MapLoader
 						obj = new app.Magnet @envCtx,x,y, @getDirection(char2)
 					when 'l'
 						obj = new app.MovingLaser @envCtx,x,y,@getOrientation(char2),@getDirection(char3)
-					when '@'
-						obj = new app.Blaster @envCtx,x,y, @getDirection(char2)
 					when '0'
 						obj = new app.Nothing @envCtx,x,y
 					when '*'
