@@ -14,7 +14,7 @@
       _ref1 = app.Universe.games;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         game = _ref1[i];
-        gamesList.append($('<option></option>').attr('value', i).text(game.Name));
+        gamesList.append($('<option></option>').attr('value', i).text(game.name));
       }
       app.GameLoader.reloadPlanets();
     };
@@ -26,7 +26,7 @@
       _ref1 = app.Universe.games[app.GameLoader.currentGame()].planets;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         planet = _ref1[i];
-        planetsList.append($('<option></option>').attr('value', i).text(planet.Name));
+        planetsList.append($('<option></option>').attr('value', i).text(planet.name));
       }
       return planetsList.change();
     };
