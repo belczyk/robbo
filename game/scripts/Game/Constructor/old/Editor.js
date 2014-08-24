@@ -35,7 +35,6 @@
           return _this.setHeight(_this.heightField.val());
         };
       })(this));
-      this.assets = app.AssetLoader;
       this.setHeight(this.heightField.val());
       this.setWidth(this.widthField.val());
       this.initMap();
@@ -106,7 +105,7 @@
       if (this.selectedTool == null) {
         return;
       }
-      asset = this.assets.getAsset(this.selectedToolIcon);
+      asset = app.AssetLoader.getAsset(this.selectedToolIcon);
       this.mainCtx.putImageData(asset, x * 32, y * 32);
       return this.updateMap(x, y, this.selectedMapSign);
     };
@@ -142,12 +141,11 @@
     };
 
     Editor.prototype.drawToolIcon = function() {
-      var asset;
       if (this.selectedTool == null) {
         return;
       }
       this.toolCtx.clearRect(0, 0, this.toolCanvas.width(), this.toolCanvas.height());
-      asset = this.assets.getAsset(this.selectedToolIcon);
+      this.asset = app.AssetLoader.getAsset(this.selectedToolIcon);
       return this.toolCtx.putImageData(asset, this.x * 32, this.y * 32);
     };
 
