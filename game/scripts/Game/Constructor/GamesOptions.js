@@ -222,16 +222,18 @@
       this.$planetName = $('.planet-name');
       this.$width.change((function(_this) {
         return function() {
-          return _this.updatePlanet(function(planet) {
+          _this.updatePlanet(function(planet) {
             return planet.width = _this.$width.val();
           });
+          return _this.eventCtx.publish('map-width-changed', parseInt(_this.$width.val()));
         };
       })(this));
       this.$height.change((function(_this) {
         return function() {
-          return _this.updatePlanet(function(planet) {
+          _this.updatePlanet(function(planet) {
             return planet.height = _this.$height.val();
           });
+          return _this.eventCtx.publish('map-height-changed', parseInt(_this.$height.val()));
         };
       })(this));
       this.$bolts.change((function(_this) {

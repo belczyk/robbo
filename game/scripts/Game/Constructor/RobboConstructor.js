@@ -36,9 +36,88 @@
           return _this.drawToolIcon();
         };
       })(this));
+      this.eventCtx.subscribe('map-height-changed', (function(_this) {
+        return function(h) {
+          return _this.updateMapHeight(h);
+        };
+      })(this));
+      this.eventCtx.subscribe('map-width-changed', (function(_this) {
+        return function(w) {
+          return _this.updateMapWidth(w);
+        };
+      })(this));
       this.games = app.Universe.games;
       this.gamesOptions = new app.GamesOptions(this.gameDesigner, this.games, this.eventCtx);
     }
+
+    RobboConstructor.prototype.updateMapHeight = function(h) {
+      if (h > this.mapHeight) {
+        this.addLines(h - this.mapHeight);
+      } else {
+        this.removeLines(h);
+      }
+      this.mapHeight = h;
+      this.setHeight(h);
+      this.redrawMap();
+      return this.eventCtx.publish('map-updated', this.map);
+    };
+
+    RobboConstructor.prototype.addLines = function(n) {
+      var i, line, x, _i, _j, _ref1, _ref2;
+      for (i = _i = 0, _ref1 = n - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
+        line = "\n";
+        for (x = _j = 0, _ref2 = this.mapWidth - 1; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; x = 0 <= _ref2 ? ++_j : --_j) {
+          line += "_..";
+        }
+        this.map += line;
+      }
+      this.map = this.map.replace(/[ ]/g, '.');
+      return this.$map.val(this.map);
+    };
+
+    RobboConstructor.prototype.removeLines = function(n) {
+      var lines;
+      lines = this.map.split('\n');
+      lines = lines.splice(0, n);
+      this.map = lines.join('\n');
+      return this.$map.val(this.map);
+    };
+
+    RobboConstructor.prototype.updateMapWidth = function(w) {
+      if (w > this.mapWidth) {
+        this.addColumns(w - this.mapWidth);
+      } else {
+        this.removeColumns(w);
+      }
+      this.mapWidth = w;
+      this.setWidth(w);
+      this.redrawMap();
+      return this.eventCtx.publish('map-updated', this.map);
+    };
+
+    RobboConstructor.prototype.addColumns = function(n) {
+      var cols, i, lines, x, _i, _j, _ref1, _ref2;
+      lines = this.map.split('\n');
+      for (i = _i = 0, _ref1 = lines.length - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
+        cols = "";
+        for (x = _j = 0, _ref2 = n - 1; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; x = 0 <= _ref2 ? ++_j : --_j) {
+          cols += "_..";
+        }
+        lines[i] = lines[i] + cols;
+      }
+      this.map = lines.join('\n');
+      return this.$map.val(this.map);
+    };
+
+    RobboConstructor.prototype.removeColumns = function(w) {
+      var i, lines, _i, _ref1;
+      lines = this.map.split('\n');
+      for (i = _i = 0, _ref1 = lines.length - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
+        lines[i] = lines[i].substring(0, w * 3);
+      }
+      this.map = lines.join('\n');
+      return this.$map.val(this.map);
+    };
 
     RobboConstructor.prototype.changeMap = function(planet) {
       this.mapWidth = planet.width;
@@ -119,7 +198,9 @@
     RobboConstructor.prototype.setWidth = function(val) {
       this.canvas.attr('width', this.mapWidth * 32);
       this.toolCanvas.attr('width', this.mapWidth * 32);
-      return this.cursorCanvas.attr('width', this.mapWidth * 32);
+      this.cursorCanvas.attr('width', this.mapWidth * 32);
+      this.$map.attr("cols", this.mapWidth * 3);
+      return this.$map.attr("rows", this.mapHeight);
     };
 
     RobboConstructor.prototype.setHeight = function(val) {

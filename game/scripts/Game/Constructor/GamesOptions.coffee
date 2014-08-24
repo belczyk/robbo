@@ -114,8 +114,13 @@ class app.GamesOptions
 		@$height = $('.height')
 		@$bolts = $('.bolts')
 		@$planetName = $('.planet-name')
-		@$width.change => @updatePlanet (planet)=>planet.width =@$width.val()
-		@$height.change => @updatePlanet (planet)=>planet.height =@$height.val()
+		@$width.change => 
+			@updatePlanet (planet)=>planet.width =@$width.val()
+			@eventCtx.publish 'map-width-changed',parseInt(@$width.val())
+		@$height.change => 
+			@updatePlanet (planet)=>planet.height =@$height.val()
+			@eventCtx.publish 'map-height-changed',parseInt(@$height.val())
+			
 		@$bolts.change => @updatePlanet (planet)=>planet.boltsToBeCollected =@$bolts.val()
 		@$planetName.change => @updatePlanet (planet)=>planet.name =@$planetName.val()
 

@@ -18,8 +18,65 @@ class app.RobboConstructor
 		@toolbar = new app.ConstructorToolbar(@eventCtx)
 		@eventCtx.subscribe 'selected-planet-changed', (p)=> @changeMap(p)
 		@eventCtx.subscribe 'current-tool-changed', () => @drawToolIcon()
+		@eventCtx.subscribe 'map-height-changed', (h) => @updateMapHeight(h)
+		@eventCtx.subscribe 'map-width-changed', (w) => @updateMapWidth(w)
+
 		@games = app.Universe.games
 		@gamesOptions = new app.GamesOptions(@gameDesigner,@games,@eventCtx)
+
+	updateMapHeight: (h)->
+		if h>@mapHeight
+			@addLines(h-@mapHeight)
+		else
+			@removeLines(h)
+		@mapHeight=h
+		@setHeight(h)
+		@redrawMap()
+		@eventCtx.publish 'map-updated',@map
+
+	addLines: (n) ->
+		for i in [0..n-1]
+			line = "\n"
+			for x in [0..@mapWidth-1]
+				line+="_.."
+			@map+=line
+
+		@map = @map.replace(///[\ ]///g,'.')
+		@$map.val(@map)
+
+	removeLines: (n)->
+		lines = @map.split '\n'
+		lines = lines.splice 0,n
+		@map = lines.join '\n'
+		@$map.val(@map)
+
+	updateMapWidth: (w)->
+		if w>@mapWidth
+			@addColumns(w-@mapWidth)
+		else
+			@removeColumns(w)
+
+		@mapWidth=w
+		@setWidth(w)
+		@redrawMap()
+		@eventCtx.publish 'map-updated',@map
+
+	addColumns: (n)->
+		lines = @map.split '\n'
+		for i in [0..lines.length-1]
+			cols = ""
+			cols+="_.." for x in [0..n-1]
+			lines[i] = lines[i]+cols
+		@map = lines.join '\n'
+		@$map.val(@map)
+
+
+	removeColumns: (w) ->
+		lines = @map.split '\n'
+		for i in [0..lines.length-1]
+			lines[i] = lines[i].substring(0,w*3)
+		@map = lines.join '\n'
+		@$map.val(@map)
 
 	changeMap: (planet) ->
 		@mapWidth = planet.width
@@ -85,6 +142,8 @@ class app.RobboConstructor
 		@canvas.attr('width',@mapWidth*32)
 		@toolCanvas.attr('width',@mapWidth*32)
 		@cursorCanvas.attr('width',@mapWidth*32)
+		@$map.attr("cols",@mapWidth*3)
+		@$map.attr("rows",@mapHeight)
 
 	setHeight: (val) -> 
 		@canvas.attr('height',@mapHeight*32)
