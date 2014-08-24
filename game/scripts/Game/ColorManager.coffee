@@ -1,11 +1,11 @@
 ﻿window.app = window.app ? {}
 app = window.app
 
-app.ColorTranslation = [{from: [162,114,64,255], to:[102,114,64,255]}
+app.ColorTranslation = [{from: [0,0,0,0], to:[0,0,0,0]},
+						 {from: [162,114,64,255], to:[102,114,64,255]}
 						,{from: [28,39,131,255], to:[28,39,129,255]}
 						,{from: [16,16,16,255], to:[16,16,16,255]}
 						,{from: [152,152,152,255], to:[152,152,152,255]}
-						,{from: [0,0,0,0], to:[0,0,0,0]}
 						{from: [255,255,255,255], to:[0,0,0,0]}]
 
 class app.ColorManager
