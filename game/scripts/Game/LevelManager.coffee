@@ -2,9 +2,8 @@
 app = window.app
 
 class app.LevelManger 
-	constructor: (@gameBoard,@game,@planetsList) ->
-		@currentLevel = parseInt(@planetsList.val())+1
-		@lives = @game.StartingNumberOfLives
+	constructor: (@gameBoard,@game,@planetsList,@currentLevel) ->
+		@lives = @game.startingNumberOfLives
 
 	setupCanvas: () ->
 		@canvas = $('<canvas></canvas>')
@@ -23,8 +22,9 @@ class app.LevelManger
 		@effectManager = new app.MapEffects(@canvas,@envCtx)
 		@setupWatchers()
 		@subscribeToEvents()
-		@envCtx.eventAggregator.publish 'starting-number-of-bolts', @game.planets[@currentLevel-1].boltsToBeCollected
-		@envCtx.eventAggregator.publish 'load-level',@game.planets[@currentLevel-1]
+		planet = @game.planets.single (p)=> p.index.toString() == @currentLevel
+		@envCtx.eventAggregator.publish 'starting-number-of-bolts', planet.boltsToBeCollected
+		@envCtx.eventAggregator.publish 'load-level',planet
 
 	setupWatchers: () ->
 		@scrollWatcher = new app.ScrollWatcher @envCtx,@eventAggregator,@canvas

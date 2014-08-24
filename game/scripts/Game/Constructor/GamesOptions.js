@@ -11,6 +11,12 @@
       this.gameDesigner = gameDesigner;
       this.games = games;
       this.eventCtx = eventCtx;
+      this.eventCtx.subscribe('map-updated', (function(_this) {
+        return function(map) {
+          return _this.onMapUpdated(map);
+        };
+      })(this));
+      this.$saveGame = $('.save-game');
       this.setupGameOptions();
       this.setupPlanetOptions();
       this.setupActions();
@@ -43,14 +49,22 @@
         };
       })(this));
       this.publishSelectedPlanetChanged();
+      this.disableSave();
+      this.setupServerPing();
     }
+
+    GamesOptions.prototype.onMapUpdated = function(map) {
+      return this.updatePlanet(function(planet) {
+        return planet.map = map;
+      });
+    };
 
     GamesOptions.prototype.publishSelectedPlanetChanged = function() {
       return this.eventCtx.publish('selected-planet-changed', this.selectedPlanet());
     };
 
     GamesOptions.prototype.setupActions = function() {
-      $('.save-game').click((function(_this) {
+      this.$saveGame.click((function(_this) {
         return function() {
           return _this.saveGame();
         };
@@ -178,7 +192,9 @@
       })(this));
     };
 
-    GamesOptions.prototype.testPlanet = function() {};
+    GamesOptions.prototype.testPlanet = function() {
+      return window.open("robbo.html?game=" + (this.selectedGame().index) + "&planet=" + (this.selectedPlanet().index), "_blank");
+    };
 
     GamesOptions.prototype.setupGameOptions = function() {
       this.$gameName = $('.game-name');
@@ -338,6 +354,51 @@
         map += "\n";
       }
       return map;
+    };
+
+    GamesOptions.prototype.setupServerPing = function() {
+      this.pingServer();
+      return setInterval(((function(_this) {
+        return function() {
+          return _this.pingServer();
+        };
+      })(this)), 3000);
+    };
+
+    GamesOptions.prototype.pingServer = function() {
+      try {
+        return $.ajax({
+          type: "GET",
+          async: true,
+          url: app.ConstructorConfig.serverAddress + '/api/robbo',
+          error: (function(_this) {
+            return function() {
+              return _this.disableSave();
+            };
+          })(this),
+          success: (function(_this) {
+            return function() {
+              return _this.enableSave();
+            };
+          })(this)
+        });
+      } catch (_error) {
+        return this.$saveGame.attr('disbled', 'disbled');
+      }
+    };
+
+    GamesOptions.prototype.disableSave = function() {
+      this.$saveGame.attr('disabled', 'disabled');
+      this.$saveGame.text("connecting...");
+      this.$saveGame.removeClass('btn-primary');
+      return this.$saveGame.addClass('btn-warning');
+    };
+
+    GamesOptions.prototype.enableSave = function() {
+      this.$saveGame.removeAttr('disabled');
+      this.$saveGame.text("Save game");
+      this.$saveGame.addClass('btn-primary');
+      return this.$saveGame.removeClass('btn-warning');
     };
 
     return GamesOptions;

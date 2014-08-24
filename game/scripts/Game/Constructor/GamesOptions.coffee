@@ -3,6 +3,8 @@ app = window.app
 
 class app.GamesOptions
 	constructor: (@gameDesigner,@games, @eventCtx) ->
+		@eventCtx.subscribe 'map-updated', (map)=> @onMapUpdated(map)
+		@$saveGame = $('.save-game')
 		@setupGameOptions()
 		@setupPlanetOptions()
 		@setupActions()
@@ -16,12 +18,19 @@ class app.GamesOptions
 		@gameDesigner.find('.toggle-rawmap').click ()=>$('.map').toggle({easing : 'blind'}) 
 		@gameDesigner.find('.toggle-options').click ()=>$('.options-panel').toggle({easing : 'blind'})
 		@publishSelectedPlanetChanged()
+		@disableSave()
+		@setupServerPing()
+
 		
+	onMapUpdated: (map)->
+		@updatePlanet (planet)->
+			planet.map = map
+
 	publishSelectedPlanetChanged: ()-> 
 		@eventCtx.publish 'selected-planet-changed', @selectedPlanet()
 
 	setupActions: () ->
-		$('.save-game').click => @saveGame()
+		@$saveGame.click => @saveGame()
 		$('.new-game').click => @newGame()
 		$('.new-planet').click => @newPlanet()
 		$('.test-planet').click => @testPlanet()
@@ -91,6 +100,7 @@ class app.GamesOptions
 		return
 
 	testPlanet: () ->
+		window.open("robbo.html?game=#{@selectedGame().index}&planet=#{@selectedPlanet().index}","_blank")
 
 
 	setupGameOptions: () ->
@@ -171,3 +181,31 @@ class app.GamesOptions
 				map+="_.."
 			map+="\n"
 		map
+
+	setupServerPing: ()->
+		@pingServer()
+		setInterval (()=>@pingServer()),3000
+
+	pingServer: () ->
+		try
+			$.ajax 
+				type: "GET",
+				async: true,
+				url: app.ConstructorConfig.serverAddress+'/api/robbo',
+				error: () => @disableSave()
+
+				success: () => @enableSave()
+		catch
+			 @$saveGame.attr('disbled','disbled')
+
+	disableSave: ()->
+		@$saveGame.attr('disabled','disabled')
+		@$saveGame.text("connecting...")
+		@$saveGame.removeClass('btn-primary')
+		@$saveGame.addClass('btn-warning')
+
+	enableSave: ()->
+		@$saveGame.removeAttr('disabled')
+		@$saveGame.text("Save game")
+		@$saveGame.addClass('btn-primary')
+		@$saveGame.removeClass('btn-warning')

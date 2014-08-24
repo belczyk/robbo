@@ -2,7 +2,7 @@ window.app = window.app ? {}
 app = window.app
 
 class app.ConstructorToolbar 
-	constructor: ()->
+	constructor: (@eventCtx)->
 		@setupToolbar()
 		$(window).keydown (event)=> 
 			if event.keyCode == 9 then return @rotateTools(event)
@@ -28,6 +28,7 @@ class app.ConstructorToolbar
 				editor.selectedTool=$(imgs[curr])
 				editor.selectedToolIcon = $(imgs[curr]).data('tool-icon')
 				editor.selectedMapSign = $(imgs[curr]).data('map')
+		@eventCtx.publish 'current-tool-changed'
 		event.preventDefault()
 		return false
 

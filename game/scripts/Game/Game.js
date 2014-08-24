@@ -7,10 +7,10 @@
   app = window.app;
 
   app.Game = (function() {
-    function Game(gameBoard, game, planetsList) {
+    function Game(gameBoard, game, planetsList, currentLevel) {
       this.gameBoard = gameBoard;
       this.disableScrolling();
-      this.levelManager = new app.LevelManger(this.gameBoard, game, planetsList);
+      this.levelManager = new app.LevelManger(this.gameBoard, game, planetsList, currentLevel);
       this.levelManager.startGame();
       this.timeDelayedMethodCall = new app.TimeDelayedMethodCall();
       this.watchCoordinates();

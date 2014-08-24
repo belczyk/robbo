@@ -10,7 +10,7 @@ class app.GameLoader
 		for game,i in app.Universe.games
 			gamesList
 				.append($('<option></option>')
-					.attr('value',i)
+					.attr('value',game.index)
 					.text(game.name))
 
 		app.GameLoader.reloadPlanets()
@@ -19,27 +19,22 @@ class app.GameLoader
 	@reloadPlanets: () -> 
 		planetsList = $('.planets')
 		planetsList.find('option').remove()
-		for planet,i in app.Universe.games[app.GameLoader.currentGame()].planets
+		for planet,i in @currentGame().planets
 			planetsList
 				.append($('<option></option>')
-					.attr('value',i)
+					.attr('value',planet.index)
 					.text(planet.name))
 
 		planetsList.change()
 
-	@currentGame: ->
+	@currentGame: () ->
+		app.Universe.games.single (g)-> g.index.toString()==app.GameLoader.currentGameIndex()
+
+	@currentGameIndex: ->
 		$('.games').val()
 
-	@currentPlanet: ->
+	@currentPlanetIndex: ->
 		$('.planets').val()
-
-	@selectGame: (n) -> 
-		$('.games').val(n)
-		$('.games').change()
-
-	@selectPlanet: (n) -> 
-		$('.planets').val(n)
-		$('.planets').change()
 
 	constructor: () ->
 		@gamesList = $('.games')
@@ -50,8 +45,8 @@ class app.GameLoader
 		@setRequestedPlanet()
 
 	startGame: () ->
-		game = app.Universe.games[@gamesList.val()]
-		game = new app.Game($('.game-board'),game,@planetsList)
+		game = app.GameLoader.currentGame()
+		game = new app.Game($('.game-board'),game,@planetsList,app.GameLoader.currentPlanetIndex())
 		new app.ColorManager($('.game-board canvas'),()->game.redraw())
 
 	setRequestedPlanet: ()-> 
@@ -60,6 +55,7 @@ class app.GameLoader
 			@gamesList.val(vars["game"])
 
 		if(vars["planet"]?)
+			planet = 
 			@planetsList.val(vars["planet"])
 			@startGame()
 

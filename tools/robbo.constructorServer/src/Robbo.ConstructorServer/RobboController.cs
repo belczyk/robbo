@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Web.Http;
 using Newtonsoft.Json;
 
@@ -12,9 +13,9 @@ namespace Robbo.Local.API
         private const string Config = "config";
         private const string Backup = "backup";
 
-        public Universe Get()
+        public HttpStatusCode Get()
         {
-            return OriginalGame.OriginalUniverse;
+            return HttpStatusCode.OK;
         }
 
 

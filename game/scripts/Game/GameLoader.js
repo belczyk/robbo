@@ -14,7 +14,7 @@
       _ref1 = app.Universe.games;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         game = _ref1[i];
-        gamesList.append($('<option></option>').attr('value', i).text(game.name));
+        gamesList.append($('<option></option>').attr('value', game.index).text(game.name));
       }
       app.GameLoader.reloadPlanets();
     };
@@ -23,30 +23,26 @@
       var i, planet, planetsList, _i, _len, _ref1;
       planetsList = $('.planets');
       planetsList.find('option').remove();
-      _ref1 = app.Universe.games[app.GameLoader.currentGame()].planets;
+      _ref1 = this.currentGame().planets;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         planet = _ref1[i];
-        planetsList.append($('<option></option>').attr('value', i).text(planet.name));
+        planetsList.append($('<option></option>').attr('value', planet.index).text(planet.name));
       }
       return planetsList.change();
     };
 
     GameLoader.currentGame = function() {
+      return app.Universe.games.single(function(g) {
+        return g.index.toString() === app.GameLoader.currentGameIndex();
+      });
+    };
+
+    GameLoader.currentGameIndex = function() {
       return $('.games').val();
     };
 
-    GameLoader.currentPlanet = function() {
+    GameLoader.currentPlanetIndex = function() {
       return $('.planets').val();
-    };
-
-    GameLoader.selectGame = function(n) {
-      $('.games').val(n);
-      return $('.games').change();
-    };
-
-    GameLoader.selectPlanet = function(n) {
-      $('.planets').val(n);
-      return $('.planets').change();
     };
 
     function GameLoader() {
@@ -68,21 +64,21 @@
 
     GameLoader.prototype.startGame = function() {
       var game;
-      game = app.Universe.games[this.gamesList.val()];
-      game = new app.Game($('.game-board'), game, this.planetsList);
+      game = app.GameLoader.currentGame();
+      game = new app.Game($('.game-board'), game, this.planetsList, app.GameLoader.currentPlanetIndex());
       return new app.ColorManager($('.game-board canvas'), function() {
         return game.redraw();
       });
     };
 
     GameLoader.prototype.setRequestedPlanet = function() {
-      var vars;
+      var planet, vars;
       vars = this.getParams();
       if ((vars["game"] != null)) {
         this.gamesList.val(vars["game"]);
       }
       if ((vars["planet"] != null)) {
-        this.planetsList.val(vars["planet"]);
+        planet = this.planetsList.val(vars["planet"]);
         return this.startGame();
       }
     };

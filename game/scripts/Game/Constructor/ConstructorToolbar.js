@@ -7,7 +7,8 @@
   app = window.app;
 
   app.ConstructorToolbar = (function() {
-    function ConstructorToolbar() {
+    function ConstructorToolbar(eventCtx) {
+      this.eventCtx = eventCtx;
       this.setupToolbar();
       $(window).keydown((function(_this) {
         return function(event) {
@@ -48,6 +49,7 @@
           return editor.selectedMapSign = $(imgs[curr]).data('map');
         }
       });
+      this.eventCtx.publish('current-tool-changed');
       event.preventDefault();
       return false;
     };

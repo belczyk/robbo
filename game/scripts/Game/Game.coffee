@@ -2,10 +2,10 @@
 app = window.app
 
 class app.Game 
-	constructor: (@gameBoard,game,planetsList) ->
+	constructor: (@gameBoard,game,planetsList,currentLevel) ->
 		@disableScrolling()
 
-		@levelManager = new app.LevelManger @gameBoard,game,planetsList
+		@levelManager = new app.LevelManger @gameBoard,game,planetsList,currentLevel
 		@levelManager.startGame()
 		@timeDelayedMethodCall = new app.TimeDelayedMethodCall()
 		

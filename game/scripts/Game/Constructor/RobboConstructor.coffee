@@ -10,12 +10,14 @@ class app.RobboConstructor
 		@cursorCtx = @cursorCanvas.get(0).getContext('2d')
 		@toolCtx = @toolCanvas.get(0).getContext('2d')
 		@mainCtx = @canvas.get(0).getContext('2d')
-		
-
+		@cursorCanvas.mousemove (e) =>@onMouseMoveInCanvas(e)
+		@setupDocumentEvents()
+		@setupClick()
 		@$map = $('.map')
 		@eventCtx = new app.EventAggregator()
 		@toolbar = new app.ConstructorToolbar(@eventCtx)
 		@eventCtx.subscribe 'selected-planet-changed', (p)=> @changeMap(p)
+		@eventCtx.subscribe 'current-tool-changed', () => @drawToolIcon()
 		@games = app.Universe.games
 		@gamesOptions = new app.GamesOptions(@gameDesigner,@games,@eventCtx)
 
@@ -23,7 +25,8 @@ class app.RobboConstructor
 		@mapWidth = planet.width
 		@mapHeight = planet.height
 		@map = planet.map
-		@$map.val(planet.map)
+		@map = @map.replace(///[\ ]///g,'.')
+		@$map.val(@map)
 		@$map.attr("cols",planet.width*3)
 		@$map.attr("rows",planet.height)
 		@setWidth()
@@ -39,6 +42,31 @@ class app.RobboConstructor
 			for x in [0..@mapWidth-1]
 				@draw(x,y,line.substring(x*3,(x*3+3)))
 		return
+
+	onMouseMoveInCanvas:(e) ->
+					@x = Math.floor((e.pageX-@cursorCanvas.offset().left)/32.0)
+					@y = Math.floor((e.pageY-@cursorCanvas.offset().top)/32.0)
+
+					@cursorCtx.lineWidth = 1
+					@cursorCtx.strokeStyle = 'white'
+					@cursorCtx.clearRect 0,0,@cursorCanvas.width(),@cursorCanvas.height()
+					@cursorCtx.strokeRect(@x*32,@y*32,32,32)
+					@drawToolIcon()
+					@drawCurrentToolOnCanvas(@x,@y) if @isLeftDown
+					#@removeTail() if @isRightDown
+	drawToolIcon: () ->
+		if not @toolbar.selectedTool? then return
+		
+		@toolCtx.clearRect 0,0,@toolCanvas.width(),@toolCanvas.height()
+		asset = @assets.getAsset(@toolbar.selectedToolIcon)
+		@toolCtx.putImageData asset,@x*32,@y*32
+
+
+	drawCurrentToolOnCanvas: (x,y) ->
+		if not @toolbar.selectedTool? then return
+		asset = @assets.getAsset(@toolbar.selectedToolIcon)
+		@mainCtx.putImageData asset,x*32,y*32
+		@updateMap(x,y,@toolbar.selectedMapSign)
 
 	draw: (x,y,sign) ->
 		if (sign[0]=="_") then return;
@@ -62,3 +90,47 @@ class app.RobboConstructor
 		@canvas.attr('height',@mapHeight*32)
 		@toolCanvas.attr('height',@mapHeight*32)
 		@cursorCanvas.attr('height',@mapHeight*32)
+
+	updateMap: (x,y,sign) -> 
+		try
+			lines = @map.split "\n"
+			line = lines[y]
+			begin = line.substring(0,x*3)
+			end = line.substring((x+1)*3)
+			line = begin + sign+end
+			lines[y] = line
+			@map = lines.join "\n"
+			@$map.val(@map)
+			@eventCtx.publish 'map-updated', @map
+		catch e
+			console.log x+" "+y+" "+e
+
+	setupDocumentEvents: ()->
+		@isLeftDown = no
+		@isRightDown = no
+		$('body').attr('onContextMenu','return false')
+		$(document).mousedown (e) =>
+			@isLeftDown = true if event.which ==1
+			@isRightDown = true if event.which == 3
+
+		$(document).mouseup (e) =>
+			@isLeftDown = false if event.which ==1
+			@isRightDown = false if event.which == 3
+
+	setupClick: ()->
+		@cursorCanvas.mousedown (e) =>
+			if event.which==1
+				@drawCurrentToolOnCanvas(@x,@y)
+			else if event.which ==3 
+				if @selectedTool?
+					@deselectTool()
+				else
+					@removeTail(@x,@y)
+
+		@cursorCanvas.mouseout (e) ->
+			leftDown = false
+			rightDown = false
+
+		return
+
+

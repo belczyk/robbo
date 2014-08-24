@@ -7,12 +7,12 @@
   app = window.app;
 
   app.LevelManger = (function() {
-    function LevelManger(gameBoard, game, planetsList) {
+    function LevelManger(gameBoard, game, planetsList, currentLevel) {
       this.gameBoard = gameBoard;
       this.game = game;
       this.planetsList = planetsList;
-      this.currentLevel = parseInt(this.planetsList.val()) + 1;
-      this.lives = this.game.StartingNumberOfLives;
+      this.currentLevel = currentLevel;
+      this.lives = this.game.startingNumberOfLives;
     }
 
     LevelManger.prototype.setupCanvas = function() {
@@ -23,6 +23,7 @@
     };
 
     LevelManger.prototype.setupLevel = function() {
+      var planet;
       this.setupCanvas();
       this.eventAggregator = new app.EventAggregator();
       this.drawingCtx = new app.DrawingContext(this.canvasContext2D);
@@ -33,8 +34,13 @@
       this.effectManager = new app.MapEffects(this.canvas, this.envCtx);
       this.setupWatchers();
       this.subscribeToEvents();
-      this.envCtx.eventAggregator.publish('starting-number-of-bolts', this.game.planets[this.currentLevel - 1].boltsToBeCollected);
-      return this.envCtx.eventAggregator.publish('load-level', this.game.planets[this.currentLevel - 1]);
+      planet = this.game.planets.single((function(_this) {
+        return function(p) {
+          return p.index.toString() === _this.currentLevel;
+        };
+      })(this));
+      this.envCtx.eventAggregator.publish('starting-number-of-bolts', planet.boltsToBeCollected);
+      return this.envCtx.eventAggregator.publish('load-level', planet);
     };
 
     LevelManger.prototype.setupWatchers = function() {

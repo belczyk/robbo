@@ -16,12 +16,24 @@
       this.cursorCtx = this.cursorCanvas.get(0).getContext('2d');
       this.toolCtx = this.toolCanvas.get(0).getContext('2d');
       this.mainCtx = this.canvas.get(0).getContext('2d');
+      this.cursorCanvas.mousemove((function(_this) {
+        return function(e) {
+          return _this.onMouseMoveInCanvas(e);
+        };
+      })(this));
+      this.setupDocumentEvents();
+      this.setupClick();
       this.$map = $('.map');
       this.eventCtx = new app.EventAggregator();
       this.toolbar = new app.ConstructorToolbar(this.eventCtx);
       this.eventCtx.subscribe('selected-planet-changed', (function(_this) {
         return function(p) {
           return _this.changeMap(p);
+        };
+      })(this));
+      this.eventCtx.subscribe('current-tool-changed', (function(_this) {
+        return function() {
+          return _this.drawToolIcon();
         };
       })(this));
       this.games = app.Universe.games;
@@ -32,7 +44,8 @@
       this.mapWidth = planet.width;
       this.mapHeight = planet.height;
       this.map = planet.map;
-      this.$map.val(planet.map);
+      this.map = this.map.replace(/[ ]/g, '.');
+      this.$map.val(this.map);
       this.$map.attr("cols", planet.width * 3);
       this.$map.attr("rows", planet.height);
       this.setWidth();
@@ -50,6 +63,39 @@
           this.draw(x, y, line.substring(x * 3, x * 3 + 3));
         }
       }
+    };
+
+    RobboConstructor.prototype.onMouseMoveInCanvas = function(e) {
+      this.x = Math.floor((e.pageX - this.cursorCanvas.offset().left) / 32.0);
+      this.y = Math.floor((e.pageY - this.cursorCanvas.offset().top) / 32.0);
+      this.cursorCtx.lineWidth = 1;
+      this.cursorCtx.strokeStyle = 'white';
+      this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width(), this.cursorCanvas.height());
+      this.cursorCtx.strokeRect(this.x * 32, this.y * 32, 32, 32);
+      this.drawToolIcon();
+      if (this.isLeftDown) {
+        return this.drawCurrentToolOnCanvas(this.x, this.y);
+      }
+    };
+
+    RobboConstructor.prototype.drawToolIcon = function() {
+      var asset;
+      if (this.toolbar.selectedTool == null) {
+        return;
+      }
+      this.toolCtx.clearRect(0, 0, this.toolCanvas.width(), this.toolCanvas.height());
+      asset = this.assets.getAsset(this.toolbar.selectedToolIcon);
+      return this.toolCtx.putImageData(asset, this.x * 32, this.y * 32);
+    };
+
+    RobboConstructor.prototype.drawCurrentToolOnCanvas = function(x, y) {
+      var asset;
+      if (this.toolbar.selectedTool == null) {
+        return;
+      }
+      asset = this.assets.getAsset(this.toolbar.selectedToolIcon);
+      this.mainCtx.putImageData(asset, x * 32, y * 32);
+      return this.updateMap(x, y, this.toolbar.selectedMapSign);
     };
 
     RobboConstructor.prototype.draw = function(x, y, sign) {
@@ -80,6 +126,71 @@
       this.canvas.attr('height', this.mapHeight * 32);
       this.toolCanvas.attr('height', this.mapHeight * 32);
       return this.cursorCanvas.attr('height', this.mapHeight * 32);
+    };
+
+    RobboConstructor.prototype.updateMap = function(x, y, sign) {
+      var begin, e, end, line, lines;
+      try {
+        lines = this.map.split("\n");
+        line = lines[y];
+        begin = line.substring(0, x * 3);
+        end = line.substring((x + 1) * 3);
+        line = begin + sign + end;
+        lines[y] = line;
+        this.map = lines.join("\n");
+        this.$map.val(this.map);
+        return this.eventCtx.publish('map-updated', this.map);
+      } catch (_error) {
+        e = _error;
+        return console.log(x + " " + y + " " + e);
+      }
+    };
+
+    RobboConstructor.prototype.setupDocumentEvents = function() {
+      this.isLeftDown = false;
+      this.isRightDown = false;
+      $('body').attr('onContextMenu', 'return false');
+      $(document).mousedown((function(_this) {
+        return function(e) {
+          if (event.which === 1) {
+            _this.isLeftDown = true;
+          }
+          if (event.which === 3) {
+            return _this.isRightDown = true;
+          }
+        };
+      })(this));
+      return $(document).mouseup((function(_this) {
+        return function(e) {
+          if (event.which === 1) {
+            _this.isLeftDown = false;
+          }
+          if (event.which === 3) {
+            return _this.isRightDown = false;
+          }
+        };
+      })(this));
+    };
+
+    RobboConstructor.prototype.setupClick = function() {
+      this.cursorCanvas.mousedown((function(_this) {
+        return function(e) {
+          if (event.which === 1) {
+            return _this.drawCurrentToolOnCanvas(_this.x, _this.y);
+          } else if (event.which === 3) {
+            if (_this.selectedTool != null) {
+              return _this.deselectTool();
+            } else {
+              return _this.removeTail(_this.x, _this.y);
+            }
+          }
+        };
+      })(this));
+      this.cursorCanvas.mouseout(function(e) {
+        var leftDown, rightDown;
+        leftDown = false;
+        return rightDown = false;
+      });
     };
 
     return RobboConstructor;

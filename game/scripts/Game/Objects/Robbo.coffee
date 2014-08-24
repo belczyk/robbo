@@ -33,7 +33,6 @@ class app.Robbo extends app.Object
 				@envCtx.timer.resetToken()
 				@eventAggregator.publish 'robbo-destroyed'
 
-
 	stateSelector: (delta,currentState, args...) ->
 					s = currentState[6]
 					ms = currentState[7]
