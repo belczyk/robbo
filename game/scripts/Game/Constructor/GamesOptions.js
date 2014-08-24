@@ -133,16 +133,19 @@
     };
 
     GamesOptions.prototype.newGame = function() {
-      this.games.push({
+      var game, maxIndex;
+      maxIndex = this.games.max((function(_this) {
+        return function(g) {
+          return parseInt(g.index);
+        };
+      })(this));
+      game = {
         name: "Game " + (this.games.length + 1),
         startingNumberOfLives: 9,
         planets: [this.createPlanet(1)],
-        index: parseInt(this.games.max((function(_this) {
-          return function(g) {
-            return g.index;
-          };
-        })(this))) + 1
-      });
+        index: maxIndex + 1
+      };
+      this.games.push(game);
       this.onGamesChanged();
       this.$games.find('option:last').attr("selected", "selected");
       return this.onGameChanged();

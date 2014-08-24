@@ -49,7 +49,12 @@ Array.prototype.last = () ->
 	this[this.length-1]
 
 Array.prototype.max = (predicat) ->
+	if this.length == 0 then return 
+
 	val = predicat(this[0])
+
+	if this.length == 1 then return val
+	
 	for i in [1..this.length-1]
 		val = predicat(this[i]) if predicat(this[i])>val
 

@@ -60,11 +60,14 @@ class app.GamesOptions
 		@onGamesChanged()
 
 	newGame: () ->
-		@games.push 
+		maxIndex = @games.max((g)=>parseInt(g.index))
+		game = 
 			name: "Game "+(@games.length+1)
 			startingNumberOfLives: 9
 			planets: [@createPlanet(1)]
-			index: parseInt(@games.max((g)=>g.index))+1
+			index: maxIndex+1
+		@games.push game
+
 		@onGamesChanged()
 		@$games.find('option:last').attr("selected","selected")
 		@onGameChanged()
