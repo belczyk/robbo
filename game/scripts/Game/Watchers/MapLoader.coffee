@@ -19,7 +19,6 @@ class app.MapLoader
 					@envCtx.unregisterRandomCalls obj
 					@envCtx.map[obj.y][obj.x] = null
 					`delete	obj`
-					
 	load : (planet)->
 		@cleanMap()
 		lines = planet.map.split '\n'

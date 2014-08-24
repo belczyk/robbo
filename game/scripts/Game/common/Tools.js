@@ -97,7 +97,13 @@
 
   Array.prototype.max = function(predicat) {
     var i, val, _i, _ref1, _results;
+    if (this.length === 0) {
+      return;
+    }
     val = predicat(this[0]);
+    if (this.length === 1) {
+      return val;
+    }
     _results = [];
     for (i = _i = 1, _ref1 = this.length - 1; 1 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
       if (predicat(this[i]) > val) {
