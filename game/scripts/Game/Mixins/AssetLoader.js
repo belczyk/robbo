@@ -9,30 +9,45 @@
   app.AssetLoader = (function() {
     function AssetLoader() {}
 
+    AssetLoader.assets = {};
+
     AssetLoader.width = 32;
 
     AssetLoader.height = 32;
 
-    AssetLoader.assetCanvas = null;
-
     AssetLoader.getAsset = function(name) {
-      var asset, color, i, imgData, x, y, _i, _j;
-      if (this.assetCanvas == null) {
-        this.assetCanvas = $('.assetLoad')[0].getContext("2d");
+      var asset, _ref1;
+      if ((_ref1 = app.ColorTranslation) != null ? _ref1.isChanged : void 0) {
+        this.assets = {};
+        app.ColorTranslation.isChanged = false;
       }
-      asset = app.Assets[name];
-      imgData = this.assetCanvas.createImageData(32, 32);
-      for (y = _i = 0; _i <= 31; y = ++_i) {
-        for (x = _j = 0; _j <= 31; x = ++_j) {
-          color = app.ColorTranslation[asset[y][x]].to;
-          i = y * 32 + x;
-          imgData.data[i + 0] = color[0];
-          imgData.data[i + 1] = color[1];
-          imgData.data[i + 2] = color[2];
-          imgData.data[i + 3] = color[3];
+      asset = this.assets[name];
+      if (asset == null) {
+        this.assets[name] = this.loadAsset(name);
+      }
+      return this.assets[name];
+    };
+
+    AssetLoader.loadAsset = function(name) {
+      var ctx, i, imageData, img, trans, _i, _j, _len, _ref1;
+      img = $("." + name).clone().get(0);
+      img.crossOrigin = '';
+      ctx = $('.assetLoad').get(0).getContext('2d');
+      ctx.clearRect(0, 0, this.width, this.height);
+      ctx.drawImage(img, 0, 0);
+      imageData = ctx.getImageData(0, 0, this.width, this.height);
+      if (app.ColorTranslation != null) {
+        for (i = _i = 0; _i <= 1023; i = ++_i) {
+          _ref1 = app.ColorTranslation;
+          for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+            trans = _ref1[_j];
+            if (this.compareColor(trans.from, this.getPixel(imageData, i))) {
+              this.setPixel(imageData, i, trans.to);
+            }
+          }
         }
       }
-      return imgData;
+      return imageData;
     };
 
     AssetLoader.getPixel = function(data, n) {

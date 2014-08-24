@@ -11,7 +11,7 @@ class app.GameLoader
 			gamesList
 				.append($('<option></option>')
 					.attr('value',i)
-					.text(game.name))
+					.text(game.Name))
 
 		app.GameLoader.reloadPlanets()
 		return
@@ -23,7 +23,7 @@ class app.GameLoader
 			planetsList
 				.append($('<option></option>')
 					.attr('value',i)
-					.text(planet.name))
+					.text(planet.Name))
 
 		planetsList.change()
 
