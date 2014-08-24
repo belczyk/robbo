@@ -21,13 +21,13 @@ w  _  L^s_  _  _  _  _  0  _  Ee _  _  w  \n\
 w  w  w  w  w  w  w  w  w  w  w  w  #  w  \n\
 w  _  _  _  s  _  b  b  _  _  _  R  _  _  \n\
 w  w  w  w  w  w  w  w  w  w  w  w  #  w  \n\
-w  _  _  _  _  @< w  @v _  _  _  _  _  _  \n\
+w  _  _  _  _  L<bw  Lvb_  _  _  _  _  _  \n\
 w  _  _  _  _  _  w  _  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  _  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  +  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  +  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  a  _  _  _  _  _  w  \n\
-w  @> _  _  _  _  w  B| _  _  _  _  _  w  \n\
+w  L>b_  _  _  _  w  B| _  _  _  _  _  w  \n\
 w  w  w  w  w  w  w  w  w  w  w  w  w  w  "
         },
         {
@@ -46,13 +46,13 @@ w  _  L^s_  _  _  _  _  0  _  Ee _  _  w  \n\
 w  w  w  w  w  w  w  w  w  w  w  w  #  w  \n\
 w  _  _  _  s  _  b  b  _  _  _  R  _  _  \n\
 w  w  w  w  w  w  w  w  w  w  w  w  #  w  \n\
-w  _  _  _  _  @< w  @v _  _  _  _  _  _  \n\
+w  _  _  _  _  L<bw  Lvb_  _  _  _  _  _  \n\
 w  _  _  _  _  _  w  _  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  _  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  +  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  +  _  _  _  _  _  w  \n\
 w  _  _  _  _  _  w  a  _  _  _  _  _  w  \n\
-w  @> _  _  _  _  w  B| _  _  _  _  _  w  \n\
+w  L>b_  _  _  _  w  B| _  _  _  _  _  w  \n\
 w  w  w  w  w  w  w  w  w  w  w  w  w  w  "
         }
       ]
