@@ -12,7 +12,7 @@ class app.AssetLoader
 			app.ColorTranslation.isChanged =false
 		asset = @assets[name]
 
-		if  not asset?
+		if  not asset? || @constructorMode
 			@assets[name] = @loadAsset(name)
 
 

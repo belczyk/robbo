@@ -1,6 +1,0 @@
-window.app = window.app ? {}
-app = window.app
-
-class app.AssetMapper 
-	constructor: () ->
-		

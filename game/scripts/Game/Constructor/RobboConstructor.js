@@ -9,6 +9,7 @@
   app.RobboConstructor = (function() {
     function RobboConstructor(universe, gameDesigner) {
       this.gameDesigner = gameDesigner;
+      app.AssetLoader.constructorMode = true;
       this.assets = app.AssetLoader;
       this.canvas = $('#constructionyard');
       this.cursorCanvas = $('#currentcell');
@@ -44,6 +45,11 @@
       this.eventCtx.subscribe('map-width-changed', (function(_this) {
         return function(w) {
           return _this.updateMapWidth(w);
+        };
+      })(this));
+      this.eventCtx.subscribe('colors-changed', (function(_this) {
+        return function() {
+          return _this.redrawMap();
         };
       })(this));
       this.games = app.Universe.games;

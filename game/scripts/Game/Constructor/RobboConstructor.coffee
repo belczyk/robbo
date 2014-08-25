@@ -3,6 +3,7 @@ app = window.app
 
 class app.RobboConstructor
 	constructor: (universe,@gameDesigner) ->
+		app.AssetLoader.constructorMode = true
 		@assets = app.AssetLoader
 		@canvas = $('#constructionyard')
 		@cursorCanvas = $('#currentcell')
@@ -20,7 +21,7 @@ class app.RobboConstructor
 		@eventCtx.subscribe 'current-tool-changed', () => @drawToolIcon()
 		@eventCtx.subscribe 'map-height-changed', (h) => @updateMapHeight(h)
 		@eventCtx.subscribe 'map-width-changed', (w) => @updateMapWidth(w)
-
+		@eventCtx.subscribe 'colors-changed', ()=> @redrawMap()
 		@games = app.Universe.games
 		@gamesOptions = new app.GamesOptions(@gameDesigner,@games,@eventCtx)
 

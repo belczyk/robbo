@@ -75,3 +75,16 @@ app.Tools.getGaussRand = (a,b, stdev)->
 app.Tools.rnd_snd = () ->
 	return (Math.random()*2-1)+(Math.random()*2-1)+(Math.random()*2-1);
 
+String.prototype.rgbaToArray = () ->
+	val = this.toString()
+	val = val.replace("rgba","")
+	val = val.replace(")","")
+	val = val.replace("(","")
+	vals = val.split(',')
+	nums = []
+	for num in vals
+		nums.push parseFloat(num)
+	nums[3] = 255*nums[3]
+	nums
+Array.prototype.toRgbaString = ()->
+	return "rgba(#{this[0]},#{this[1]},#{this[2]},#{this[3]/255})"

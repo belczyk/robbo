@@ -8,5 +8,8 @@
         public int height { get; set; }
         public int boltsToBeCollected { get; set; }
         public string map { get; set; }
+        public int[] background { get; set; }
+        public int[] transparent { get; set; }
+        public int[][] colors { get; set; }
     }
 }

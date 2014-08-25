@@ -22,7 +22,7 @@
         app.ColorTranslation.isChanged = false;
       }
       asset = this.assets[name];
-      if (asset == null) {
+      if ((asset == null) || this.constructorMode) {
         this.assets[name] = this.loadAsset(name);
       }
       return this.assets[name];

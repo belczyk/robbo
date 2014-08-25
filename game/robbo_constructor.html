@@ -7,12 +7,12 @@
 	<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
 	<link href="content/QUnit/QUnit.1.10.0.css" rel="stylesheet">
-	<link href="colorpicker/css/colorpicker.css" rel="stylesheet">
 	<link href="content/bootstrap/bootstrap.css" rel="stylesheet">
 	<link href="content/bootstrap/bootstrap-responsive.css" rel="stylesheet">
 	<link href="content/game.css" rel="stylesheet">
 	<link href="content/constructor.css" rel="stylesheet">
 	<link href="Content/QUnit/QUnit.1.10.0.css" rel="stylesheet">
+	<link href="Content/colorpicker.css" rel="stylesheet">
 </head>
 <body oncontextmenu="return false">
 		<div class="editor">
@@ -48,6 +48,36 @@
 								<label>Width:</label><input type="text" class="number width"  />
 								<label>Height:</label><input type="text" class="number height"  />
 								<button  class="remove-planet btn btn-default btn-sm has-tooltip red-tooltip" data-toggle="tooltip" data-placement="top"  title="Remove planet"><i class="glyphicon glyphicon-remove"></i></button>
+							</div>
+						</div>
+					</div> 
+					<div class="panel panel-default planet-colors" >
+						<div class="panel-body">
+							<div>
+								<div class="input-append color" data-color-for="transparent" data-color="rgba(0, 0, 0,0)" data-color-format="rgba">
+									<input type="hidden" class="color-transparent" value="" >
+									<span class="add-on"><i style="background-color: rgba(0, 0, 0,0)"></i></span>
+								</div>
+								<div class="input-append color" data-color-for="1" data-color="rgba(162, 114, 64,255)" data-color-format="rgba">
+									<input type="hidden" class="color-1" value="" >
+									<span class="add-on"><i style="background-color: rgba(162, 114, 64,255)"></i></span>
+								</div>
+								<div class="input-append color" data-color-for="2" data-color="rgba(28, 39, 129,255)" data-color-format="rgba">
+									<input type="hidden" class="color-2" value="" >
+									<span class="add-on"><i style="background-color: rgba(28, 39, 129)"></i></span>
+								</div>
+								<div class="input-append color" data-color-for="3" data-color="rgba(16, 16, 16,255)" data-color-format="rgba">
+									<input type="hidden" class="color-3" value="" >
+									<span class="add-on"><i style="background-color: rgba(16, 16, 16,255)"></i></span>
+								</div>
+								<div class="input-append color" data-color-for="4" data-color="rgba(152, 152, 152,255)" data-color-format="rgba">
+									<input type="hidden" class="color-4" value="" >
+									<span class="add-on"><i style="background-color: rgba(152, 152, 152,255)"></i></span>
+								</div>
+								<div class="input-append color" data-color-for="background" data-color="rgba(0, 128, 0,255)" data-color-format="rgba">
+									<input type="hidden" class="color-background" value="" >
+									<span class="add-on"><i style="background-color: rgb(0, 128, 0,255)"></i></span>
+								</div>
 							</div>
 						</div>
 					</div> 
@@ -196,7 +226,7 @@
 
 					<div class="label label-primary messages">Missing ship. Missing robbo.</div>
 					<div class="scroll-panel" style="width: 532px;">
-						<canvas id="constructionyard" style="background-color: green" height="1024" width="512"></canvas>
+						<canvas id="constructionyard" height="1024" width="512"></canvas>
 						<canvas id="currenttool" style="" height="1024" width="512"></canvas>
 						<canvas id="currentcell" style="" height="1024" width="512"></canvas>
 					</div>
@@ -217,10 +247,8 @@
 				<script src="scripts/game/common/Tools.js"></script>
 				<script src="scripts/game/common/Predef.js"></script>
 
-				<script src="colorpicker/js/colorpicker.js"></script>
-				<script src="colorpicker/js/eye.js"></script>
-				<script src="colorpicker/js/utils.js"></script>
-				<script src="colorpicker/js/layout.js"></script>
+				<script src="scripts/external/colorpicker/colorpicker-color.js"></script>
+				<script src="scripts/external/colorpicker/colorpicker.js"></script>
 
 				<script src="scripts/game/Module.js"></script>
 				<script src="scripts/game/assets.js"></script>

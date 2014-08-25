@@ -141,4 +141,24 @@
     return (Math.random() * 2 - 1) + (Math.random() * 2 - 1) + (Math.random() * 2 - 1);
   };
 
+  String.prototype.rgbaToArray = function() {
+    var num, nums, val, vals, _i, _len;
+    val = this.toString();
+    val = val.replace("rgba", "");
+    val = val.replace(")", "");
+    val = val.replace("(", "");
+    vals = val.split(',');
+    nums = [];
+    for (_i = 0, _len = vals.length; _i < _len; _i++) {
+      num = vals[_i];
+      nums.push(parseFloat(num));
+    }
+    nums[3] = 255 * nums[3];
+    return nums;
+  };
+
+  Array.prototype.toRgbaString = function() {
+    return "rgba(" + this[0] + "," + this[1] + "," + this[2] + "," + (this[3] / 255) + ")";
+  };
+
 }).call(this);

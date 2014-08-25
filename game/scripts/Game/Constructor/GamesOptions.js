@@ -11,6 +11,12 @@
       this.gameDesigner = gameDesigner;
       this.games = games;
       this.eventCtx = eventCtx;
+      $('.color').colorpicker();
+      $('.color').colorpicker().on('changeColor', (function(_this) {
+        return function(e) {
+          return _this.onColorChange(e);
+        };
+      })(this));
       this.eventCtx.subscribe('map-updated', (function(_this) {
         return function(map) {
           return _this.onMapUpdated(map);
@@ -52,6 +58,32 @@
       this.disableSave();
       this.setupServerPing();
     }
+
+    GamesOptions.prototype.onColorChange = function(e) {
+      var color, colorFor, colorVal, index;
+      colorFor = $(e.target).data('color-for');
+      colorVal = $(e.target).find('input').val();
+      color = colorVal.rgbaToArray();
+      if (colorFor === "background") {
+        this.updatePlanet(function(p) {
+          return p.background = color;
+        });
+        $('#constructionyard').css("background-color", colorVal);
+        return;
+      } else if (colorFor === "transparent") {
+        this.updatePlanet(function(p) {
+          p.transparent = color;
+          return app.ColorTranslation[0].to = color;
+        });
+      } else {
+        index = parseInt(colorFor);
+        this.updatePlanet(function(p) {
+          app.ColorTranslation[index].to = color;
+          return p.colors[index] = color;
+        });
+      }
+      this.eventCtx.publish('colors-changed');
+    };
 
     GamesOptions.prototype.onMapUpdated = function(map) {
       return this.updatePlanet(function(planet) {
@@ -311,12 +343,14 @@
     };
 
     GamesOptions.prototype.onPlanetChanged = function() {
-      var planet;
+      var bcg, planet;
       planet = this.selectedPlanet();
       this.$width.val(planet.width);
       this.$height.val(planet.height);
       this.$bolts.val(planet.boltsToBeCollected);
-      return this.$planetName.val(planet.name);
+      this.$planetName.val(planet.name);
+      bcg = planet.background.toRgbaString();
+      $('[data-color-for="background"]').colorpicker('setValue', bcg);
     };
 
     GamesOptions.prototype.selectedGame = function() {

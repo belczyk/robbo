@@ -3,6 +3,8 @@ app = window.app
 
 class app.GamesOptions
 	constructor: (@gameDesigner,@games, @eventCtx) ->
+		$('.color').colorpicker()
+		$('.color').colorpicker().on('changeColor',(e)=>@onColorChange(e))
 		@eventCtx.subscribe 'map-updated', (map)=> @onMapUpdated(map)
 		@$saveGame = $('.save-game')
 		@setupGameOptions()
@@ -21,7 +23,31 @@ class app.GamesOptions
 		@disableSave()
 		@setupServerPing()
 
-		
+
+
+	onColorChange: (e)->
+		colorFor = $(e.target).data('color-for')
+		colorVal = $(e.target).find('input').val()
+		color = colorVal.rgbaToArray()
+		if colorFor=="background"
+			@updatePlanet (p)->
+				p.background = color
+			$('#constructionyard').css("background-color",colorVal)
+			return
+		else if (colorFor=="transparent")
+			@updatePlanet (p)->
+				p.transparent = color
+				app.ColorTranslation[0].to = color
+		else
+			index = parseInt(colorFor)
+			@updatePlanet (p) ->
+				app.ColorTranslation[index].to = color
+				p.colors[index] = color
+
+		@eventCtx.publish 'colors-changed'
+
+
+		return
 	onMapUpdated: (map)->
 		@updatePlanet (planet)->
 			planet.map = map
@@ -164,6 +190,9 @@ class app.GamesOptions
 		@$height.val(planet.height)
 		@$bolts.val(planet.boltsToBeCollected)
 		@$planetName.val(planet.name)
+		bcg = planet.background.toRgbaString()
+		$('[data-color-for="background"]').colorpicker('setValue', bcg)
+		return
 
 	selectedGame: () -> 
 		@games.single (g) => g.index.toString() == @$games.val() 
