@@ -12,8 +12,7 @@ body{
 }
 
 .tool {
-    position: relative;
-    overflow: auto;
+    text-align: center;
     cursor: pointer;
     border: solid 1px transparent;
     width: 40px;
@@ -22,6 +21,7 @@ body{
     display: block;
     & > img {
         display: none;
+        border: solid 1px transparent;
     }
     & > img.curr {
         display: inline;
@@ -29,11 +29,11 @@ body{
 
 }
 
-.tool.selected {
+.tool.selected img{
     border: solid 1px white;
 }
 
-.tool:hover {
+.tool > img:hover {
     border: solid 1px yellow;
 }
 
