@@ -46,7 +46,7 @@ class app.MapLoader
 				obj = null
 				switch char
 					when 'w'
-						obj = new app.Wall @envCtx,x,y
+						obj = new app.Wall @envCtx,x,y,parseInt(char2)
 					when 'R'
 						obj = new app.Robbo @envCtx,x,y
 					when 'b'

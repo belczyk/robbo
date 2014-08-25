@@ -20,7 +20,7 @@ namespace Robbo.AssetConverter
 
             foreach (var file in gameFiles.Union(constructorFiles))
             {
-                files[file.Name] = GetPixels(file);
+                files[Path.GetFileNameWithoutExtension(file.FullName)] = GetPixels(file);
             }
 
             var script = FilesToScript(files);
@@ -49,7 +49,7 @@ namespace Robbo.AssetConverter
         private static string GetAssetString(KeyValuePair<string, List<List<int>>> file)
         {
             var sb = new StringBuilder();
-            sb.AppendLine(string.Format("\t\"{0}\" = [", file.Key));
+            sb.AppendLine(string.Format("\t\"{0}\" : [", file.Key));
 
             for (var i = 0; i < file.Value.Count; i++)
             {

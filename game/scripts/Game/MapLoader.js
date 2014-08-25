@@ -82,7 +82,7 @@
           obj = null;
           switch (char) {
             case 'w':
-              obj = new app.Wall(this.envCtx, x, y);
+              obj = new app.Wall(this.envCtx, x, y, parseInt(char2));
               break;
             case 'R':
               obj = new app.Robbo(this.envCtx, x, y);
