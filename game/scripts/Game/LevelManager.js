@@ -39,6 +39,7 @@
           return p.index.toString() === _this.currentLevel;
         };
       })(this));
+      new app.ColorManager($('.game-board canvas'), planet.background, planet.transparent, planet.colors);
       this.envCtx.eventAggregator.publish('starting-number-of-bolts', planet.boltsToBeCollected);
       return this.envCtx.eventAggregator.publish('load-level', planet);
     };

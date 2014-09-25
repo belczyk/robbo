@@ -9,28 +9,13 @@ app.ColorTranslation = [{from: [0,0,0,0], to:[0,0,0,0]},
 						{from: [255,255,255,255], to:[0,0,0,0]}]
 
 class app.ColorManager
-	constructor: (canvas,@redraw) ->
-			bs = $('.background-color-selector')
-			start ='#'+bs.attr('data-start-val')
-			bs.css('background-color',start)
-			bs.ColorPicker {
-							color: bs.attr('data-start-val'),
-							onSubmit: (hsb, hex, rgb,el) ->
-										bs.css('background-color','#'+hex)
-										canvas.css('background-color','#'+hex)
+	constructor: (canvas,background, transparent, colors) ->
 
-							}
-			$('.color-selector').each (i,e)=>
-										startVal = $(e).attr('data-start-val')
-										$(e).css('background-color',"##{startVal}")
-										$(e).ColorPicker {
-														color: "##{startVal}",
-														onSubmit: (hsb, hex, rgb,el) =>
-																	$(el).css('background-color','#'+hex)
-																	to = app.ColorTranslation[$(el).attr('data-for')].to
-																	to[0]=rgb.r
-																	to[1]=rgb.g
-																	to[2]=rgb.b
-																	app.ColorTranslation.isChanged = true;
-																	@redraw?()
-														}
+
+		app.ColorTranslation[0].to = transparent
+		for color,i in colors
+			app.ColorTranslation[i+1].to = color
+
+		if canvas?
+			canvas.css('background-color',"rgba(#{background[0]},#{background[1]},#{background[2]},#{background[3]})")
+

@@ -4,7 +4,6 @@ app = window.app
 class app.GamesOptions
 	constructor: (@gameDesigner,@games, @eventCtx) ->
 		$('.color').colorpicker()
-		$('.color').colorpicker().on('changeColor',(e)=>@onColorChange(e))
 		@eventCtx.subscribe 'map-updated', (map)=> @onMapUpdated(map)
 		@$saveGame = $('.save-game')
 		@setupGameOptions()
@@ -16,14 +15,14 @@ class app.GamesOptions
 		@$planets.change () => 
 			@onPlanetChanged()
 			@publishSelectedPlanetChanged()
+
 		@onGamesChanged()
 		@gameDesigner.find('.toggle-rawmap').click ()=>$('.map').toggle({easing : 'blind'}) 
 		@gameDesigner.find('.toggle-options').click ()=>$('.options-panel').toggle({easing : 'blind'})
 		@publishSelectedPlanetChanged()
 		@disableSave()
 		@setupServerPing()
-
-
+		$('.color').colorpicker().on('changeColor',(e)=>@onColorChange(e))
 
 	onColorChange: (e)->
 		colorFor = $(e.target).data('color-for')
@@ -40,9 +39,11 @@ class app.GamesOptions
 				app.ColorTranslation[0].to = color
 		else
 			index = parseInt(colorFor)
+			console.log 'set color '+ index
 			@updatePlanet (p) ->
+				console.log p.colors
 				app.ColorTranslation[index].to = color
-				p.colors[index] = color
+				p.colors[index-1] = color
 
 		@eventCtx.publish 'colors-changed'
 
@@ -62,6 +63,8 @@ class app.GamesOptions
 		$('.test-planet').click => @testPlanet()
 		$('.remove-planet').click => @removePlanet()
 		$('.remove-game').click => @removeGame()
+		$('.clear-planet').click => @eventCtx.publish 'clear-planet'
+		$('.random-maze').click => @eventCtx.publish 'random-maze-next-step'
 
 	saveGame: () ->
 		$('.save-game').text('Saving...')
@@ -190,8 +193,13 @@ class app.GamesOptions
 		@$height.val(planet.height)
 		@$bolts.val(planet.boltsToBeCollected)
 		@$planetName.val(planet.name)
-		bcg = planet.background.toRgbaString()
-		$('[data-color-for="background"]').colorpicker('setValue', bcg)
+		$('[data-color-for="background"]').colorpicker('setValue', planet.background.toRgbaString())
+		@eventCtx.publish 'background-changed', planet.background
+		$('[data-color-for="transparent"]').colorpicker('setValue', planet.transparent.toRgbaString())
+		for color,i in planet.colors
+			$("[data-color-for=\"#{i+1}\"]").colorpicker('setValue', color.toRgbaString())
+
+		new app.ColorManager null, planet.background,planet.transparent,planet.colors
 		return
 
 	selectedGame: () -> 
@@ -227,7 +235,6 @@ class app.GamesOptions
 				async: true,
 				url: app.ConstructorConfig.serverAddress+'/api/robbo',
 				error: () => @disableSave()
-
 				success: () => @enableSave()
 		catch
 			 @$saveGame.attr('disbled','disbled')

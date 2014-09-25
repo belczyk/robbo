@@ -4,9 +4,14 @@ app = window.app
 class app.ConstructorToolbar 
 	constructor: (@eventCtx)->
 		@setupToolbar()
+		@eventCtx.subscribe 'tool-deselected', ()=>@deselectTool()
 		$(window).keydown (event)=> 
 			if event.keyCode == 9 then return @rotateTools(event)
-
+	deselectTool: ()->
+		@selectedTool = null
+		@selectedToolIcon = null
+		@selectedToolIcon = null
+		$('.tool').removeClass 'selected'
 	rotateTools: (event) ->
 		editor = this
 		$('.tool').each (i,e) ->

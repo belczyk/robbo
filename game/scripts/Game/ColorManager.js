@@ -29,39 +29,16 @@
   ];
 
   app.ColorManager = (function() {
-    function ColorManager(canvas, redraw) {
-      var bs, start;
-      this.redraw = redraw;
-      bs = $('.background-color-selector');
-      start = '#' + bs.attr('data-start-val');
-      bs.css('background-color', start);
-      bs.ColorPicker({
-        color: bs.attr('data-start-val'),
-        onSubmit: function(hsb, hex, rgb, el) {
-          bs.css('background-color', '#' + hex);
-          return canvas.css('background-color', '#' + hex);
-        }
-      });
-      $('.color-selector').each((function(_this) {
-        return function(i, e) {
-          var startVal;
-          startVal = $(e).attr('data-start-val');
-          $(e).css('background-color', "#" + startVal);
-          return $(e).ColorPicker({
-            color: "#" + startVal,
-            onSubmit: function(hsb, hex, rgb, el) {
-              var to;
-              $(el).css('background-color', '#' + hex);
-              to = app.ColorTranslation[$(el).attr('data-for')].to;
-              to[0] = rgb.r;
-              to[1] = rgb.g;
-              to[2] = rgb.b;
-              app.ColorTranslation.isChanged = true;
-              return typeof _this.redraw === "function" ? _this.redraw() : void 0;
-            }
-          });
-        };
-      })(this));
+    function ColorManager(canvas, background, transparent, colors) {
+      var color, i, _i, _len;
+      app.ColorTranslation[0].to = transparent;
+      for (i = _i = 0, _len = colors.length; _i < _len; i = ++_i) {
+        color = colors[i];
+        app.ColorTranslation[i + 1].to = color;
+      }
+      if (canvas != null) {
+        canvas.css('background-color', "rgba(" + background[0] + "," + background[1] + "," + background[2] + "," + background[3] + ")");
+      }
     }
 
     return ColorManager;

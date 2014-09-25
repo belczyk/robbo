@@ -10,6 +10,11 @@
     function ConstructorToolbar(eventCtx) {
       this.eventCtx = eventCtx;
       this.setupToolbar();
+      this.eventCtx.subscribe('tool-deselected', (function(_this) {
+        return function() {
+          return _this.deselectTool();
+        };
+      })(this));
       $(window).keydown((function(_this) {
         return function(event) {
           if (event.keyCode === 9) {
@@ -18,6 +23,13 @@
         };
       })(this));
     }
+
+    ConstructorToolbar.prototype.deselectTool = function() {
+      this.selectedTool = null;
+      this.selectedToolIcon = null;
+      this.selectedToolIcon = null;
+      return $('.tool').removeClass('selected');
+    };
 
     ConstructorToolbar.prototype.rotateTools = function(event) {
       var editor;

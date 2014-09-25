@@ -47,8 +47,7 @@ class app.GameLoader
 	startGame: () ->
 		game = app.GameLoader.currentGame()
 		game = new app.Game($('.game-board'),game,@planetsList,app.GameLoader.currentPlanetIndex())
-		new app.ColorManager($('.game-board canvas'),()->game.redraw())
-
+		
 	setRequestedPlanet: ()-> 
 		vars = @getParams()
 		if(vars["game"]?)

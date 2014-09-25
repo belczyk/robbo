@@ -65,10 +65,7 @@
     GameLoader.prototype.startGame = function() {
       var game;
       game = app.GameLoader.currentGame();
-      game = new app.Game($('.game-board'), game, this.planetsList, app.GameLoader.currentPlanetIndex());
-      return new app.ColorManager($('.game-board canvas'), function() {
-        return game.redraw();
-      });
+      return game = new app.Game($('.game-board'), game, this.planetsList, app.GameLoader.currentPlanetIndex());
     };
 
     GameLoader.prototype.setRequestedPlanet = function() {

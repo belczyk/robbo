@@ -22,8 +22,20 @@ class app.RobboConstructor
 		@eventCtx.subscribe 'map-height-changed', (h) => @updateMapHeight(h)
 		@eventCtx.subscribe 'map-width-changed', (w) => @updateMapWidth(w)
 		@eventCtx.subscribe 'colors-changed', ()=> @redrawMap()
+		@eventCtx.subscribe 'background-changed', (color)=>@backgroundChanged(color)
+		@eventCtx.subscribe 'clear-planet', ()=>@clearPlanet()
+		@eventCtx.subscribe 'random-maze-next-step', ()=>@radomMazeStep()
 		@games = app.Universe.games
 		@gamesOptions = new app.GamesOptions(@gameDesigner,@games,@eventCtx)
+		@setupMinimap()
+
+	clearPlanet: () ->
+		map = ""
+		for y in [0..@mapHeight-1]
+			for x in [0..@mapWidth-1]
+				@updateMap x,y,"_.."
+		@chambers = null
+		@redrawMap()
 
 	updateMapHeight: (h)->
 		if h>@mapHeight
@@ -89,7 +101,13 @@ class app.RobboConstructor
 		@$map.attr("rows",planet.height)
 		@setWidth()
 		@setHeight()
+		@setupColors(planet.background,planet.transparent,planet.colors)
 		@redrawMap()
+
+	setupColors: (background,transparent,colors) ->
+		console.log background
+		console.log transparent
+		console.log colors
 
 	redrawMap: ()->
 		lines = @map.split '\n'
@@ -110,9 +128,13 @@ class app.RobboConstructor
 					@cursorCtx.clearRect 0,0,@cursorCanvas.width(),@cursorCanvas.height()
 					@cursorCtx.strokeRect(@x*32,@y*32,32,32)
 					@drawToolIcon()
-					@drawCurrentToolOnCanvas(@x,@y) if @isLeftDown
-					#@removeTail() if @isRightDown
+					@drawCurrentToolOnCanvas(@x,@y) if @isLeftDown 
+					@removeTail(@x, @y) if @isRightDown
+
+
 	drawToolIcon: () ->
+		@toolCtx.clearRect 0,0,@toolCanvas.width(),@toolCanvas.height()
+
 		if not @toolbar.selectedTool? then return
 		
 		@toolCtx.clearRect 0,0,@toolCanvas.width(),@toolCanvas.height()
@@ -127,7 +149,9 @@ class app.RobboConstructor
 		@updateMap(x,y,@toolbar.selectedMapSign)
 
 	draw: (x,y,sign) ->
-		if (sign[0]=="_") then return;
+		@mainCtx.clearRect x*32,y*32,32,32
+
+		if (sign[0]=="_") then return
 
 		@mainCtx.clearRect x*32,y*32,32,32
 		tool = $('[data-map="'+sign+'"]')
@@ -182,15 +206,118 @@ class app.RobboConstructor
 			if event.which==1
 				@drawCurrentToolOnCanvas(@x,@y)
 			else if event.which ==3 
-				if @selectedTool?
+				if @toolbar.selectedTool?
 					@deselectTool()
 				else
-					@removeTail(@x,@y)
+					@removeTail(@y,@x)
 
 		@cursorCanvas.mouseout (e) ->
 			leftDown = false
 			rightDown = false
 
+	removeTail: (x,y)->
+		@updateMap(x,y,"_..")
+		@mainCtx.clearRect x*32,y*32,32,32
 		return
+	backgroundChanged: (color)->
+		@canvas.css('background-color',color.toRgbaString())
+
+	deselectTool: ()->
+		@eventCtx.publish 'tool-deselected'
+		@drawToolIcon()
+
+
+	setupMinimap: ()->
+		callback = () =>
+			scale = 0.5
+			minimap = $('.minimap')
+						.attr('width',@canvas.width()*scale)
+						.attr('height',@canvas.height()*scale)
+						.css('background-color',@canvas
+						.css('background-color'))
+
+			minimap2D = minimap.get(0).getContext('2d')
+			minimap2D.scale scale,scale
+			minimap2D.drawImage @canvas[0],0,0
+			setTimeout (()->callback()),200
+		callback()
+
+	radomMazeStep: ()=>
+	
+		if !@chambers? 
+			@chambers = []
+			@chambers.push @newChamber(0,@mapWidth-1,0,@mapHeight-1)
+
+		if @chambers.length>0
+			@splitLastChamber()
+			@radomMazeStep()
+		else
+			return
+
+	newChamber: (xs,xe,ys,ye) ->
+		x:
+			start: xs
+			end: xe
+		y:
+			start: ys
+			end: ye
+
+	minChamberDim: 4
+	minChamberArea: 70
+	splitLastChamber: () -> 
+		chamber = @chambers.pop()
+		split = @randomSplit(chamber)
+		minChamberSize = 7
+		if (chamber.y.end-chamber.y.start)>(chamber.x.end- chamber.x.start)
+			if (chamber.y.end-chamber.y.start< minChamberSize) then return
+
+			wall = split.y
+			door = split.ydoor
+			c1 = @newChamber(chamber.x.start, chamber.x.end, chamber.y.start, wall)
+			c2 = @newChamber(chamber.x.start,chamber.x.end,wall,chamber.y.end)
+
+			for x in [chamber.x.start..chamber.x.end]
+				@draw(x,wall,"w1.") unless x==door
+
+
+	
+
+		else
+			if (chamber.x.end-chamber.x.start< minChamberSize) then return
+
+			wall = split.x
+			door = split.xdoor
+			c1 = @newChamber(chamber.x.start, wall, chamber.y.start, chamber.y.end)
+			c2 = @newChamber(wall,chamber.x.end,chamber.y.start,chamber.y.end)
+
+			for y in [chamber.y.start..chamber.y.end]
+				@draw(wall,y,"w1.") unless y==door
+
+		if (c1.x.end-c1.x.start)*(c1.y.end-c1.y.start)>@minChamberArea
+			@chambers.push c1
+		if (c2.x.end-c2.x.start)*(c2.y.end-c2.y.start)>@minChamberArea
+			@chambers.push c2
+
+
+	randomSplit: (chamber) ->
+
+		console.log 'chamber to be split: '+JSON.stringify chamber
+		xmin = chamber.x.start
+		xmax = chamber.x.end
+
+		ymin = chamber.y.start
+		ymax = chamber.y.end
+
+		res =
+			x : @rand(xmin+@minChamberDim+1,xmax-@minChamberDim-1)
+			y :  @rand(ymin+@minChamberDim+1,ymax-@minChamberDim-1)
+			xdoor :  @rand(ymin+@minChamberDim+1,ymax-@minChamberDim-1)
+			ydoor :  @rand(xmin+@minChamberDim+1,xmax-@minChamberDim-1)
+
+		res
+
+	rand: (min,max) ->
+		 Math.floor(Math.random() * (max - min+1) + min)
+
 
 

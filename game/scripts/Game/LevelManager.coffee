@@ -23,6 +23,8 @@ class app.LevelManger
 		@setupWatchers()
 		@subscribeToEvents()
 		planet = @game.planets.single (p)=> p.index.toString() == @currentLevel
+		new app.ColorManager($('.game-board canvas'),planet.background,planet.transparent,planet.colors)
+
 		@envCtx.eventAggregator.publish 'starting-number-of-bolts', planet.boltsToBeCollected
 		@envCtx.eventAggregator.publish 'load-level',planet
 

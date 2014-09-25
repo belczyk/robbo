@@ -20,7 +20,7 @@ class app.Game
 						.css('background-color',@canvas()
 						.css('background-color'))
 
-			minimap2D =minimap.get(0).getContext('2d')
+			minimap2D = minimap.get(0).getContext('2d')
 			minimap2D.scale 0.2,0.2
 			minimap2D.drawImage @canvas()[0],0,0
 			@timeDelayedMethodCall.delay 1000, ()->callback()
