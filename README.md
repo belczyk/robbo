@@ -1,4 +1,4 @@
-robbo
+Robbo
 =====
 ![ScreenShot](http://belczyk.com/github/robbo1.jpg)
 
