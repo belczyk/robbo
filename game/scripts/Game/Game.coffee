@@ -9,7 +9,6 @@ class app.Game
 		@levelManager.startGame()
 		@timeDelayedMethodCall = new app.TimeDelayedMethodCall()
 		
-		@watchCoordinates()
 		@setupMinimap()
 
 	setupMinimap: ()->
@@ -30,13 +29,7 @@ class app.Game
 	canvas: () ->
 		@gameBoard.find('canvas')
 
-	watchCoordinates: () ->
-		@canvas().mousemove (e) =>
-					x = Math.floor((e.pageX-@canvas().offset().left)/32.0)
-					y = Math.floor((e.pageY-@canvas().offset().top)/32.0)
-					if x<10 then x = ' '+x
-					if y<10 then y = ' '+y
-					$('.coordinates').text "[#{x},#{y}]"
+
 	redraw: () ->
 			for x in [0..@envCtx.width-1]
 				for y in [0..@envCtx.height-1]

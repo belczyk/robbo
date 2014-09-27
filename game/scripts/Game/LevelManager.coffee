@@ -49,6 +49,15 @@ class app.LevelManger
 		@timer.resetToken()
 		@currentLevel++
 		@setupLevel()
+		@watchCoordinates()
+
+	watchCoordinates: () ->
+		@canvas().mousemove (e) =>
+					x = Math.floor((e.pageX-@canvas().offset().left)/32.0)
+					y = Math.floor((e.pageY-@canvas().offset().top)/32.0)
+					if x<10 then x = ' '+x
+					if y<10 then y = ' '+y
+					$(app.Predef.Selectors.Coordinates).text "[#{x},#{y}]"
 
 	onLevelStarts: () ->
 		@envCtx.eventAggregator.publish 'level-started' 

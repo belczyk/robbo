@@ -7,6 +7,9 @@ app.Const =
 app.Predef =
 		Const:
 			speed1: 100
+
+		Selectors:
+			Coordinates: ".coordinates"
 		Game: 
 			lives: 1
 		Ammo:

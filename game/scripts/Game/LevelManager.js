@@ -83,7 +83,25 @@
       this.envCtx.eventAggregator.unsubscribeAll();
       this.timer.resetToken();
       this.currentLevel++;
-      return this.setupLevel();
+      this.setupLevel();
+      return this.watchCoordinates();
+    };
+
+    LevelManger.prototype.watchCoordinates = function() {
+      return this.canvas().mousemove((function(_this) {
+        return function(e) {
+          var x, y;
+          x = Math.floor((e.pageX - _this.canvas().offset().left) / 32.0);
+          y = Math.floor((e.pageY - _this.canvas().offset().top) / 32.0);
+          if (x < 10) {
+            x = ' ' + x;
+          }
+          if (y < 10) {
+            y = ' ' + y;
+          }
+          return $(app.Predef.Selectors.Coordinates).text("[" + x + "," + y + "]");
+        };
+      })(this));
     };
 
     LevelManger.prototype.onLevelStarts = function() {
