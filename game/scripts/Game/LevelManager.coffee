@@ -22,7 +22,7 @@ class app.LevelManger
 		@effectManager = new app.MapEffects(@canvas,@envCtx)
 		@setupWatchers()
 		@subscribeToEvents()
-		planet = @game.planets.single (p)=> p.index.toString() == @currentLevel
+		planet = @game.planets.single (p)=> p.index.toString() == @currentLevel.toString()
 		new app.ColorManager($('.game-board canvas'),planet.background,planet.transparent,planet.colors)
 
 		@envCtx.eventAggregator.publish 'starting-number-of-bolts', planet.boltsToBeCollected

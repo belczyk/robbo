@@ -36,7 +36,7 @@
       this.subscribeToEvents();
       planet = this.game.planets.single((function(_this) {
         return function(p) {
-          return p.index.toString() === _this.currentLevel;
+          return p.index.toString() === _this.currentLevel.toString();
         };
       })(this));
       new app.ColorManager($('.game-board canvas'), planet.background, planet.transparent, planet.colors);

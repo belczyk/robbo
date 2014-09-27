@@ -12,7 +12,6 @@ class app.ScrollWatcher
 		@tailWidth = 32
 		@scrollDelay = 60
 
-
 		@eventAggregator.subscribe 'level-started',()=>@onLevelStarted()
 		@eventAggregator.subscribe 'robbo-moved', 
 									((x,y,d) => @scroll(x,y,d)),
@@ -37,20 +36,31 @@ class app.ScrollWatcher
 		@mapWidth = @canvas.width()/@tailWidth
 		@scrollTo(robbo.x,robbo.y,robbo)
 
+
+
+
 	scrollTo: (x,y,robbo) ->
 		toScrollY=0
 		toScrollX=0
 
+		#check if robbo moved to threashold zone which is from (span-treashold,inf>
 		if (y>@span-@threshold)
-			toScrollY = Math.ceil(((y-@span)+@threshold*2)/@step)			
+			toScrollY = Math.ceil(((y-@span)+@threshold*2)/@step)
 		if (x>@span-@threshold)
 			toScrollX = Math.ceil(((x-@span)+@threshold*2)/@step)
-		@leftX=toScrollX*@step
-		@topY=toScrollY*@step
+
+		#caluclate delta between current position and expected position
 		dx = Math.abs(@leftX-x)
 		dy = Math.abs(@topY-y)
+
+		#update current position to new coordinates
+		@leftX=toScrollX*@step
+		@topY=toScrollY*@step
+
+		#movement step (doesnt matter how far we teleport animation time will be the same thus speed of animation will change)
 		step=Math.ceil(Math.sqrt(dx*dx*dy*dy))/this.step
-		if toScrollY>0 or toScrollX>0
+
+		if toScrollY>=0 or toScrollX>=0
 			@canvas.animate {'margin-top': toScrollY*-@tailHeight*@step,'margin-left':toScrollX*-@tailWidth*@step}
 							,@scrollDelay*step
 							,()->robbo.canMove = true
@@ -80,8 +90,6 @@ class app.ScrollWatcher
 
 		@canvas.animate({'margin-top': @topY*-@tailHeight},delay*step,()->whenFinish?())
 
-
-
 	scrollUpBy: (step,delay,whenFinish) ->
 		step?=@step
 		delay?= @scrollDelay
@@ -105,7 +113,6 @@ class app.ScrollWatcher
 		@leftX += step
 
 		@canvas.animate({'margin-left': @leftX*-@tailWidth},delay*step,()->whenFinish?())
-
 
 	scrollLeftBy: (step,delay,whenFinish) ->
 		step?=@step
