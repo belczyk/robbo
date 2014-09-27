@@ -57,35 +57,8 @@
           return _this.onColorChange(e);
         };
       })(this));
+      return;
     }
-
-    GamesOptions.prototype.onColorChange = function(e) {
-      var color, colorFor, colorVal, index;
-      colorFor = $(e.target).data('color-for');
-      colorVal = $(e.target).find('input').val();
-      color = colorVal.rgbaToArray();
-      if (colorFor === "background") {
-        this.updatePlanet(function(p) {
-          return p.background = color;
-        });
-        $('#constructionyard').css("background-color", colorVal);
-        return;
-      } else if (colorFor === "transparent") {
-        this.updatePlanet(function(p) {
-          p.transparent = color;
-          return app.ColorTranslation[0].to = color;
-        });
-      } else {
-        index = parseInt(colorFor);
-        console.log('set color ' + index);
-        this.updatePlanet(function(p) {
-          console.log(p.colors);
-          app.ColorTranslation[index].to = color;
-          return p.colors[index - 1] = color;
-        });
-      }
-      this.eventCtx.publish('colors-changed');
-    };
 
     GamesOptions.prototype.onMapUpdated = function(map) {
       return this.updatePlanet(function(planet) {
@@ -142,6 +115,7 @@
 
     GamesOptions.prototype.saveGame = function() {
       $('.save-game').text('Saving...');
+      this.processMaps(this.games);
       this.upateSizes();
       $.ajax({
         url: app.ConstructorConfig.serverAddress + "/api/robbo",
@@ -159,6 +133,17 @@
           return $('.save-game').text('Save game');
         }
       });
+    };
+
+    GamesOptions.prototype.processMaps = function() {
+      var gameIndex, mapProcessing, planet, planetIndex, _i, _j, _ref1, _ref2;
+      mapProcessing = new app.MapProcessing();
+      for (gameIndex = _i = 0, _ref1 = this.games.length - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; gameIndex = 0 <= _ref1 ? ++_i : --_i) {
+        for (planetIndex = _j = 0, _ref2 = this.games[gameIndex].planets.length - 1; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; planetIndex = 0 <= _ref2 ? ++_j : --_j) {
+          planet = this.games[gameIndex].planets[planetIndex];
+          this.games[gameIndex].planets[planetIndex].map = mapProcessing.preSaveProcessing(planet.map);
+        }
+      }
     };
 
     GamesOptions.prototype.upateSizes = function() {
@@ -215,8 +200,7 @@
           return game.planets.push(_this.createPlanet(game.planets.length + 1));
         };
       })(this));
-      this.onPlanetsChanged();
-      return this.$planets.find('option:last').attr("selected", "selected");
+      return this.onPlanetsChanged();
     };
 
     GamesOptions.prototype.removePlanet = function() {
@@ -343,6 +327,8 @@
         planet = _ref1[_i];
         this.$planets.append($('<option />').attr('value', planet.index).text(planet.name));
       }
+      this.$planets.find('option').attr("selected", null);
+      this.$planets.find('option:last').attr("selected", "selected");
       return this.onPlanetChanged();
     };
 
@@ -355,21 +341,59 @@
     };
 
     GamesOptions.prototype.onPlanetChanged = function() {
-      var color, i, planet, _i, _len, _ref1;
+      var planet;
       planet = this.selectedPlanet();
       this.$width.val(planet.width);
       this.$height.val(planet.height);
       this.$bolts.val(planet.boltsToBeCollected);
       this.$planetName.val(planet.name);
+      this.updateColors(planet);
+      this.publishSelectedPlanetChanged();
+    };
+
+    GamesOptions.prototype.updateColors = function(planet) {
+      var color, i, _i, _len, _ref1;
+      this.stopColorUpdates = true;
       $('[data-color-for="background"]').colorpicker('setValue', planet.background.toRgbaString());
-      this.eventCtx.publish('background-changed', planet.background);
+      new app.ColorManager(null, planet.background, planet.transparent, planet.colors);
       $('[data-color-for="transparent"]').colorpicker('setValue', planet.transparent.toRgbaString());
       _ref1 = planet.colors;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         color = _ref1[i];
         $("[data-color-for=\"" + (i + 1) + "\"]").colorpicker('setValue', color.toRgbaString());
       }
+      this.eventCtx.publish('background-changed', planet.background);
       new app.ColorManager(null, planet.background, planet.transparent, planet.colors);
+      return this.stopColorUpdates = false;
+    };
+
+    GamesOptions.prototype.onColorChange = function(e) {
+      var color, colorFor, colorVal, index;
+      if ((this.stopColorUpdates != null) && this.stopColorUpdates) {
+        return;
+      }
+      colorFor = $(e.target).data('color-for');
+      colorVal = $(e.target).find('input').val();
+      color = colorVal.rgbaToArray();
+      if (colorFor === "background") {
+        this.updatePlanet(function(p) {
+          return p.background = color;
+        });
+        $('#constructionyard').css("background-color", colorVal);
+        return;
+      } else if (colorFor === "transparent") {
+        this.updatePlanet(function(p) {
+          p.transparent = color;
+          return app.ColorTranslation[0].to = color;
+        });
+      } else {
+        index = parseInt(colorFor);
+        this.updatePlanet(function(p) {
+          app.ColorTranslation[index].to = color;
+          return p.colors[index - 1] = color;
+        });
+      }
+      return this.eventCtx.publish('colors-changed');
     };
 
     GamesOptions.prototype.selectedGame = function() {
@@ -395,7 +419,10 @@
         index: index,
         width: 16,
         height: 32,
-        map: this.generateEmptyMap(32, 16)
+        map: this.generateEmptyMap(32, 16),
+        background: [83, 148, 83, 255],
+        transparent: [255, 0, 0, 0],
+        colors: [[162, 114, 64, 255], [28, 39, 129, 255], [138, 144, 191, 255], [152, 152, 152, 255]]
       };
     };
 

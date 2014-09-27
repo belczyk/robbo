@@ -40,6 +40,10 @@
     return this.slice(0, n);
   };
 
+  Array.prototype.skip = function(n) {
+    return this.slice(n, this.length);
+  };
+
   Array.prototype.firstIndexOf = function(predicat) {
     var e, i, _i, _len;
     for (i = _i = 0, _len = this.length; _i < _len; i = ++_i) {
@@ -158,7 +162,7 @@
   };
 
   Array.prototype.toRgbaString = function() {
-    return "rgba(" + this[0] + "," + this[1] + "," + this[2] + "," + (this[3] / 255) + ")";
+    return "rgba(" + this[0] + "," + this[1] + "," + this[2] + "," + this[3] + ")";
   };
 
 }).call(this);

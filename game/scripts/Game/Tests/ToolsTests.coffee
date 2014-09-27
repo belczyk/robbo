@@ -30,3 +30,18 @@
 #		console.log "#{prop}: #{Math.round(val/1000,2)}%"
 #
 #	equal(1,1)
+
+
+window.app = window.app ? {}
+app = window.app
+
+
+module('Array tools')
+
+test "skip returns proper array", () ->
+	arr = [1,2,3,4,5,6,7,8]
+
+	skiped = arr.skip 2
+
+	equal skiped[0],3
+	equal skiped.length,6

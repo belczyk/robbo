@@ -9,6 +9,7 @@
 
   app.RobboConstructor = (function() {
     function RobboConstructor(universe, gameDesigner) {
+      var cutMap;
       this.gameDesigner = gameDesigner;
       this.radomMazeStep = __bind(this.radomMazeStep, this);
       app.AssetLoader.constructorMode = true;
@@ -72,6 +73,7 @@
       this.games = app.Universe.games;
       this.gamesOptions = new app.GamesOptions(this.gameDesigner, this.games, this.eventCtx);
       this.setupMinimap();
+      cutMap = new app.MapStruct("T10_.._.._.._.._.._..\n_.._.._.._.._.._.._..\n_.._.._.._.._.._.._..\n_.._.._..T21_.._.._..\n_..T38_.._.._.._.._..");
     }
 
     RobboConstructor.prototype.clearPlanet = function() {
@@ -156,23 +158,19 @@
     };
 
     RobboConstructor.prototype.changeMap = function(planet) {
+      var mapProcessing;
+      mapProcessing = new app.MapProcessing();
       this.mapWidth = planet.width;
       this.mapHeight = planet.height;
       this.map = planet.map;
       this.map = this.map.replace(/[ ]/g, '.');
+      this.map = mapProcessing.removeTeleportSeqNumbers(this.map);
       this.$map.val(this.map);
       this.$map.attr("cols", planet.width * 3);
       this.$map.attr("rows", planet.height);
       this.setWidth();
       this.setHeight();
-      this.setupColors(planet.background, planet.transparent, planet.colors);
       return this.redrawMap();
-    };
-
-    RobboConstructor.prototype.setupColors = function(background, transparent, colors) {
-      console.log(background);
-      console.log(transparent);
-      return console.log(colors);
     };
 
     RobboConstructor.prototype.redrawMap = function() {
@@ -227,7 +225,7 @@
     RobboConstructor.prototype.draw = function(x, y, sign) {
       var asset, assetName, e, tool;
       this.mainCtx.clearRect(x * 32, y * 32, 32, 32);
-      if (sign[0] === "_") {
+      if (sign === '' || sign[0] === "_") {
         return;
       }
       this.mainCtx.clearRect(x * 32, y * 32, 32, 32);
@@ -238,7 +236,7 @@
         return this.mainCtx.putImageData(asset, x * 32, y * 32);
       } catch (_error) {
         e = _error;
-        console.log("Coudn't load asst for '" + sign + "'. Found asset name " + assetName + ". [" + x + "," + y + "]");
+        console.log("Coudn't load asset for '" + sign + "'. Found asset name " + assetName + ". [" + x + "," + y + "]");
         return console.log(e);
       }
     };

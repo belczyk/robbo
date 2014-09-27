@@ -16,6 +16,9 @@ Array.prototype.single = (predicat) ->
 
 Array.prototype.top = (n)-> this.slice(0,n)
 
+Array.prototype.skip = (n) -> 
+	this.slice n,this.length
+
 Array.prototype.firstIndexOf = (predicat)->
 	for e,i in this
 		if predicat(e)
@@ -87,4 +90,4 @@ String.prototype.rgbaToArray = () ->
 	nums[3] = 255*nums[3]
 	nums
 Array.prototype.toRgbaString = ()->
-	return "rgba(#{this[0]},#{this[1]},#{this[2]},#{this[3]/255})"
+	return "rgba(#{this[0]},#{this[1]},#{this[2]},#{this[3]})"

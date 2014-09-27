@@ -24,28 +24,7 @@ class app.GamesOptions
 		@setupServerPing()
 		$('.color').colorpicker().on('changeColor',(e)=>@onColorChange(e))
 
-	onColorChange: (e)->
-		colorFor = $(e.target).data('color-for')
-		colorVal = $(e.target).find('input').val()
-		color = colorVal.rgbaToArray()
-		if colorFor=="background"
-			@updatePlanet (p)->
-				p.background = color
-			$('#constructionyard').css("background-color",colorVal)
-			return
-		else if (colorFor=="transparent")
-			@updatePlanet (p)->
-				p.transparent = color
-				app.ColorTranslation[0].to = color
-		else
-			index = parseInt(colorFor)
-			console.log 'set color '+ index
-			@updatePlanet (p) ->
-				console.log p.colors
-				app.ColorTranslation[index].to = color
-				p.colors[index-1] = color
 
-		@eventCtx.publish 'colors-changed'
 
 
 		return
@@ -68,6 +47,7 @@ class app.GamesOptions
 
 	saveGame: () ->
 		$('.save-game').text('Saving...')
+		@processMaps(@games)
 		@upateSizes()
 		$.ajax
 			url: app.ConstructorConfig.serverAddress+"/api/robbo"
@@ -78,6 +58,14 @@ class app.GamesOptions
 				alert("Error. Coudn't save game.")
 				$('.save-game').text('Save game')
 
+		return
+
+	processMaps: ()-> 
+		mapProcessing = new app.MapProcessing()
+		for gameIndex in [0..@games.length-1]
+			for planetIndex in [0..@games[gameIndex].planets.length-1]
+				planet = @games[gameIndex].planets[planetIndex]
+				@games[gameIndex].planets[planetIndex].map = mapProcessing.preSaveProcessing planet.map
 		return
 
 	upateSizes: () ->
@@ -113,7 +101,8 @@ class app.GamesOptions
 		@updateGame (game) =>
 			game.planets.push @createPlanet(game.planets.length+1)
 		@onPlanetsChanged()
-		@$planets.find('option:last').attr("selected","selected")
+		
+		
 
 	removePlanet: () ->
 		if @selectedGame().planets.length ==1
@@ -157,7 +146,7 @@ class app.GamesOptions
 			if(game.index.toString() == @$games.val())
 				for planet in game.planets
 					func(planet) if (planet.index.toString() == @$planets.val())
-						
+
 		return
 
 	updateGame: (func)->
@@ -165,18 +154,23 @@ class app.GamesOptions
 			func(game) if(game.index.toString() == @$games.val())
 				
 		return
+
 	onGamesChanged: () ->
 		@$games.find('option').remove()
 		for game in @games
 			@$games.append($('<option />').attr('value',game.index).text(game.name))
 
 		@onGameChanged()
+
 		return
 
 	onPlanetsChanged: () -> 
 		@$planets.find('option').remove()
 		for planet in @selectedGame().planets
 			@$planets.append($('<option />').attr('value',planet.index).text(planet.name))
+
+		@$planets.find('option').attr("selected",null)
+		@$planets.find('option:last').attr("selected","selected")
 
 		@onPlanetChanged()
 
@@ -192,14 +186,48 @@ class app.GamesOptions
 		@$height.val(planet.height)
 		@$bolts.val(planet.boltsToBeCollected)
 		@$planetName.val(planet.name)
+		@updateColors(planet)
+		@publishSelectedPlanetChanged()
+		
+		return
+	updateColors: (planet)->
+		@stopColorUpdates = true
+
 		$('[data-color-for="background"]').colorpicker('setValue', planet.background.toRgbaString())
-		@eventCtx.publish 'background-changed', planet.background
+		new app.ColorManager null, planet.background,planet.transparent,planet.colors
+
 		$('[data-color-for="transparent"]').colorpicker('setValue', planet.transparent.toRgbaString())
 		for color,i in planet.colors
 			$("[data-color-for=\"#{i+1}\"]").colorpicker('setValue', color.toRgbaString())
 
+		@eventCtx.publish 'background-changed', planet.background
 		new app.ColorManager null, planet.background,planet.transparent,planet.colors
-		return
+
+		@stopColorUpdates = false
+
+	onColorChange: (e)->
+		if @stopColorUpdates? && @stopColorUpdates then return
+
+		colorFor = $(e.target).data('color-for')
+		colorVal = $(e.target).find('input').val()
+		color = colorVal.rgbaToArray()
+		if colorFor=="background"
+			@updatePlanet (p)->
+				p.background = color
+			$('#constructionyard').css("background-color",colorVal)
+			return
+		else if (colorFor == "transparent")
+			@updatePlanet (p)->
+				p.transparent = color
+				app.ColorTranslation[0].to = color
+		else
+			index = parseInt(colorFor)
+			@updatePlanet (p) ->
+				app.ColorTranslation[index].to = color
+				p.colors[index-1] = color
+
+		@eventCtx.publish 'colors-changed'
+
 
 	selectedGame: () -> 
 		@games.single (g) => g.index.toString() == @$games.val() 
@@ -214,6 +242,9 @@ class app.GamesOptions
 			width: 16
 			height: 32
 			map: @generateEmptyMap(32,16)
+			background: [83,148,83,255]
+			transparent: [255,0,0,0]
+			colors: [[162,114,64,255],[28,39,129,255],[138,144,191,255],[152,152,152,255]]
 
 	generateEmptyMap: (h,w)->
 		map = ""

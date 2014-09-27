@@ -1,6 +1,7 @@
 window.app = window.app ? {}
 app = window.app
 
+
 class app.RobboConstructor
 	constructor: (universe,@gameDesigner) ->
 		app.AssetLoader.constructorMode = true
@@ -28,7 +29,13 @@ class app.RobboConstructor
 		@games = app.Universe.games
 		@gamesOptions = new app.GamesOptions(@gameDesigner,@games,@eventCtx)
 		@setupMinimap()
-
+		cutMap = new app.MapStruct """
+		T10_.._.._.._.._.._..
+		_.._.._.._.._.._.._..
+		_.._.._.._.._.._.._..
+		_.._.._..T21_.._.._..
+		_..T38_.._.._.._.._..
+		"""
 	clearPlanet: () ->
 		map = ""
 		for y in [0..@mapHeight-1]
@@ -92,22 +99,20 @@ class app.RobboConstructor
 		@$map.val(@map)
 
 	changeMap: (planet) ->
+		mapProcessing = new app.MapProcessing()
 		@mapWidth = planet.width
 		@mapHeight = planet.height
 		@map = planet.map
 		@map = @map.replace(///[\ ]///g,'.')
+		@map = mapProcessing.removeTeleportSeqNumbers(@map)
+
 		@$map.val(@map)
 		@$map.attr("cols",planet.width*3)
 		@$map.attr("rows",planet.height)
 		@setWidth()
 		@setHeight()
-		@setupColors(planet.background,planet.transparent,planet.colors)
 		@redrawMap()
 
-	setupColors: (background,transparent,colors) ->
-		console.log background
-		console.log transparent
-		console.log colors
 
 	redrawMap: ()->
 		lines = @map.split '\n'
@@ -151,7 +156,7 @@ class app.RobboConstructor
 	draw: (x,y,sign) ->
 		@mainCtx.clearRect x*32,y*32,32,32
 
-		if (sign[0]=="_") then return
+		if (sign == '' || sign[0]=="_") then return
 
 		@mainCtx.clearRect x*32,y*32,32,32
 		tool = $('[data-map="'+sign+'"]')
@@ -160,7 +165,7 @@ class app.RobboConstructor
 			asset = app.AssetLoader.getAsset(assetName)
 			@mainCtx.putImageData(asset,x*32,y*32)
 		catch e
-			console.log "Coudn't load asst for '#{sign}'. Found asset name #{assetName}. [#{x},#{y}]"
+			console.log "Coudn't load asset for '#{sign}'. Found asset name #{assetName}. [#{x},#{y}]"
 			console.log e
 
 	setWidth: (val) ->
@@ -184,6 +189,9 @@ class app.RobboConstructor
 			line = begin + sign+end
 			lines[y] = line
 			@map = lines.join "\n"
+
+
+
 			@$map.val(@map)
 			@eventCtx.publish 'map-updated', @map
 		catch e
