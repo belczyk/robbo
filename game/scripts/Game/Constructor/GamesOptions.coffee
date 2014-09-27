@@ -78,7 +78,6 @@ class app.GamesOptions
 				alert("Error. Coudn't save game.")
 				$('.save-game').text('Save game')
 
-
 		return
 
 	upateSizes: () ->

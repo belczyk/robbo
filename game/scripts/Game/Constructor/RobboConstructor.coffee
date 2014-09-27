@@ -243,7 +243,6 @@ class app.RobboConstructor
 		callback()
 
 	radomMazeStep: ()=>
-	
 		if !@chambers? 
 			@chambers = []
 			@chambers.push @newChamber(0,@mapWidth-1,0,@mapHeight-1)
@@ -252,7 +251,9 @@ class app.RobboConstructor
 			@splitLastChamber()
 			@radomMazeStep()
 		else
-			return
+			for x in [0..@width-1]
+				@draw(x,0,"w1..")
+				@updateMap(x,0,"w1.")
 
 	newChamber: (xs,xe,ys,ye) ->
 		x:
@@ -277,10 +278,9 @@ class app.RobboConstructor
 			c2 = @newChamber(chamber.x.start,chamber.x.end,wall,chamber.y.end)
 
 			for x in [chamber.x.start..chamber.x.end]
-				@draw(x,wall,"w1.") unless x==door
-
-
-	
+				unless x==door
+					@draw(x,wall,"w1.") 
+					@updateMap(x,wall,"w1.")
 
 		else
 			if (chamber.x.end-chamber.x.start< minChamberSize) then return
@@ -291,7 +291,9 @@ class app.RobboConstructor
 			c2 = @newChamber(wall,chamber.x.end,chamber.y.start,chamber.y.end)
 
 			for y in [chamber.y.start..chamber.y.end]
-				@draw(wall,y,"w1.") unless y==door
+				unless y==door
+					@draw(wall,y,"w1.") 
+					@updateMap(wall,y,"w1.")
 
 		if (c1.x.end-c1.x.start)*(c1.y.end-c1.y.start)>@minChamberArea
 			@chambers.push c1

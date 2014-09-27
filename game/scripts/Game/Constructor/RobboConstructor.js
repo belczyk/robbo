@@ -355,6 +355,7 @@
     };
 
     RobboConstructor.prototype.radomMazeStep = function() {
+      var x, _i, _ref1, _results;
       if (this.chambers == null) {
         this.chambers = [];
         this.chambers.push(this.newChamber(0, this.mapWidth - 1, 0, this.mapHeight - 1));
@@ -363,7 +364,12 @@
         this.splitLastChamber();
         return this.radomMazeStep();
       } else {
-
+        _results = [];
+        for (x = _i = 0, _ref1 = this.width - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; x = 0 <= _ref1 ? ++_i : --_i) {
+          this.draw(x, 0, "w1..");
+          _results.push(this.updateMap(x, 0, "w1."));
+        }
+        return _results;
       }
     };
 
@@ -400,6 +406,7 @@
         for (x = _i = _ref1 = chamber.x.start, _ref2 = chamber.x.end; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; x = _ref1 <= _ref2 ? ++_i : --_i) {
           if (x !== door) {
             this.draw(x, wall, "w1.");
+            this.updateMap(x, wall, "w1.");
           }
         }
       } else {
@@ -413,6 +420,7 @@
         for (y = _j = _ref3 = chamber.y.start, _ref4 = chamber.y.end; _ref3 <= _ref4 ? _j <= _ref4 : _j >= _ref4; y = _ref3 <= _ref4 ? ++_j : --_j) {
           if (y !== door) {
             this.draw(wall, y, "w1.");
+            this.updateMap(wall, y, "w1.");
           }
         }
       }

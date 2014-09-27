@@ -2,6 +2,7 @@
 app = window.app
 
 class app.Door extends app.Object
+	@include(new app.Bombblowable())
 	
 	unlocked: false
 	opened: false
