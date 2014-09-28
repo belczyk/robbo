@@ -13,7 +13,6 @@
       this.levelManager = new app.LevelManger(this.gameBoard, game, planetsList, currentLevel);
       this.levelManager.startGame();
       this.timeDelayedMethodCall = new app.TimeDelayedMethodCall();
-      this.watchCoordinates();
       this.setupMinimap();
     }
 
@@ -36,23 +35,6 @@
 
     Game.prototype.canvas = function() {
       return this.gameBoard.find('canvas');
-    };
-
-    Game.prototype.watchCoordinates = function() {
-      return this.canvas().mousemove((function(_this) {
-        return function(e) {
-          var x, y;
-          x = Math.floor((e.pageX - _this.canvas().offset().left) / 32.0);
-          y = Math.floor((e.pageY - _this.canvas().offset().top) / 32.0);
-          if (x < 10) {
-            x = ' ' + x;
-          }
-          if (y < 10) {
-            y = ' ' + y;
-          }
-          return $('.coordinates').text("[" + x + "," + y + "]");
-        };
-      })(this));
     };
 
     Game.prototype.redraw = function() {

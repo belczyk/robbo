@@ -1,9 +1,4 @@
-﻿
-label, option, input {
-    font-weight: normal !important;
-}
-
-.game-board {
+﻿.game-board {
     canvas {
         background-color: green;
         display: block;
@@ -100,10 +95,38 @@ input.number
     width: 60px;
 }
 
+
+@ui-font: consolas,"courier new";
+@ui-border-color: #555555;
 .game-selector
 {
-    width: 650px;
-    margin: 20px;
+    width: 512px;
+    margin-left: 20px;
+    color: green;
+    font-family: @ui-font;
+    font-weight: bold;
+
+    select {
+        color: green;
+        font-family: @ui-font;
+        width: 140px;
+        border: solid 1px @ui-border-color;
+    }
+
+    label {
+        width: auto;
+        font-weight: bold;
+    }
+
+    .play {
+        height: 40px;
+        width: 70px;
+        margin: 2px 0 0 5px;
+        background: #222222;
+        color: green;
+        border: solid 1px @ui-border-color;
+        position: absolute;
+    }
 }
 
 .btn-right{
@@ -111,3 +134,13 @@ input.number
 }
 
 .red-tooltip + .tooltip > .tooltip-inner {background-color: #E74C3C;}
+
+.logo {
+
+        color: green;
+        background: none;
+        border: none;
+        margin: 5px 0 5px 20px;
+        padding: 0;
+
+}
