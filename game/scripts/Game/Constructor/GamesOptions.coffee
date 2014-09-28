@@ -23,14 +23,14 @@ class app.GamesOptions
 		@disableSave()
 		@setupServerPing()
 		$('.color').colorpicker().on('changeColor',(e)=>@onColorChange(e))
-
-
-
-
 		return
+
 	onMapUpdated: (map)->
 		@updatePlanet (planet)->
 			planet.map = map
+		@updateCounters()
+		@validateMap()
+
 
 	publishSelectedPlanetChanged: ()-> 
 		@eventCtx.publish 'selected-planet-changed', @selectedPlanet()
@@ -101,8 +101,6 @@ class app.GamesOptions
 		@updateGame (game) =>
 			game.planets.push @createPlanet(game.planets.length+1)
 		@onPlanetsChanged()
-		
-		
 
 	removePlanet: () ->
 		if @selectedGame().planets.length ==1
@@ -188,7 +186,9 @@ class app.GamesOptions
 		@$planetName.val(planet.name)
 		@updateColors(planet)
 		@publishSelectedPlanetChanged()
-		
+		@updateCounters()
+		@validateMap()
+
 		return
 	updateColors: (planet)->
 		@stopColorUpdates = true
@@ -275,8 +275,32 @@ class app.GamesOptions
 		@$saveGame.removeClass('btn-primary')
 		@$saveGame.addClass('btn-warning')
 
-	enableSave: ()->
+	enableSave: () ->
 		@$saveGame.removeAttr('disabled')
 		@$saveGame.text("Save game")
 		@$saveGame.addClass('btn-primary')
 		@$saveGame.removeClass('btn-warning')
+
+	updateCounters: () ->
+		bolts = @selectedPlanet().map.match(/b\.\./g)
+		keys = @selectedPlanet().map.match(/k\.\./g)
+		$('.bolts-count').text (if bolts? then bolts.length else 0 )
+		$('.keys-count').text (if keys? then keys.length else 0 )
+
+	validateMap: () ->
+		map = @selectedPlanet().map
+		robbo = map.match(/R\.\./g)
+		ship = map.match(/s\.\./g)
+		msg = ""
+		msgs = $('.messages')
+
+		if (!robbo?)
+			msg+="Missing robbo. "
+
+		if (!ship?)
+			msg+="Missing ship. "
+
+		if msg=='' then msgs.hide()  else msgs.show()
+
+		msgs.text msg
+

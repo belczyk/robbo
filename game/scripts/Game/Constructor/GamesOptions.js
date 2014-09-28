@@ -61,9 +61,11 @@
     }
 
     GamesOptions.prototype.onMapUpdated = function(map) {
-      return this.updatePlanet(function(planet) {
+      this.updatePlanet(function(planet) {
         return planet.map = map;
       });
+      this.updateCounters();
+      return this.validateMap();
     };
 
     GamesOptions.prototype.publishSelectedPlanetChanged = function() {
@@ -349,6 +351,8 @@
       this.$planetName.val(planet.name);
       this.updateColors(planet);
       this.publishSelectedPlanetChanged();
+      this.updateCounters();
+      this.validateMap();
     };
 
     GamesOptions.prototype.updateColors = function(planet) {
@@ -481,6 +485,35 @@
       this.$saveGame.text("Save game");
       this.$saveGame.addClass('btn-primary');
       return this.$saveGame.removeClass('btn-warning');
+    };
+
+    GamesOptions.prototype.updateCounters = function() {
+      var bolts, keys;
+      bolts = this.selectedPlanet().map.match(/b\.\./g);
+      keys = this.selectedPlanet().map.match(/k\.\./g);
+      $('.bolts-count').text((bolts != null ? bolts.length : 0));
+      return $('.keys-count').text((keys != null ? keys.length : 0));
+    };
+
+    GamesOptions.prototype.validateMap = function() {
+      var map, msg, msgs, robbo, ship;
+      map = this.selectedPlanet().map;
+      robbo = map.match(/R\.\./g);
+      ship = map.match(/s\.\./g);
+      msg = "";
+      msgs = $('.messages');
+      if (robbo == null) {
+        msg += "Missing robbo. ";
+      }
+      if (ship == null) {
+        msg += "Missing ship. ";
+      }
+      if (msg === '') {
+        msgs.hide();
+      } else {
+        msgs.show();
+      }
+      return msgs.text(msg);
     };
 
     return GamesOptions;

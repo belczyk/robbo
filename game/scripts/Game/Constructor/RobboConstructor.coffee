@@ -149,8 +149,7 @@ class app.RobboConstructor
 
 	drawCurrentToolOnCanvas: (x,y) ->
 		if not @toolbar.selectedTool? then return
-		asset = @assets.getAsset(@toolbar.selectedToolIcon)
-		@mainCtx.putImageData asset,x*32,y*32
+
 		@updateMap(x,y,@toolbar.selectedMapSign)
 
 	draw: (x,y,sign) ->
@@ -182,6 +181,9 @@ class app.RobboConstructor
 
 	updateMap: (x,y,sign) -> 
 		try
+			if (sign == 'R..' and @map.match(/R\.\./g)?) or (sign == 's..' and @map.match(/s\.\./g)?)
+				return
+
 			lines = @map.split "\n"
 			line = lines[y]
 			begin = line.substring(0,x*3)
@@ -189,10 +191,9 @@ class app.RobboConstructor
 			line = begin + sign+end
 			lines[y] = line
 			@map = lines.join "\n"
-
-
-
 			@$map.val(@map)
+			@draw(x,y,sign) 
+
 			@eventCtx.publish 'map-updated', @map
 		catch e
 			console.log x+" "+y+" "+e
@@ -260,7 +261,6 @@ class app.RobboConstructor
 			@radomMazeStep()
 		else
 			for x in [0..@width-1]
-				@draw(x,0,"w1..")
 				@updateMap(x,0,"w1.")
 
 	newChamber: (xs,xe,ys,ye) ->
@@ -287,7 +287,6 @@ class app.RobboConstructor
 
 			for x in [chamber.x.start..chamber.x.end]
 				unless x==door
-					@draw(x,wall,"w1.") 
 					@updateMap(x,wall,"w1.")
 
 		else
@@ -300,7 +299,6 @@ class app.RobboConstructor
 
 			for y in [chamber.y.start..chamber.y.end]
 				unless y==door
-					@draw(wall,y,"w1.") 
 					@updateMap(wall,y,"w1.")
 
 		if (c1.x.end-c1.x.start)*(c1.y.end-c1.y.start)>@minChamberArea

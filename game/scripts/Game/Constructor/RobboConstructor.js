@@ -213,12 +213,9 @@
     };
 
     RobboConstructor.prototype.drawCurrentToolOnCanvas = function(x, y) {
-      var asset;
       if (this.toolbar.selectedTool == null) {
         return;
       }
-      asset = this.assets.getAsset(this.toolbar.selectedToolIcon);
-      this.mainCtx.putImageData(asset, x * 32, y * 32);
       return this.updateMap(x, y, this.toolbar.selectedMapSign);
     };
 
@@ -258,6 +255,9 @@
     RobboConstructor.prototype.updateMap = function(x, y, sign) {
       var begin, e, end, line, lines;
       try {
+        if ((sign === 'R..' && (this.map.match(/R\.\./g) != null)) || (sign === 's..' && (this.map.match(/s\.\./g) != null))) {
+          return;
+        }
         lines = this.map.split("\n");
         line = lines[y];
         begin = line.substring(0, x * 3);
@@ -266,6 +266,7 @@
         lines[y] = line;
         this.map = lines.join("\n");
         this.$map.val(this.map);
+        this.draw(x, y, sign);
         return this.eventCtx.publish('map-updated', this.map);
       } catch (_error) {
         e = _error;
@@ -364,7 +365,6 @@
       } else {
         _results = [];
         for (x = _i = 0, _ref1 = this.width - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; x = 0 <= _ref1 ? ++_i : --_i) {
-          this.draw(x, 0, "w1..");
           _results.push(this.updateMap(x, 0, "w1."));
         }
         return _results;
@@ -403,7 +403,6 @@
         c2 = this.newChamber(chamber.x.start, chamber.x.end, wall, chamber.y.end);
         for (x = _i = _ref1 = chamber.x.start, _ref2 = chamber.x.end; _ref1 <= _ref2 ? _i <= _ref2 : _i >= _ref2; x = _ref1 <= _ref2 ? ++_i : --_i) {
           if (x !== door) {
-            this.draw(x, wall, "w1.");
             this.updateMap(x, wall, "w1.");
           }
         }
@@ -417,7 +416,6 @@
         c2 = this.newChamber(wall, chamber.x.end, chamber.y.start, chamber.y.end);
         for (y = _j = _ref3 = chamber.y.start, _ref4 = chamber.y.end; _ref3 <= _ref4 ? _j <= _ref4 : _j >= _ref4; y = _ref3 <= _ref4 ? ++_j : --_j) {
           if (y !== door) {
-            this.draw(wall, y, "w1.");
             this.updateMap(wall, y, "w1.");
           }
         }
