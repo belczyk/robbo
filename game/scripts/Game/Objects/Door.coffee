@@ -4,8 +4,6 @@ app = window.app
 class app.Door extends app.Object
 	@include(new app.Bombblowable())
 	
-	unlocked: false
-	opened: false
 	constructor: (@envCtx,@x,@y) ->
 				super('door')
 				@eventAggregator.subscribe 'robbo-moving', 
@@ -13,15 +11,12 @@ class app.Door extends app.Object
 											this,
 											(x,y)=> x == @x and y == @y
 
-	canStepOn: -> @opend 
-
 	openDoor: () ->
 		robbo = @envCtx.getRobbo()
-		if !@unlocked and robbo.keys>0
-			@unlocked = true
+		if robbo.keys>0
 			@eventAggregator.publish 'key-used'
-			@envCtx.hide @x,@y
 			@envCtx.sound 'door'
-		else if @unlocked
-			@opend = true
-			@eventAggregator.unsubscribe this
+			@envCtx.delay 100, ()=>
+				@eventAggregator.unsubscribe this
+				@envCtx.setObjAt @x,@y,null
+			

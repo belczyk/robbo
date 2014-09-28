@@ -13,10 +13,6 @@
 
     Door.include(new app.Bombblowable());
 
-    Door.prototype.unlocked = false;
-
-    Door.prototype.opened = false;
-
     function Door(envCtx, x, y) {
       this.envCtx = envCtx;
       this.x = x;
@@ -33,21 +29,18 @@
       })(this));
     }
 
-    Door.prototype.canStepOn = function() {
-      return this.opend;
-    };
-
     Door.prototype.openDoor = function() {
       var robbo;
       robbo = this.envCtx.getRobbo();
-      if (!this.unlocked && robbo.keys > 0) {
-        this.unlocked = true;
+      if (robbo.keys > 0) {
         this.eventAggregator.publish('key-used');
-        this.envCtx.hide(this.x, this.y);
-        return this.envCtx.sound('door');
-      } else if (this.unlocked) {
-        this.opend = true;
-        return this.eventAggregator.unsubscribe(this);
+        this.envCtx.sound('door');
+        return this.envCtx.delay(100, (function(_this) {
+          return function() {
+            _this.eventAggregator.unsubscribe(_this);
+            return _this.envCtx.setObjAt(_this.x, _this.y, null);
+          };
+        })(this));
       }
     };
 
