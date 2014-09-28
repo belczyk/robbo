@@ -188,6 +188,7 @@
     RobboConstructor.prototype.onMouseMoveInCanvas = function(e) {
       this.x = Math.floor((e.pageX - this.cursorCanvas.offset().left) / 32.0);
       this.y = Math.floor((e.pageY - this.cursorCanvas.offset().top) / 32.0);
+      console.log(this.x + ", " + this.y);
       this.cursorCtx.lineWidth = 1;
       this.cursorCtx.strokeStyle = 'white';
       this.cursorCtx.clearRect(0, 0, this.cursorCanvas.width(), this.cursorCanvas.height());
@@ -258,6 +259,7 @@
         if ((sign === 'R..' && (this.map.match(/R\.\./g) != null)) || (sign === 's..' && (this.map.match(/s\.\./g) != null))) {
           return;
         }
+        console.log("Update map " + x + "," + y + " => " + sign);
         lines = this.map.split("\n");
         line = lines[y];
         begin = line.substring(0, x * 3);
@@ -309,7 +311,7 @@
             if (_this.toolbar.selectedTool != null) {
               return _this.deselectTool();
             } else {
-              return _this.removeTail(_this.y, _this.x);
+              return _this.removeTail(_this.x, _this.y);
             }
           }
         };
@@ -324,6 +326,7 @@
     RobboConstructor.prototype.removeTail = function(x, y) {
       this.updateMap(x, y, "_..");
       this.mainCtx.clearRect(x * 32, y * 32, 32, 32);
+      console.log("Remove tail " + x + "," + y);
     };
 
     RobboConstructor.prototype.backgroundChanged = function(color) {
@@ -430,7 +433,6 @@
 
     RobboConstructor.prototype.randomSplit = function(chamber) {
       var res, xmax, xmin, ymax, ymin;
-      console.log('chamber to be split: ' + JSON.stringify(chamber));
       xmin = chamber.x.start;
       xmax = chamber.x.end;
       ymin = chamber.y.start;

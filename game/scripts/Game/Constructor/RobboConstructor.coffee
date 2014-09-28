@@ -127,7 +127,7 @@ class app.RobboConstructor
 	onMouseMoveInCanvas:(e) ->
 					@x = Math.floor((e.pageX-@cursorCanvas.offset().left)/32.0)
 					@y = Math.floor((e.pageY-@cursorCanvas.offset().top)/32.0)
-
+					console.log @x+", "+@y
 					@cursorCtx.lineWidth = 1
 					@cursorCtx.strokeStyle = 'white'
 					@cursorCtx.clearRect 0,0,@cursorCanvas.width(),@cursorCanvas.height()
@@ -183,7 +183,7 @@ class app.RobboConstructor
 		try
 			if (sign == 'R..' and @map.match(/R\.\./g)?) or (sign == 's..' and @map.match(/s\.\./g)?)
 				return
-
+			console.log "Update map #{x},#{y} => #{sign}"
 			lines = @map.split "\n"
 			line = lines[y]
 			begin = line.substring(0,x*3)
@@ -215,10 +215,10 @@ class app.RobboConstructor
 			if event.which==1
 				@drawCurrentToolOnCanvas(@x,@y)
 			else if event.which ==3 
-				if @toolbar.selectedTool?
+				if  @toolbar.selectedTool?
 					@deselectTool()
 				else
-					@removeTail(@y,@x)
+					@removeTail(@x,@y)
 
 		@cursorCanvas.mouseout (e) ->
 			leftDown = false
@@ -227,6 +227,7 @@ class app.RobboConstructor
 	removeTail: (x,y)->
 		@updateMap(x,y,"_..")
 		@mainCtx.clearRect x*32,y*32,32,32
+		console.log "Remove tail #{x},#{y}"
 		return
 	backgroundChanged: (color)->
 		@canvas.css('background-color',color.toRgbaString())
@@ -309,7 +310,6 @@ class app.RobboConstructor
 
 	randomSplit: (chamber) ->
 
-		console.log 'chamber to be split: '+JSON.stringify chamber
 		xmin = chamber.x.start
 		xmax = chamber.x.end
 
