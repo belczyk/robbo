@@ -10,11 +10,11 @@ Game is designed as stand alone HTML page. It means you can just checkout this r
 
 Levels and games are stored in `game/config/universe.js`. You can use Robbo Constructor to edit games and planets.
 
-![ScreenShot](http://belczyk.com/github/robbo1.jpg)
+![ScreenShot](docs/images/robbo.png)
 
 Robbo Constructor
 =====
 Robbo Constructor allows to build games and planets for robbo. 
 As it's also stand alone HTML page. Games and planets are sotred in file (`game/config/universe.js`) there is a need for server which will save file on page request. For that reason thre is `game/Robbo Constructor Server.exe`. When you run this program it will open `robbo_constructor.htm` and also console application which is a self-hosted WebAPI. 
 
-![ScreenShot](http://belczyk.com/github/robbo_constructor1.jpg)
+![ScreenShot](docs/images/robbo_constructor.png)
