@@ -41,7 +41,8 @@
       })(this));
       new app.ColorManager($('.game-board canvas'), planet.background, planet.transparent, planet.colors);
       this.envCtx.eventAggregator.publish('starting-number-of-bolts', planet.boltsToBeCollected);
-      return this.envCtx.eventAggregator.publish('load-level', planet);
+      this.envCtx.eventAggregator.publish('load-level', planet);
+      return this.watchCoordinates();
     };
 
     LevelManger.prototype.setupWatchers = function() {
@@ -49,7 +50,8 @@
       this.boltWatcher = new app.BoltWatcher(this.eventAggregator);
       this.keyWatcher = new app.KeyWatcher(this.eventAggregator);
       this.liveWatcher = new app.LiveWatcher(this.lives, this.eventAggregator);
-      return this.ammoWatcher = new app.AmmoWatcher(this.eventAggregator);
+      this.ammoWatcher = new app.AmmoWatcher(this.eventAggregator);
+      return this.restartLevelWatcher = new app.RestartLevelWatcher(this.envCtx, this.eventAggregator);
     };
 
     LevelManger.prototype.subscribeToEvents = function() {
@@ -83,21 +85,20 @@
       this.envCtx.eventAggregator.unsubscribeAll();
       this.timer.resetToken();
       this.currentLevel++;
-      this.setupLevel();
-      return this.watchCoordinates();
+      return this.setupLevel();
     };
 
     LevelManger.prototype.watchCoordinates = function() {
-      return this.canvas().mousemove((function(_this) {
+      return this.canvas.mousemove((function(_this) {
         return function(e) {
           var x, y;
-          x = Math.floor((e.pageX - _this.canvas().offset().left) / 32.0);
-          y = Math.floor((e.pageY - _this.canvas().offset().top) / 32.0);
+          x = Math.floor((e.pageX - _this.canvas.offset().left) / 32.0);
+          y = Math.floor((e.pageY - _this.canvas.offset().top) / 32.0);
           if (x < 10) {
-            x = ' ' + x;
+            x = '0' + x;
           }
           if (y < 10) {
-            y = ' ' + y;
+            y = '0' + y;
           }
           return $(app.Predef.Selectors.Coordinates).text("[" + x + "," + y + "]");
         };

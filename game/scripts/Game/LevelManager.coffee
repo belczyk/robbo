@@ -27,13 +27,14 @@ class app.LevelManger
 
 		@envCtx.eventAggregator.publish 'starting-number-of-bolts', planet.boltsToBeCollected
 		@envCtx.eventAggregator.publish 'load-level',planet
-
+		@watchCoordinates()
 	setupWatchers: () ->
 		@scrollWatcher = new app.ScrollWatcher @envCtx,@eventAggregator,@canvas
 		@boltWatcher = new app.BoltWatcher @eventAggregator
 		@keyWatcher = new app.KeyWatcher @eventAggregator
 		@liveWatcher = new app.LiveWatcher @lives, @eventAggregator
 		@ammoWatcher = new app.AmmoWatcher @eventAggregator
+		@restartLevelWatcher = new app.RestartLevelWatcher @envCtx,@eventAggregator
 
 	subscribeToEvents: () ->
 		@envCtx.eventAggregator.subscribe 'robbo-destroyed',(()=>@onRobboDestroyed())
@@ -49,14 +50,14 @@ class app.LevelManger
 		@timer.resetToken()
 		@currentLevel++
 		@setupLevel()
-		@watchCoordinates()
+		
 
 	watchCoordinates: () ->
-		@canvas().mousemove (e) =>
-					x = Math.floor((e.pageX-@canvas().offset().left)/32.0)
-					y = Math.floor((e.pageY-@canvas().offset().top)/32.0)
-					if x<10 then x = ' '+x
-					if y<10 then y = ' '+y
+		@canvas.mousemove (e) =>
+					x = Math.floor((e.pageX-@canvas.offset().left)/32.0)
+					y = Math.floor((e.pageY-@canvas.offset().top)/32.0)
+					if x<10 then x = '0'+x
+					if y<10 then y = '0'+y
 					$(app.Predef.Selectors.Coordinates).text "[#{x},#{y}]"
 
 	onLevelStarts: () ->
