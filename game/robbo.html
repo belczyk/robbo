@@ -16,61 +16,116 @@
 
 <body>
 
-	
-		<pre class="logo">
+	<div class="header">
+		<pre class="ascii-logo  color-animated game-logo">
 ██████╗  ██████╗ ██████╗ ██████╗  ██████╗ 
 ██╔══██╗██╔═══██╗██╔══██╗██╔══██╗██╔═══██╗
 ██████╔╝██║   ██║██████╔╝██████╔╝██║   ██║
 ██╔══██╗██║   ██║██╔══██╗██╔══██╗██║   ██║
 ██║  ██║╚██████╔╝██████╔╝██████╔╝╚██████╔╝
 ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ </pre>
-	<div class="game-selector" >
-			<label>Game: </label> <select class="games"></select>
-			<label>Planet: </label> <select class="planets"></select>
-			<button class="play">Play</button>
+		<div class="game-selector" >
+				<label>Game: </label> <select class="games"></select>
+				<label>Planet: </label> <select class="planets"></select>
+				<button class="ascii-btn">Play</button>
+		</div>
 	</div>
 
-	<div class="game-chrome">
-		<div class="game-scroll-pane game-board">
-			<canvas width="1024" height="2400"></canvas>
+	<div class="body">
+		<div class="game-chrome screen">
+			<div class="game-scroll-pane game-board">
+				<canvas width="1024" height="2400"></canvas>
+			</div>
+			<div  class="minimap-panel">
+				<canvas  class="minimap" width="205" height="480" style="background-color: rgb(0, 128, 0);"></canvas>
+			</div>
+			<div class="clear-fix"></div>
+			<div class="counters">
+				<div class="counter ">
+					<div class="icon">
+						<img src="content/game-assets/bolt.png">
+					</div>
+					<div class="label bolts-left">2</div>
+				</div>
+				<div class="counter ">
+					<div class="icon">
+						<img src="content/game-assets/key.png">
+					</div>
+					<div class="label keys-left">0</div>
+				</div>
+				<div class="counter ">
+					<div class="icon">
+						<img src="content/game-assets/ammo.png">
+					</div>
+					<div class="label ammo-left">0</div>
+				</div>
+				<div class="counter ">
+					<div class="icon">
+						<img src="content/game-assets/robbo-fu.png">
+					</div>
+					<div class="label lives-left">1</div>
+				</div>
+			</div>
+			<div class="help">
+				<div class="coordinates">[14, 9]</div>
+				<div class="shortcuts">
+					<span>Press <code>SHIFT+R</code> to restart level.</span>
+				</div>
+			</div>
 		</div>
-		<div  class="minimap-panel">
-			<canvas  class="minimap" width="205" height="480" style="background-color: rgb(0, 128, 0);"></canvas>
+
+		<div class="start-screen screen" >
+			<button class="ascii-btn start-game">Start game</button>
 		</div>
-		<div class="clear-fix"></div>
-		<div class="counters">
-			<div class="counter ">
-				<div class="icon">
-					<img src="content/game-assets/bolt.png">
-				</div>
-				<div class="label bolts-left">2</div>
+
+		<div class="game-over-screen screen">
+			<div>
+<pre class="ascii-logo color-animated">
+  ▄████  ▄▄▄       ███▄ ▄███▓▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  
+ ██▒ ▀█▒▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
+▒██░▄▄▄░▒██  ▀█▄  ▓██    ▓██░▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
+░▓█  ██▓░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒██   ██░  ▒██ █░░▒▓█  ▄ ▒██▀▀█▄  
+░▒▓███▀▒ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ░ ████▓▒░   ▒▀█░  ░▒████▒░██▓ ▒██▒
+ ░▒   ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ▒░▒░▒░    ░ ▐░  ░░ ▒░ ░░ ▒▓ ░▒▓░
+  ░   ░   ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░ ▒ ▒░    ░ ░░   ░ ░  ░  ░▒ ░ ▒░
+░ ░   ░   ░   ▒   ░      ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░ 
+      ░       ░  ░       ░      ░  ░       ░ ░        ░     ░  ░   ░     
+                                                     ░                   
+				</pre>
 			</div>
-			<div class="counter ">
-				<div class="icon">
-					<img src="content/game-assets/key.png">
-				</div>
-				<div class="label keys-left">0</div>
+			<div>
+				<button class="ascii-btn">Play again</button>
 			</div>
-			<div class="counter ">
-				<div class="icon">
-					<img src="content/game-assets/ammo.png">
-				</div>
-				<div class="label ammo-left">0</div>
-			</div>
-			<div class="counter ">
-				<div class="icon">
-					<img src="content/game-assets/robbo-fu.png">
-				</div>
-				<div class="label lives-left">1</div>
+			<div>
+				<button class="ascii-btn">Home</button>
 			</div>
 		</div>
+		<div class="game-finished-screen screen">
+			<div>
+				<pre class="ascii-logo color-animated">
+████████╗██╗  ██╗███████╗    ███████╗███╗   ██╗██████╗ 
+╚══██╔══╝██║  ██║██╔════╝    ██╔════╝████╗  ██║██╔══██╗
+   ██║   ███████║█████╗      █████╗  ██╔██╗ ██║██║  ██║
+   ██║   ██╔══██║██╔══╝      ██╔══╝  ██║╚██╗██║██║  ██║
+   ██║   ██║  ██║███████╗    ███████╗██║ ╚████║██████╔╝
+   ╚═╝   ╚═╝  ╚═╝╚══════╝    ╚══════╝╚═╝  ╚═══╝╚═════╝ 
+				</pre>
+			</div>
+			<div>
+				<button class="ascii-btn">Play again</button>
+			</div>
+			<div>
+				<button class="ascii-btn">Home</button>
+			</div>
+		</div>
+
 	</div>
-	<span class="coordinates">[14, 9]</span>
-	<div class="shortcuts">
-		<span>Press <code>SHIFT+R</code> to restart level.</span>
+	<div class="footer">
+		<div class="copy-rights">Original game design &copy; 1989 Janusz Pelc</div>
+		<div class="copy-rights">Browser version <a href="http://belczyk.com" target="_blank">Sebastian Belczyk</a> Source Code: <a href="https://github.com/belczyk/robbo" target="_blank">github: belczyk/robbo</a></div>
 	</div>
-	<div class="copy-rights">Original game design &copy; 1989 Janusz Pelc</div>
-	<div class="copy-rights">Browser version <a href="http://belczyk.com" target="_blank">Sebastian Belczyk</a> Source Code: <a href="https://github.com/belczyk/robbo" target="_blank">github: belczyk/robbo</a></div>
+
+
 	<div id="assets">
 		<audio id="audio-ammo">
 			<source src="content/game-sounds/ammo.wav" type="audio/wav"/>
@@ -127,101 +182,105 @@
 			<source src="content/game-sounds/thunder.wav" type="audio/wav"/>
 		</audio>
 		<canvas width="32" height="32" class="asset assetLoad"></canvas>
-
 	</div>
+	<div id="scripts">
+		<script src="scripts/external/jquery-1.8.3.min.js"></script>
+		<script src="scripts/external/jquery-ui-1.9.2.min.js"></script>
+		<script src="scripts/external/json2.min.js"></script>
+		<script src="scripts/external/Math.uuid.js"></script>
+		<script src="scripts/external/bootstrap.js"></script>
+		<script src="scripts/external/jquery.mousewheel.min.js"></script>
 
-	<script src="scripts/external/jquery-1.8.3.min.js"></script>
-	<script src="scripts/external/json2.min.js"></script>
-	<script src="scripts/external/Math.uuid.js"></script>
-	<script src="scripts/external/bootstrap.js"></script>
-	<script src="scripts/external/jquery.mousewheel.min.js"></script>
+		<script src="scripts/game/common/Tools.js"></script>
+		<script src="scripts/game/common/Predef.js"></script>
 
-	<script src="scripts/game/common/Tools.js"></script>
-	<script src="scripts/game/common/Predef.js"></script>
+		<script src="scripts/game/Module.js"></script>
+		<script src="scripts/game/assets.js"></script>
+		<script src="scripts/game/TimeDelayedMethodCall.js"></script>
+		<script src="scripts/game/ColorManager.js"></script>
+		<script src="scripts/game/EventAggregator.js"></script>
+		<script src="scripts/game/MapLoader.js"></script>
+		<script src="scripts/game/Game.js"></script>
+		<script src="scripts/game/MapEffects.js"></script>
+		<script src="scripts/game/mixins/AssetLoader.js"></script>
+		<script src="scripts/game/Structures/Delta.js"></script>
+		<script src="scripts/game/Structures/MNeighbour.js"></script>
+		<script src="scripts/game/Structures/NNeighbour.js"></script>
+		<script src="scripts/game/Structures/RingArray.js"></script>
+		<script src="scripts/game/mixins/Animatable.js"></script>
+		<script src="scripts/game/mixins/ArmedWithBlaster.js"></script>
+		<script src="scripts/game/mixins/ArmedWithLaser.js"></script>
+		<script src="scripts/game/mixins/ArmedWithStableBeamLaser.js"></script>
+		<script src="scripts/game/mixins/Blowable.js"></script>
+		<script src="scripts/game/mixins/Bombblowable.js"></script>
+		<script src="scripts/game/mixins/Circlewalker.js"></script>
+		<script src="scripts/game/mixins/Collectable.js"></script>
+		<script src="scripts/game/mixins/Enemy.js"></script>
+		<script src="scripts/game/mixins/Moveable.js"></script>
+		<script src="scripts/game/mixins/Multistate.js"></script>
+		<script src="scripts/game/mixins/Walking.js"></script>
+		<script src="scripts/game/DrawingContext.js"></script>
+		<script src="scripts/game/EnvironmentContext.js"></script>
+		<script src="scripts/game/watchers/AmmoWatcher.js"></script>
+		<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
+		<script src="scripts/game/watchers/BoltWatcher.js"></script>
+		<script src="scripts/game/watchers/ScrollWatcher.js"></script>
+		<script src="scripts/game/LevelManager.js"></script>
+		<script src="scripts/game/objects/Object.js"></script>
+		<script src="scripts/game/objects/DisappearingAnimation.js"></script>
+		<script src="scripts/game/watchers/AmmoWatcher.js"></script>
+		<script src="scripts/game/watchers/BoltWatcher.js"></script>
+		<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
+		<script src="scripts/game/watchers/KeyWatcher.js"></script>
+		<script src="scripts/game/watchers/LiveWatcher.js"></script>
+		<script src="scripts/game/watchers/ScrollWatcher.js"></script>
+		<script src="scripts/game/watchers/RestartLevelWatcher.js"></script>
+		<script src="scripts/game/objects/Ammo.js"></script>
+		<script src="scripts/game/objects/Ant.js"></script>
+		<script src="scripts/game/objects/Bat.js"></script>
+		<script src="scripts/game/objects/Blast.js"></script>
+		<script src="scripts/game/objects/Blaster.js"></script>
+		<script src="scripts/game/objects/Blink.js"></script>
+		<script src="scripts/game/objects/Bolt.js"></script>
+		<script src="scripts/game/objects/Bomb.js"></script>
+		<script src="scripts/game/objects/Coala.js"></script>
+		<script src="scripts/game/objects/Container.js"></script>
+		<script src="scripts/game/objects/ContainerWithWheels.js"></script>
+		<script src="scripts/game/objects/Door.js"></script>
+		<script src="scripts/game/objects/Eyes.js"></script>
+		<script src="scripts/game/objects/FiringBat.js"></script>
+		<script src="scripts/game/objects/IonStorm.js"></script>
+		<script src="scripts/game/objects/Key.js"></script>
+		<script src="scripts/game/objects/Laser.js"></script>
+		<script src="scripts/game/objects/LaserBeam.js"></script>
+		<script src="scripts/game/objects/Live.js"></script>
+		<script src="scripts/game/objects/Magnet.js"></script>
+		<script src="scripts/game/objects/MightyLive.js"></script>
+		<script src="scripts/game/objects/MovingLaser.js"></script>
+		<script src="scripts/game/objects/Nothing.js"></script>
+		<script src="scripts/game/objects/QuestionMark.js"></script>
+		<script src="scripts/game/objects/Robbo.js"></script>
+		<script src="scripts/game/objects/RotatingLaser.js"></script>
+		<script src="scripts/game/objects/Rubble.js"></script>
+		<script src="scripts/game/objects/Ship.js"></script>
+		<script src="scripts/game/objects/Smoke.js"></script>
+		<script src="scripts/game/objects/StableBeam.js"></script>
+		<script src="scripts/game/objects/StableBeamLaser.js"></script>
+		<script src="scripts/game/objects/Teleport.js"></script>
+		<script src="scripts/game/objects/Wall.js"></script>
+		<script src="scripts/game/GameLoader.js"></script>
+		<script src="scripts/game/RobboGame.js"></script>
 
-	<script src="scripts/game/Module.js"></script>
-	<script src="scripts/game/assets.js"></script>
-	<script src="scripts/game/TimeDelayedMethodCall.js"></script>
-	<script src="scripts/game/ColorManager.js"></script>
-	<script src="scripts/game/EventAggregator.js"></script>
-	<script src="scripts/game/MapLoader.js"></script>
-	<script src="scripts/game/Game.js"></script>
-	<script src="scripts/game/MapEffects.js"></script>
-	<script src="scripts/game/mixins/AssetLoader.js"></script>
-	<script src="scripts/game/Structures/Delta.js"></script>
-	<script src="scripts/game/Structures/MNeighbour.js"></script>
-	<script src="scripts/game/Structures/NNeighbour.js"></script>
-	<script src="scripts/game/Structures/RingArray.js"></script>
-	<script src="scripts/game/mixins/Animatable.js"></script>
-	<script src="scripts/game/mixins/ArmedWithBlaster.js"></script>
-	<script src="scripts/game/mixins/ArmedWithLaser.js"></script>
-	<script src="scripts/game/mixins/ArmedWithStableBeamLaser.js"></script>
-	<script src="scripts/game/mixins/Blowable.js"></script>
-	<script src="scripts/game/mixins/Bombblowable.js"></script>
-	<script src="scripts/game/mixins/Circlewalker.js"></script>
-	<script src="scripts/game/mixins/Collectable.js"></script>
-	<script src="scripts/game/mixins/Enemy.js"></script>
-	<script src="scripts/game/mixins/Moveable.js"></script>
-	<script src="scripts/game/mixins/Multistate.js"></script>
-	<script src="scripts/game/mixins/Walking.js"></script>
-	<script src="scripts/game/DrawingContext.js"></script>
-	<script src="scripts/game/EnvironmentContext.js"></script>
-	<script src="scripts/game/watchers/AmmoWatcher.js"></script>
-	<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
-	<script src="scripts/game/watchers/BoltWatcher.js"></script>
-	<script src="scripts/game/watchers/ScrollWatcher.js"></script>
-	<script src="scripts/game/LevelManager.js"></script>
-	<script src="scripts/game/objects/Object.js"></script>
-	<script src="scripts/game/objects/DisappearingAnimation.js"></script>
-	<script src="scripts/game/watchers/AmmoWatcher.js"></script>
-	<script src="scripts/game/watchers/BoltWatcher.js"></script>
-	<script src="scripts/game/watchers/KeyboardWatcher.js"></script>
-	<script src="scripts/game/watchers/KeyWatcher.js"></script>
-	<script src="scripts/game/watchers/LiveWatcher.js"></script>
-	<script src="scripts/game/watchers/ScrollWatcher.js"></script>
-	<script src="scripts/game/watchers/RestartLevelWatcher.js"></script>
-	<script src="scripts/game/objects/Ammo.js"></script>
-	<script src="scripts/game/objects/Ant.js"></script>
-	<script src="scripts/game/objects/Bat.js"></script>
-	<script src="scripts/game/objects/Blast.js"></script>
-	<script src="scripts/game/objects/Blaster.js"></script>
-	<script src="scripts/game/objects/Blink.js"></script>
-	<script src="scripts/game/objects/Bolt.js"></script>
-	<script src="scripts/game/objects/Bomb.js"></script>
-	<script src="scripts/game/objects/Coala.js"></script>
-	<script src="scripts/game/objects/Container.js"></script>
-	<script src="scripts/game/objects/ContainerWithWheels.js"></script>
-	<script src="scripts/game/objects/Door.js"></script>
-	<script src="scripts/game/objects/Eyes.js"></script>
-	<script src="scripts/game/objects/FiringBat.js"></script>
-	<script src="scripts/game/objects/IonStorm.js"></script>
-	<script src="scripts/game/objects/Key.js"></script>
-	<script src="scripts/game/objects/Laser.js"></script>
-	<script src="scripts/game/objects/LaserBeam.js"></script>
-	<script src="scripts/game/objects/Live.js"></script>
-	<script src="scripts/game/objects/Magnet.js"></script>
-	<script src="scripts/game/objects/MightyLive.js"></script>
-	<script src="scripts/game/objects/MovingLaser.js"></script>
-	<script src="scripts/game/objects/Nothing.js"></script>
-	<script src="scripts/game/objects/QuestionMark.js"></script>
-	<script src="scripts/game/objects/Robbo.js"></script>
-	<script src="scripts/game/objects/RotatingLaser.js"></script>
-	<script src="scripts/game/objects/Rubble.js"></script>
-	<script src="scripts/game/objects/Ship.js"></script>
-	<script src="scripts/game/objects/Smoke.js"></script>
-	<script src="scripts/game/objects/StableBeam.js"></script>
-	<script src="scripts/game/objects/StableBeamLaser.js"></script>
-	<script src="scripts/game/objects/Teleport.js"></script>
-	<script src="scripts/game/objects/Wall.js"></script>
-	<script src="scripts/game/GameLoader.js"></script>
 
-	<script src="config/Universe.js"></script>
-	
-	<script type="text/javascript">
-		$(function(){
-			new app.GameLoader()
-		});
-	</script>
+		<script src="config/Universe.js"></script>
+		
+		<script type="text/javascript">
+			$(function(){
+				new app.RobboGame()
+
+			});
+		</script>
+	</div>
 
 </body>
 </html>

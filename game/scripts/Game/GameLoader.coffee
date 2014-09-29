@@ -43,10 +43,11 @@ class app.GameLoader
 		app.GameLoader.loadGamesConfig()
 		$('button.play').click => @startGame()
 		@setRequestedPlanet()
+		@startGame()
 
 	startGame: () ->
 		game = app.GameLoader.currentGame()
-		game = new app.Game($('.game-board'),game,@planetsList,app.GameLoader.currentPlanetIndex())
+		new app.Game($('.game-board'),game,@planetsList,app.GameLoader.currentPlanetIndex())
 		
 	setRequestedPlanet: ()-> 
 		vars = @getParams()

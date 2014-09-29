@@ -60,12 +60,13 @@
         };
       })(this));
       this.setRequestedPlanet();
+      this.startGame();
     }
 
     GameLoader.prototype.startGame = function() {
       var game;
       game = app.GameLoader.currentGame();
-      return game = new app.Game($('.game-board'), game, this.planetsList, app.GameLoader.currentPlanetIndex());
+      return new app.Game($('.game-board'), game, this.planetsList, app.GameLoader.currentPlanetIndex());
     };
 
     GameLoader.prototype.setRequestedPlanet = function() {

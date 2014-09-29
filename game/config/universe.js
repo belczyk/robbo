@@ -1,7 +1,7 @@
 app.Universe = {
   "games": [
     {
-      "startingNumberOfLives": 9,
+      "startingNumberOfLives": 1,
       "name": "Test game 1",
       "index": 1,
       "planets": [

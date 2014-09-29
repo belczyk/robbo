@@ -132,7 +132,12 @@
             }
           }
           return setTimeout((function() {
-            return _this.envCtx.eventAggregator.publish('restart-level', _this.game.planets[_this.currentLevel - 1]);
+            if (_this.lives > 0) {
+              return _this.envCtx.eventAggregator.publish('restart-level', _this.game.planets[_this.currentLevel - 1]);
+            } else {
+              $('.game-chrome').hide();
+              return $('.game-over-screen').show();
+            }
           }), 2000);
         };
       })(this);

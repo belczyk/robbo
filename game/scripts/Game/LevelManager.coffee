@@ -50,7 +50,6 @@ class app.LevelManger
 		@timer.resetToken()
 		@currentLevel++
 		@setupLevel()
-		
 
 	watchCoordinates: () ->
 		@canvas.mousemove (e) =>
@@ -80,5 +79,10 @@ class app.LevelManger
 						@envCtx.unregisterRandomCalls obj
 						smoke.init()
 			setTimeout((()=>
-							@envCtx.eventAggregator.publish('restart-level',@game.planets[@currentLevel-1])),2000)
+				if @lives>0
+					@envCtx.eventAggregator.publish('restart-level',@game.planets[@currentLevel-1])
+				else
+					$('.game-chrome').hide()
+					$('.game-over-screen').show()
+			),2000)
 		setTimeout(explosionCallback,700)
