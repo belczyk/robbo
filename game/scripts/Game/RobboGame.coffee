@@ -3,15 +3,18 @@ app = window.app
 
 class app.RobboGame
 	constructor: ()->
-		interval = setInterval(@setupLogoSpectrumAnimation,1800)
+		$('button.start-game, button.play-again').click ()=>@startGame()
+		$('button.back-home').click ()=> @backHome()
 
-		$('.start-game').click ()=>
-			clearInterval(interval)
-			$('.game-logo').stop().removeClass('.color-animated').css('color','green')
-			$('.screen').hide()
-			$('.game-chrome').show()
-			new app.GameLoader()
+	backHome: ()->
+		$('.screen').hide()
+		$('.start-screen').show()
 
+	startGame: () ->
+		@currentGame = null
+		$('.screen').hide()
+		$('.game-chrome').show()
+		@currentGame = new app.GameLoader()
 
 	setupLogoSpectrumAnimation: ()->
 		$('.color-animated').stop()

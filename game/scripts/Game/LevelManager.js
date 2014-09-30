@@ -22,8 +22,7 @@
       return this.canvasContext2D = this.canvas.get(0).getContext('2d');
     };
 
-    LevelManger.prototype.setupLevel = function() {
-      var planet;
+    LevelManger.prototype.setupLevel = function(planet) {
       this.setupCanvas();
       this.eventAggregator = new app.EventAggregator();
       this.drawingCtx = new app.DrawingContext(this.canvasContext2D);
@@ -34,11 +33,6 @@
       this.effectManager = new app.MapEffects(this.canvas, this.envCtx);
       this.setupWatchers();
       this.subscribeToEvents();
-      planet = this.game.planets.single((function(_this) {
-        return function(p) {
-          return p.index.toString() === _this.currentLevel.toString();
-        };
-      })(this));
       new app.ColorManager($('.game-board canvas'), planet.background, planet.transparent, planet.colors);
       this.envCtx.eventAggregator.publish('starting-number-of-bolts', planet.boltsToBeCollected);
       this.envCtx.eventAggregator.publish('load-level', planet);
@@ -78,14 +72,29 @@
     };
 
     LevelManger.prototype.startGame = function() {
-      return this.setupLevel();
+      return this.setupLevel(this.game.planets.single((function(_this) {
+        return function(p) {
+          return p.index.toString() === _this.currentLevel.toString();
+        };
+      })(this)));
     };
 
     LevelManger.prototype.onLevelUp = function() {
+      var planet;
       this.envCtx.eventAggregator.unsubscribeAll();
       this.timer.resetToken();
       this.currentLevel++;
-      return this.setupLevel();
+      planet = this.game.planets.single((function(_this) {
+        return function(p) {
+          return p.index.toString() === _this.currentLevel.toString();
+        };
+      })(this));
+      if (planet == null) {
+        $('.screen').hide();
+        $('.game-finished-screen').show();
+        return;
+      }
+      return this.setupLevel(planet);
     };
 
     LevelManger.prototype.watchCoordinates = function() {

@@ -8,18 +8,29 @@
 
   app.RobboGame = (function() {
     function RobboGame() {
-      var interval;
-      interval = setInterval(this.setupLogoSpectrumAnimation, 1800);
-      $('.start-game').click((function(_this) {
+      $('button.start-game, button.play-again').click((function(_this) {
         return function() {
-          clearInterval(interval);
-          $('.game-logo').stop().removeClass('.color-animated').css('color', 'green');
-          $('.screen').hide();
-          $('.game-chrome').show();
-          return new app.GameLoader();
+          return _this.startGame();
+        };
+      })(this));
+      $('button.back-home').click((function(_this) {
+        return function() {
+          return _this.backHome();
         };
       })(this));
     }
+
+    RobboGame.prototype.backHome = function() {
+      $('.screen').hide();
+      return $('.start-screen').show();
+    };
+
+    RobboGame.prototype.startGame = function() {
+      this.currentGame = null;
+      $('.screen').hide();
+      $('.game-chrome').show();
+      return this.currentGame = new app.GameLoader();
+    };
 
     RobboGame.prototype.setupLogoSpectrumAnimation = function() {
       var hue;

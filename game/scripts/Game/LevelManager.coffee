@@ -11,7 +11,7 @@ class app.LevelManger
 		@gameBoard.append(@canvas)
 		@canvasContext2D = @canvas.get(0).getContext('2d')
 
-	setupLevel: () ->
+	setupLevel: (planet) ->
 		@setupCanvas()
 		@eventAggregator = new app.EventAggregator()
 		@drawingCtx = new app.DrawingContext @canvasContext2D
@@ -22,7 +22,6 @@ class app.LevelManger
 		@effectManager = new app.MapEffects(@canvas,@envCtx)
 		@setupWatchers()
 		@subscribeToEvents()
-		planet = @game.planets.single (p)=> p.index.toString() == @currentLevel.toString()
 		new app.ColorManager($('.game-board canvas'),planet.background,planet.transparent,planet.colors)
 
 		@envCtx.eventAggregator.publish 'starting-number-of-bolts', planet.boltsToBeCollected
@@ -42,14 +41,19 @@ class app.LevelManger
 		@envCtx.eventAggregator.subscribe 'level-up',(()=>@onLevelUp())
 		@eventAggregator.subscribe 'live-collected', (()=>@lives++)
 		
-	startGame: () -> @setupLevel()
-		
+	startGame: () -> 
+		@setupLevel(@game.planets.single (p)=> p.index.toString() == @currentLevel.toString())
 
 	onLevelUp: () ->
 		@envCtx.eventAggregator.unsubscribeAll()
 		@timer.resetToken()
 		@currentLevel++
-		@setupLevel()
+		planet = @game.planets.single (p)=> p.index.toString() == @currentLevel.toString()
+		if (!planet?)
+			$('.screen').hide()
+			$('.game-finished-screen').show()
+			return
+		@setupLevel(planet)
 
 	watchCoordinates: () ->
 		@canvas.mousemove (e) =>
