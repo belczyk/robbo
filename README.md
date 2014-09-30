@@ -26,6 +26,6 @@ Levels and games are stored in `game/config/universe.js`. You can use Robbo Cons
 Robbo Constructor
 =====
 Robbo Constructor allows to build games and planets for robbo. 
-As it's also stand alone HTML page. Games and planets are sotred in file (`game/config/universe.js`) there is a need for server which will save file on page request. For that reason thre is `game/Robbo Constructor Server.exe`. When you run this program it will open `robbo_constructor.htm` and also console application which is a self-hosted WebAPI. 
+As it's also stand alone HTML page there is a need for server which will save file on page request. For that reason thre is `game/Robbo Constructor Server.exe`. When you run this program it will open `robbo_constructor.htm` and also console application which is a self-hosted WebAPI. 
 
 ![ScreenShot](docs/images/robbo_constructor.png)
