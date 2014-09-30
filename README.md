@@ -4,8 +4,9 @@ Robbo
 Old school Atari games Robbo and Robbo Constructor resurected in a browser with the power of CoffeeScript.
 The orginal game was created by [Janusz Pelc](http://pl.wikipedia.org/wiki/Janusz_Pelc_(programista)) for [8-bit Atari](http://en.wikipedia.org/wiki/Atari) computer. Published by [Laboratorium Komputerowe Avalan](http://en.wikipedia.org/wiki/LK_Avalon) in 1989 (Robbo Constructor 1990).
 
-You can play this game here: [robbo.belczyk.com](http://robbo.belczyk.com/)
-Task board: [Robbo tasks board on trello](https://trello.com/b/32AXUnia/robbo)
+You can play this game here: [`robbo.belczyk.com`](http://robbo.belczyk.com/)
+
+Task board: [`Robbo tasks board on trello`](https://trello.com/b/32AXUnia/robbo)
 
 I recreated this game using CoffeScript as a part of my CoffeeScript training. The first version of the game was simply an excercise and demo presenting power of CoffeeScript class system. Once I discovered how much fun I get building it I've continued work on the game as my pet project.
 
